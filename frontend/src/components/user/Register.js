@@ -24,7 +24,7 @@ const Register = () => {
 
   const [profilePicture, setProfilePicture] = useState("");
   const [profilePicturePreview, setProfilePicturePreview] = useState(
-    "/images/defaultProfile.jpg"
+    "https://picsum.photos/200"
   );
 
   const dispatch = useDispatch();
