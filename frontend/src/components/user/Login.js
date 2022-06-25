@@ -24,7 +24,7 @@ const Login = () => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate("/");
+      navigate("/me");
     }
 
     if (error) {
