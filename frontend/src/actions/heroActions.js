@@ -10,9 +10,9 @@ import {
   ADMIN_HEROES_REQUEST,
   ADMIN_HEROES_SUCCESS,
   ADMIN_HEROES_FAIL,
-  USER_HEROES_REQUEST,
-  USER_HEROES_SUCCESS,
-  USER_HEROES_FAIL,
+  MY_HEROES_REQUEST,
+  MY_HEROES_SUCCESS,
+  MY_HEROES_FAIL,
   NEW_HERO_REQUEST,
   NEW_HERO_SUCCESS,
   NEW_HERO_RESET,
@@ -189,20 +189,18 @@ export const clearErrors = () => async (dispatch) => {
 
 //USER
 
-//Get All Heroes
-export const getUserHeroes = () => async (dispatch) => {
+export const myHeroes = () => async (dispatch) => {
   try {
-    dispatch({ type: ADMIN_HEROES_REQUEST });
-
-    const { data } = await axios.get(`/api/v1/user/heroes`);
+    dispatch({ type: MY_HEROES_REQUEST });
+    const { data } = await axios.get("/api/v1/heroes/me");
 
     dispatch({
-      type: ADMIN_HEROES_SUCCESS,
+      type: MY_HEROES_SUCCESS,
       payload: data.heroes,
     });
   } catch (error) {
     dispatch({
-      type: ADMIN_HEROES_FAIL,
+      type: MY_HEROES_FAIL,
       payload: error.response.data.message,
     });
   }

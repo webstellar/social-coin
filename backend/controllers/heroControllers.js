@@ -129,3 +129,13 @@ exports.deleteHero = catchAsyncErrors(async (req, res, next) => {
     message: "Hero successfully deleted",
   });
 });
+
+//Get logged in user heros => /api/v1/hero/me
+exports.myHeroes = catchAsyncErrors(async (req, res, next) => {
+  const heroes = await Hero.find({ user: req.user.id });
+
+  res.status(200).json({
+    success: true,
+    heroes,
+  });
+});

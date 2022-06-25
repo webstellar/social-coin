@@ -110,4 +110,14 @@ exports.deleteAppreciation = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
+//Get logged in user appreciations => /api/v1/appreciation/me
+exports.myAppreciations = catchAsyncErrors(async (req, res, next) => {
+  const appreciations = await Appreciation.find({ user: req.user.id });
+
+  res.status(200).json({
+    success: true,
+    appreciations,
+  });
+});
+
 //restapitutorial.com/httpstatuscodes.html

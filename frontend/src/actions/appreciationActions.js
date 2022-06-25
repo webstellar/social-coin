@@ -9,9 +9,9 @@ import {
   ADMIN_APPRECIATIONS_REQUEST,
   ADMIN_APPRECIATIONS_SUCCESS,
   ADMIN_APPRECIATIONS_FAIL,
-  USER_APPRECIATIONS_REQUEST,
-  USER_APPRECIATIONS_SUCCESS,
-  USER_APPRECIATIONS_FAIL,
+  MY_APPRECIATIONS_REQUEST,
+  MY_APPRECIATIONS_SUCCESS,
+  MY_APPRECIATIONS_FAIL,
   NEW_APPRECIATION_REQUEST,
   NEW_APPRECIATION_SUCCESS,
   NEW_APPRECIATION_FAIL,
@@ -164,4 +164,23 @@ export const clearErrors = () => async (dispatch) => {
   dispatch({
     type: CLEAR_ERRORS,
   });
+};
+
+//USER
+
+export const myAppreciations = () => async (dispatch) => {
+  try {
+    dispatch({ type: MY_APPRECIATIONS_REQUEST });
+    const { data } = await axios.get("/api/v1/appreciations/me");
+
+    dispatch({
+      type: MY_APPRECIATIONS_SUCCESS,
+      payload: data.appreciations,
+    });
+  } catch (error) {
+    dispatch({
+      type: MY_APPRECIATIONS_FAIL,
+      payload: error.response.data.message,
+    });
+  }
 };

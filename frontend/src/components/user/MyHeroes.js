@@ -1,51 +1,45 @@
-import React, { useEffect, Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { MDBDataTable } from "mdbreact";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import { BsPencil, BsTrash } from "react-icons/bs";
 
-import MetaData from "../layout/MetaData";
-import Loader from "../layout/Loader";
-import AdminSideBar from "./AdminSideBar";
-
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getAdminHeroes,
-  deleteHero,
-  clearErrors,
-} from "../../actions/heroActions";
+import { myHeroes, deleteHero, clearErrors } from "../../actions/heroActions";
 import { DELETE_HERO_RESET } from "../../constants/heroConstant";
+import { toast, ToastContainer } from "react-toastify";
+import Loader from "../layout/Loader";
 
-const HeroesList = () => {
+//TODO Create getUserHeroes reducer, controller, action
+
+const MyHeroes = ({ user }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const params = useParams();
 
-  const { loading, error, heroes } = useSelector((state) => state.heroes);
+  const { loading, error, heroes } = useSelector((state) => state.myHeroes);
   const { error: deleteError, isDeleted } = useSelector((state) => state.hero);
 
   useEffect(() => {
-    dispatch(getAdminHeroes());
+    dispatch(myHeroes(params.id));
 
     if (error) {
+      toast.error(error);
       dispatch(clearErrors());
     }
 
     if (deleteError) {
+      toast.error(deleteError);
       dispatch(clearErrors());
     }
 
     if (isDeleted) {
-      navigate("/admin/heroes");
+      toast.success("your hero was deleted successfully");
+      navigate("/me");
       dispatch({ type: DELETE_HERO_RESET });
     }
-  }, [dispatch, error, deleteError, isDeleted, navigate]);
-
-  /*
-  const deleteHeroHandler = (id) => {
-    dispatch(deleteHero(id));
-  };
-  */
+  }, [dispatch, error, deleteError, isDeleted, navigate, params.id]);
 
   const setHeroes = () => {
     const data = {
@@ -114,42 +108,40 @@ const HeroesList = () => {
     });
   };
 
-  /*   
-  onClick={deleteHeroHandler(hero._id)}
-            <Button
-              className="rounded-pill btn-danger py-1 px-2 ml-2"
-              onClick={deleteHeroHandler(hero._id)}
-            >
-              <BsTrash />
-            </Button>
-  */
+  const deleteHeroHandler = (id) => {
+    dispatch(deleteHero(id));
+  };
 
   return (
     <Fragment>
-      <MetaData title={"All Heroes"} />
-      <Container>
-        <Row>
-          <Col xs={4} md={2}>
-            <AdminSideBar />
-          </Col>
-          <Col>
-            <h1 className="my-5">All Heroes</h1>
-            {loading ? (
-              <Loader />
-            ) : (
-              <MDBDataTable
-                data={setHeroes()}
-                className="px-3"
-                bordered
-                striped
-                hover
-              />
-            )}
-          </Col>
-        </Row>
-      </Container>
+      {loading ? (
+        <Loader />
+      ) : (
+        <Fragment>
+          <Container>
+            <MDBDataTable
+              data={setHeroes()}
+              className="px-3"
+              bordered
+              striped
+              hover
+            />
+            <ToastContainer
+              position="bottom-left"
+              autoClose={5000}
+              hideProgressBar={true}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+            />
+          </Container>
+        </Fragment>
+      )}
     </Fragment>
   );
 };
 
-export default HeroesList;
+export default MyHeroes;

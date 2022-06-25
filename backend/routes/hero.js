@@ -10,6 +10,7 @@ const {
   deleteHero,
   associateHeroAppreciations,
   getAdminHeroes,
+  myHeroes,
 } = require("../controllers/heroControllers");
 const { isAuthenticatedUser, authorizeRoles } = require("../middlewares/auth");
 
@@ -25,6 +26,8 @@ router
   .route("/hero/:id")
   .put(isAuthenticatedUser, updateHero)
   .delete(isAuthenticatedUser, deleteHero);
+
+router.route("/heroes/me").get(isAuthenticatedUser, myHeroes);
 
 // Admin
 router.route("/hero/new").post(isAuthenticatedUser, newHero);

@@ -8,9 +8,9 @@ import {
   ADMIN_APPRECIATIONS_REQUEST,
   ADMIN_APPRECIATIONS_SUCCESS,
   ADMIN_APPRECIATIONS_FAIL,
-  USER_APPRECIATIONS_REQUEST,
-  USER_APPRECIATIONS_SUCCESS,
-  USER_APPRECIATIONS_FAIL,
+  MY_APPRECIATIONS_REQUEST,
+  MY_APPRECIATIONS_SUCCESS,
+  MY_APPRECIATIONS_FAIL,
   NEW_APPRECIATION_REQUEST,
   NEW_APPRECIATION_SUCCESS,
   NEW_APPRECIATION_RESET,
@@ -174,6 +174,39 @@ export const appreciationReducer = (state = {}, action) => {
       return {
         ...state,
         isUpdated: false,
+      };
+
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+
+    default:
+      return state;
+  }
+};
+
+export const myAppreciationsReducer = (
+  state = { appreciations: [] },
+  action
+) => {
+  switch (action.type) {
+    case MY_APPRECIATIONS_REQUEST:
+      return {
+        loading: true,
+      };
+
+    case MY_APPRECIATIONS_SUCCESS:
+      return {
+        loading: false,
+        appreciations: action.payload,
+      };
+
+    case MY_APPRECIATIONS_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
       };
 
     case CLEAR_ERRORS:

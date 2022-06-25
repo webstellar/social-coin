@@ -8,6 +8,7 @@ import HeroDetailsAbout from "./HeroDetailsAbout";
 import HeroAppreciationLink from "./HeroAppreciationLink";
 import Loader from "../../layout/Loader";
 import { GoPrimitiveDot } from "react-icons/go";
+import { toast, ToastContainer } from "react-toastify";
 
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -30,7 +31,7 @@ const HeroDetails = () => {
     dispatch(getHeroes());
 
     if (error) {
-      //alert.error(error);
+      toast.error(error);
       dispatch(clearErrors());
     }
   }, [dispatch, error, params.id]);
@@ -92,6 +93,17 @@ const HeroDetails = () => {
                 </Col>
               </Row>
             </ErrorBoundary>
+            <ToastContainer
+              position="bottom-left"
+              autoClose={5000}
+              hideProgressBar={true}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+            />
           </Container>
         </Fragment>
       )}

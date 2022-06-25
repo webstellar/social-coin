@@ -8,9 +8,9 @@ import {
   ADMIN_HEROES_REQUEST,
   ADMIN_HEROES_SUCCESS,
   ADMIN_HEROES_FAIL,
-  USER_HEROES_REQUEST,
-  USER_HEROES_SUCCESS,
-  USER_HEROES_FAIL,
+  MY_HEROES_REQUEST,
+  MY_HEROES_SUCCESS,
+  MY_HEROES_FAIL,
   NEW_HERO_REQUEST,
   NEW_HERO_SUCCESS,
   NEW_HERO_RESET,
@@ -174,6 +174,36 @@ export const heroReducer = (state = {}, action) => {
       return {
         ...state,
         isUpdated: false,
+      };
+
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+
+    default:
+      return state;
+  }
+};
+
+export const myHeroesReducer = (state = { heroes: [] }, action) => {
+  switch (action.type) {
+    case MY_HEROES_REQUEST:
+      return {
+        loading: true,
+      };
+
+    case MY_HEROES_SUCCESS:
+      return {
+        loading: false,
+        heroes: action.payload,
+      };
+
+    case MY_HEROES_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
       };
 
     case CLEAR_ERRORS:

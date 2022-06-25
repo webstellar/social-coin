@@ -4,7 +4,8 @@ import { Container, Navbar, Nav, Tabs, Tab } from "react-bootstrap";
 import MetaData from "../layout/MetaData";
 import Loader from "../layout/Loader";
 import ProfileTab from "./ProfileTab";
-
+import MyHeroes from "./MyHeroes";
+import MyAppreciations from "./MyAppreciations";
 import { BsPlus } from "react-icons/bs";
 
 const Profile = () => {
@@ -36,11 +37,15 @@ const Profile = () => {
               id="uncontrolled-tab-example"
               className="mb-lg-5"
             >
-              <Tab eventKey="home" title="Given" className="sc-tab">
-                Given
+              <Tab
+                eventKey="myappreciation"
+                title="My Appreciations"
+                className="sc-tab"
+              >
+                <MyAppreciations />
               </Tab>
-              <Tab eventKey="received" title="Received" className="sc-tab">
-                Received
+              <Tab eventKey="myheroes" title="My Heroes" className="sc-tab">
+                <MyHeroes />
               </Tab>
               <Tab eventKey="my-profile" title="My Profile" className="sc-tab">
                 <ProfileTab user={user} />

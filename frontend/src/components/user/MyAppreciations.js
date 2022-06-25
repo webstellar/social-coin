@@ -1,37 +1,34 @@
-import React, { useEffect, Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { MDBDataTable } from "mdbreact";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import { BsPencil, BsTrash } from "react-icons/bs";
-
-import MetaData from "../layout/MetaData";
 import Loader from "../layout/Loader";
-import AdminSideBar from "./AdminSideBar";
-import { ToastContainer, toast } from "react-toastify";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  getAdminAppreciations,
+  myAppreciations,
   deleteAppreciation,
   clearErrors,
 } from "../../actions/appreciationActions";
 import { DELETE_APPRECIATION_RESET } from "../../constants/appreciationConstant";
+import { toast, ToastContainer } from "react-toastify";
 
-const AppreciationsList = () => {
+const MyAppreciations = ({ user }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const params = useParams();
 
   const { loading, error, appreciations } = useSelector(
-    (state) => state.appreciations
+    (state) => state.myAppreciations
   );
-
   const { error: deleteError, isDeleted } = useSelector(
     (state) => state.appreciation
   );
 
   useEffect(() => {
-    dispatch(getAdminAppreciations());
+    dispatch(myAppreciations(params.id));
 
     if (error) {
       toast.error(error);
@@ -44,15 +41,17 @@ const AppreciationsList = () => {
     }
 
     if (isDeleted) {
-      toast.success("Appreciation deleted successfully");
-      navigate("/admin/appreciations");
+      toast.success("your hero was deleted successfully");
+      navigate("/me");
       dispatch({ type: DELETE_APPRECIATION_RESET });
     }
-  }, [dispatch, deleteError, isDeleted, navigate, error]);
-
+  }, [dispatch, error, deleteError, isDeleted, navigate, params.id]);
+  /*
   const deleteAppreciationHandler = (id) => {
     dispatch(deleteAppreciation(id));
   };
+
+  */
 
   const setAppreciations = () => {
     const data = {
@@ -68,13 +67,8 @@ const AppreciationsList = () => {
           sort: "asc",
         },
         {
-          label: "Appreciator",
-          field: "user",
-          sort: "asc",
-        },
-        {
-          label: "Like",
-          field: "likeCount",
+          label: "Summary",
+          field: "summary",
           sort: "asc",
         },
         {
@@ -90,8 +84,7 @@ const AppreciationsList = () => {
       data.rows.push({
         id: appreciation?._id,
         hero: appreciation?.name,
-        user: appreciation?.user,
-        likeCount: appreciation?.likeCount,
+        summary: appreciation?.summary.substring(0, 20),
         actions: (
           <Fragment>
             <Link
@@ -111,43 +104,34 @@ const AppreciationsList = () => {
 
   return (
     <Fragment>
-      <MetaData title={"All Appreciations"} />
-      <Container>
-        <Row>
-          <Col xs={4} md={2}>
-            <AdminSideBar />
-          </Col>
-          <Col>
-            <Fragment>
-              <h1 className="my-5">All Appreciations</h1>
-              {loading ? (
-                <Loader />
-              ) : (
-                <MDBDataTable
-                  data={setAppreciations()}
-                  className="px-3"
-                  bordered
-                  striped
-                  hover
-                />
-              )}
-            </Fragment>
-          </Col>
-        </Row>
-        <ToastContainer
-          position="bottom-left"
-          autoClose={5000}
-          hideProgressBar={true}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-        />
-      </Container>
+      {loading ? (
+        <Loader />
+      ) : (
+        <Fragment>
+          <Container>
+            <MDBDataTable
+              data={setAppreciations()}
+              className="px-3"
+              bordered
+              striped
+              hover
+            />
+            <ToastContainer
+              position="bottom-left"
+              autoClose={5000}
+              hideProgressBar={true}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+            />
+          </Container>
+        </Fragment>
+      )}
     </Fragment>
   );
 };
 
-export default AppreciationsList;
+export default MyAppreciations;

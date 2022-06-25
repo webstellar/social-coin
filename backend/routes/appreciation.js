@@ -9,6 +9,7 @@ const {
   updateAppreciation,
   deleteAppreciation,
   getAdminAppreciations,
+  myAppreciations,
 } = require("../controllers/appreciationControllers");
 const { isAuthenticatedUser } = require("../middlewares/auth");
 
@@ -22,6 +23,8 @@ router
   .route("/appreciation/:id")
   .put(isAuthenticatedUser, updateAppreciation)
   .delete(isAuthenticatedUser, deleteAppreciation);
+
+router.route("/appreciations/me").get(isAuthenticatedUser, myAppreciations);
 
 //Admin
 router.route("/appreciation/new").post(isAuthenticatedUser, newAppreciation);
