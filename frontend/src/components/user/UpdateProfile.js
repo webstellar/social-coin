@@ -7,13 +7,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateProfile, loadUser, clearErrors } from "../../actions/userAction";
 import { useNavigate } from "react-router-dom";
 import { UPDATE_PROFILE_RESET } from "../../constants/userConstant";
+import { ToastContainer, toast } from "react-toastify";
 
 const UpdateProfile = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [profilePicture, setProfilePicture] = useState("");
   const [profilePicturePreview, setProfilePicturePreview] = useState(
-    "https://res.cloudinary.com/dja7mdaul/image/upload/v1655345210/social-coin/user_avatar/defaultProfile_ouwetk.jpg"
+    "/images/defaultProfile.jpg"
   );
 
   const dispatch = useDispatch();
@@ -30,12 +31,12 @@ const UpdateProfile = () => {
     }
 
     if (error) {
-      alert.error(error);
+      toast.error(error);
       dispatch(clearErrors());
     }
 
     if (isUpdated) {
-      alert.success("User updated successfully");
+      toast.success("User updated successfully");
       dispatch(loadUser());
 
       navigate("/me");
@@ -44,7 +45,7 @@ const UpdateProfile = () => {
         type: UPDATE_PROFILE_RESET,
       });
     }
-  }, [dispatch, alert, error, user, navigate, isUpdated]);
+  }, [dispatch, error, user, navigate, isUpdated]);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -161,6 +162,17 @@ const UpdateProfile = () => {
                   </div>
                 </Col>
               </Row>
+              <ToastContainer
+                position="bottom-left"
+                autoClose={5000}
+                hideProgressBar={true}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+              />
             </Container>
           </ErrorBoundary>
         </Fragment>
