@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useState, useEffect, useRef } from "react";
 import MetaData from "../layout/MetaData";
 import Loader from "../layout/Loader";
 import ErrorBoundary from "../../ErrorBoundary";
@@ -10,6 +10,11 @@ import { UPDATE_PASSWORD_RESET } from "../../constants/userConstant";
 import { ToastContainer, toast } from "react-toastify";
 
 const UpdatePassword = () => {
+  const newPassword = useRef();
+  const confirmPassword = useRef();
+  const [showErrorMessage, setShowErrorMessage] = useState(false);
+  const [cPasswordClass, setCPasswordClass] = useState("form-control");
+  const [isCPasswordDirty, setIsCPasswordDirty] = useState(false);
   const [oldPassword, setOldPassword] = useState("");
   const [password, setPassword] = useState("");
 
@@ -18,7 +23,30 @@ const UpdatePassword = () => {
 
   const { error, isUpdated, loading } = useSelector((state) => state.user);
 
+  const checkPasswords = (e) => {
+    setIsCPasswordDirty(true);
+    if (isCPasswordDirty) {
+      if (newPassword.current.value === confirmPassword.current.value) {
+        setShowErrorMessage(false);
+        setCPasswordClass("form-control is-valid");
+      } else {
+        setShowErrorMessage(true);
+        setCPasswordClass("form-control is-invalid");
+      }
+    }
+  };
+
   useEffect(() => {
+    if (isCPasswordDirty) {
+      if (newPassword.current.value === confirmPassword.current.value) {
+        setShowErrorMessage(false);
+        setCPasswordClass("form-control is-valid");
+      } else {
+        setShowErrorMessage(true);
+        setCPasswordClass("form-control is-invalid");
+      }
+    }
+
     if (error) {
       toast.error(error);
       dispatch(clearErrors());
@@ -33,7 +61,7 @@ const UpdatePassword = () => {
         type: UPDATE_PASSWORD_RESET,
       });
     }
-  }, [dispatch, error, navigate, isUpdated]);
+  }, [dispatch, error, navigate, isUpdated, isCPasswordDirty]);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -41,6 +69,7 @@ const UpdatePassword = () => {
     const formData = new FormData();
     formData.set("oldPassword", oldPassword);
     formData.set("password", password);
+    formData.set("confirmPassword", confirmPassword);
 
     dispatch(updatePassword(formData));
   };
@@ -80,10 +109,32 @@ const UpdatePassword = () => {
                           type="password"
                           className="sc-disablefocus rounded-pill border-dark"
                           value={password}
+                          ref={newPassword}
                           onChange={(e) => {
                             setPassword(e.target.value);
                           }}
                         />
+                      </Form.Group>
+                      <Form.Group className="mb-3">
+                        <Form.Label htmlFor="password_field">
+                          confirm password
+                        </Form.Label>
+                        <Form.Control
+                          required
+                          type="Password"
+                          className={`${cPasswordClass} sc-disablefocus rounded-pill border-dark`}
+                          name="password"
+                          ref={confirmPassword}
+                          onChange={checkPasswords}
+                        />
+
+                        <Form.Text>
+                          {showErrorMessage && isCPasswordDirty ? (
+                            <div> Passwords did not match </div>
+                          ) : (
+                            ""
+                          )}
+                        </Form.Text>
                       </Form.Group>
                       <div classNam="d-grid gap-2">
                         <Button

@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useState, useEffect, useRef } from "react";
 import MetaData from "../layout/MetaData";
 import Loader from "../layout/Loader";
 import ErrorBoundary from "../../ErrorBoundary";
@@ -13,14 +13,19 @@ import { register, clearErrors } from "../../actions/userAction";
 import { toast, ToastContainer } from "react-toastify";
 
 const Register = () => {
+  const confirmPassword = useRef();
+  const newPassword = useRef();
+  const [showErrorMessage, setShowErrorMessage] = useState(false);
+  const [cPasswordClass, setCPasswordClass] = useState("form-control");
+  const [isCPasswordDirty, setIsCPasswordDirty] = useState(false);
+
   const [user, setUser] = useState({
     name: "",
     email: "",
     password: "",
-    confirmPassword: "",
   });
 
-  const { name, email, password, confirmPassword } = user;
+  const { name, email, password } = user;
 
   const [profilePicture, setProfilePicture] = useState("");
   const [profilePicturePreview, setProfilePicturePreview] = useState(
@@ -34,7 +39,30 @@ const Register = () => {
     (state) => state.auth
   );
 
+  const checkPasswords = (e) => {
+    setIsCPasswordDirty(true);
+    if (isCPasswordDirty) {
+      if (newPassword.current.value === confirmPassword.current.value) {
+        setShowErrorMessage(false);
+        setCPasswordClass("form-control is-valid");
+      } else {
+        setShowErrorMessage(true);
+        setCPasswordClass("form-control is-invalid");
+      }
+    }
+  };
+
   useEffect(() => {
+    if (isCPasswordDirty) {
+      if (newPassword.current.value === confirmPassword.current.value) {
+        setShowErrorMessage(false);
+        setCPasswordClass("form-control is-valid");
+      } else {
+        setShowErrorMessage(true);
+        setCPasswordClass("form-control is-invalid");
+      }
+    }
+
     if (isAuthenticated) {
       navigate("/hero/new");
     }
@@ -43,7 +71,7 @@ const Register = () => {
       toast.error(error);
       dispatch(clearErrors());
     }
-  }, [dispatch, isAuthenticated, error, navigate]);
+  }, [dispatch, isAuthenticated, error, navigate, isCPasswordDirty]);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -97,6 +125,7 @@ const Register = () => {
                           full name
                         </Form.Label>
                         <Form.Control
+                          required
                           type="name"
                           className="sc-disablefocus rounded-pill border-dark"
                           name="name"
@@ -109,6 +138,7 @@ const Register = () => {
                           email address
                         </Form.Label>
                         <Form.Control
+                          required
                           type="email"
                           className="sc-disablefocus rounded-pill border-dark"
                           name="email"
@@ -121,10 +151,12 @@ const Register = () => {
                           password
                         </Form.Label>
                         <Form.Control
+                          required
                           type="password"
                           className="sc-disablefocus rounded-pill border-dark"
                           name="password"
                           value={password}
+                          ref={newPassword}
                           onChange={onChange}
                         />
                       </Form.Group>
@@ -133,12 +165,21 @@ const Register = () => {
                           confirm password
                         </Form.Label>
                         <Form.Control
+                          required
                           type="Password"
-                          className="sc-disablefocus rounded-pill border-dark"
+                          className={`${cPasswordClass} sc-disablefocus rounded-pill border-dark`}
                           name="password"
-                          value={confirmPassword}
-                          onChange={onChange}
+                          ref={confirmPassword}
+                          onChange={checkPasswords}
                         />
+
+                        <Form.Text>
+                          {showErrorMessage && isCPasswordDirty ? (
+                            <div> Passwords did not match </div>
+                          ) : (
+                            ""
+                          )}
+                        </Form.Text>
                       </Form.Group>
                       <Form.Group className="mb-3">
                         <Form.Label htmlFor="profilePicture_field">
@@ -157,6 +198,7 @@ const Register = () => {
                           </Col>
                           <Col sm="10">
                             <Form.Control
+                              required
                               type="file"
                               className="sc-disablefocus rounded-pill border-dark"
                               accept="images/*"
@@ -168,6 +210,7 @@ const Register = () => {
                       </Form.Group>
                       <Form.Group className="mb-3">
                         <Form.Check
+                          required
                           type="checkbox"
                           label={`confirm that you accept our terms of uses, privacy policy and cookies policy`}
                           style={{ fontSize: "11px" }}
