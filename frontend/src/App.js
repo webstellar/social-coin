@@ -29,6 +29,8 @@ import HeroesList from "./components/admin/HeroesList";
 import AppreciationsList from "./components/admin/AppreciationsList";
 import NewAdminHero from "./components/admin/NewAdminHero";
 import NewAdminAppreciation from "./components/admin/NewAdminAppreciation";
+import NewUserHero from "./components/user/NewUserHero";
+import NewUserAppreciation from "./components/user/NewUserAppreciation";
 
 import { loadUser } from "./actions/userAction";
 import store from "./store";
@@ -52,6 +54,8 @@ function App() {
         />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/hero/new" element={<NewUserHero />} />
+        <Route path="/appreciation/new" element={<NewUserAppreciation />} />
         <Route
           path="/me"
           element={
@@ -118,6 +122,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+
         <Route path="/password/forgot" element={<ForgotPassword />} />
         <Route path="/password/reset/:token" element={<NewPassword />} />
         <Route path="/discover" element={<Discover />} />

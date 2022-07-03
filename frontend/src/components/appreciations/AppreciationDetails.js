@@ -23,12 +23,11 @@ import {
   clearErrors,
 } from "../../actions/appreciationActions";
 
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
 const AppreciationDetails = () => {
   const params = useParams();
   const dispatch = useDispatch();
-  const alert = toast();
 
   const { loading, error, appreciation } = useSelector(
     (state) => state.appreciationDetails
@@ -38,10 +37,10 @@ const AppreciationDetails = () => {
     dispatch(getAppreciationDetails(params.id));
 
     if (error) {
-      alert.error(error);
+      toast.error(error);
       dispatch(clearErrors);
     }
-  }, [dispatch, error, alert, params.id]);
+  }, [dispatch, error, params.id]);
 
   const apprDate = dayjs(appreciation.createdAt).format("MMM D, YYYY");
 
@@ -117,6 +116,17 @@ const AppreciationDetails = () => {
                 </Col>
               </Row>
             </ErrorBoundary>
+            <ToastContainer
+              position="bottom-left"
+              autoClose={5000}
+              hideProgressBar={true}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+            />
           </Container>
         </Fragment>
       )}

@@ -17,11 +17,9 @@ const heroSchema = new mongoose.Schema(
     profilePicture: {
       public_id: {
         type: String,
-        required: true,
       },
       url: {
         type: String,
-        required: true,
       },
     },
     gender: {

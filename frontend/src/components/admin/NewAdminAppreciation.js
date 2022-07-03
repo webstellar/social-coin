@@ -45,8 +45,7 @@ const NewAppreciation = () => {
     }
 
     if (success) {
-      //navigate("/appreciation/new");
-      //navigate("heroid/appreciationid")
+      //navigate("/admin/appreciations");
       toast.success("Appreciation created successfully");
       dispatch({ type: NEW_APPRECIATION_RESET });
     }

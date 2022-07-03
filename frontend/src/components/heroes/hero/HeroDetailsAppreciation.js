@@ -39,7 +39,7 @@ const Appreciation = ({ appreciation }) => {
                 />
               )}
               <p className="text-end">
-                {appreciation?.user ? appreciation?.user : "Admin"}
+                {appreciation?.user ? appreciation.user.name : "Admin"}
               </p>
             </div>
           </div>

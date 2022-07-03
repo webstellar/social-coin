@@ -1,4 +1,7 @@
 const Appreciation = require("../models/appreciation");
+const Hero = require("../models/hero");
+const mongoose = require("mongoose");
+const toId = mongoose.Types.ObjectId;
 
 const ErrorHandler = require("../utils/errorHandler");
 const catchAsyncErrors = require("../middlewares/catchAsyncErrors");
@@ -7,18 +10,31 @@ const cloudinary = require("cloudinary");
 
 //create new appreciation => /api/v1/appreciation/new
 exports.newAppreciation = catchAsyncErrors(async (req, res, next) => {
+  req.body.user = req.user.id;
+  req.body.hero = toId(req.body.hero);
+
   const image = await cloudinary.v2.uploader.upload(req.body.image, {
     folder: "social-coin/appreciations/images",
   });
 
   req.body.image = image;
 
-  req.body.user = req.user.id;
   const appreciation = await Appreciation.create(req.body);
+
+  req.params.id = req.body.hero;
+  if (!req.params.id) {
+    return next(new ErrorHandler("Hero not found", 404));
+  }
+
+  const hero = await Hero.findById(req.params.id);
+  hero.appreciations.push(appreciation);
+  hero.markModified("appreciations");
+  await hero.save();
 
   res.status(201).json({
     success: true,
     appreciation,
+    hero,
   });
 });
 

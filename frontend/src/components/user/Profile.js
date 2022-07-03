@@ -33,7 +33,7 @@ const Profile = () => {
               </Container>
             </Navbar>
             <Tabs
-              defaultActiveKey="home"
+              defaultActiveKey="my-profile"
               id="uncontrolled-tab-example"
               className="mb-lg-5"
             >
