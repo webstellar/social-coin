@@ -60,8 +60,22 @@ function App() {
         />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/hero/new" element={<NewUserHero />} />
-        <Route path="/appreciation/new" element={<NewUserAppreciation />} />
+        <Route
+          path="/hero/new"
+          element={
+            <ProtectedRoute>
+              <NewUserHero />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/appreciation/new"
+          element={
+            <ProtectedRoute>
+              <NewUserAppreciation />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/me"
           element={
