@@ -15,11 +15,11 @@ const appreciationSchema = new mongoose.Schema(
       maxLength: [3000, "Please summary cannot exceed 3000 characters"],
     },
     hero: {
-      type: mongoose.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "Hero",
     },
     user: {
-      type: mongoose.Schema.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },

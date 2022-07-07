@@ -15,6 +15,7 @@ import ContactUs from "./components/pages/ContactUs";
 
 import HeroDetails from "./components/heroes/hero/HeroDetails";
 import AppreciationDetails from "./components/appreciations/AppreciationDetails";
+import ShareAppreciations from "./components/appreciations/ShareAppreciations";
 
 import Register from "./components/user/Register";
 import Login from "./components/user/Login";
@@ -50,6 +51,11 @@ function App() {
         <Route
           path="/appreciation/:id"
           element={<AppreciationDetails />}
+          exact
+        />
+        <Route
+          path="/share/appreciation/:id"
+          element={<ShareAppreciations />}
           exact
         />
         <Route path="/register" element={<Register />} />

@@ -45,7 +45,7 @@ const NewAppreciation = () => {
     }
 
     if (success) {
-      //navigate("/admin/appreciations");
+      navigate("/share");
       toast.success("Appreciation created successfully");
       dispatch({ type: NEW_APPRECIATION_RESET });
     }
@@ -55,6 +55,7 @@ const NewAppreciation = () => {
     e.preventDefault();
 
     const formData = new FormData();
+    formData.set("hero", hero);
     formData.set("summary", summary);
     formData.set("story", story);
     formData.set("image", image);
@@ -62,6 +63,10 @@ const NewAppreciation = () => {
     //formData.set("video", video);
 
     dispatch(newAppreciation(formData));
+  };
+
+  const storyChange = (story) => {
+    setStory(story);
   };
 
   const onChange = (e) => {
@@ -95,7 +100,10 @@ const NewAppreciation = () => {
                 <ErrorBoundary>
                   <h2 className="pw-bolder text-center">name your hero</h2>
                   <div className="mt-5 sc-logincontrol">
-                    <Form>
+                    <Form
+                      onSubmit={submitHandler}
+                      encType="multipart/form-data"
+                    >
                       <Form.Group className="mb-3">
                         <Form.Label htmlFor="fullname_field">hero</Form.Label>
                         <Form.Select
@@ -105,17 +113,12 @@ const NewAppreciation = () => {
                         >
                           {heroes &&
                             heroes.map((hero) => (
-                              <option key={hero._id} value={hero}>
+                              <option key={hero._id} value={hero._id}>
                                 {hero.name}
                               </option>
                             ))}
                         </Form.Select>
                       </Form.Group>
-                    </Form>
-                    <Form
-                      onSubmit={submitHandler}
-                      encType="multipart/form-data"
-                    >
                       <Form.Group className="mb-3">
                         <Form.Label htmlFor="fullname_field">
                           summary
@@ -139,13 +142,12 @@ const NewAppreciation = () => {
                         <Editor
                           apiKey="0z5qmo7cx8rjieka6xxb9nz2y1b8k8rdyluiq9zv9r0t6du2"
                           value={story}
+                          plugins="wordcount fullscreen"
                           init={{
                             height: 500,
                             menubar: false,
                           }}
-                          onChange={(e) => {
-                            setStory(e.target.value);
-                          }}
+                          onEditorChange={storyChange}
                         />
                       </Form.Group>
 

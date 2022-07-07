@@ -5,6 +5,8 @@ import { GoPrimitiveDot } from "react-icons/go";
 import Loader from "../layout/Loader";
 import { useDispatch, useSelector } from "react-redux";
 import { getHeroes } from "../../actions/heroActions";
+import { Link } from "react-router-dom";
+import { BsPlus } from "react-icons/bs";
 
 import SearchBar from "../layout/SearchBar";
 import { ReactComponent as Envelope } from "../../images/envelope-plus.svg";
@@ -23,7 +25,13 @@ const AppreciationDetailsSideBarBottom = () => {
       <SearchBar />
       <div>
         <button type="button" className="btn btn-dark rounded-pill px-3 me-3">
-          APPRECIATE
+          <Link
+            to="/appreciation/new"
+            className="text-light text-decoration-none"
+          >
+            <BsPlus />
+            APPRECIATE
+          </Link>
         </button>
         <span className="border border-2 border-dark text-dark rounded-circle p-2">
           <Envelope />
@@ -43,12 +51,14 @@ const AppreciationDetailsSideBarBottom = () => {
               See Who Got Appreciated Today
             </span>
             {heroes &&
-              heroes.map((heroes, i) => (
-                <HeroAppreciationLink
-                  key={i}
-                  heroes={heroes}
-                ></HeroAppreciationLink>
-              ))}
+              heroes
+                .slice(0, 5)
+                .map((heroes, i) => (
+                  <HeroAppreciationLink
+                    key={i}
+                    heroes={heroes}
+                  ></HeroAppreciationLink>
+                ))}
           </ListGroup>
         </Fragment>
       )}

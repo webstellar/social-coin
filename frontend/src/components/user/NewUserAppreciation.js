@@ -29,7 +29,7 @@ const NewUserAppreciation = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { loading, error, success } = useSelector(
+  const { loading, error, success, appreciation } = useSelector(
     (state) => state.newAppreciation
   );
 
@@ -44,16 +44,17 @@ const NewUserAppreciation = () => {
     }
 
     if (success) {
-      navigate("/me");
+      navigate(`/share/appreciation/${appreciation._id}`);
       toast.success("Appreciation created successfully");
       dispatch({ type: NEW_APPRECIATION_RESET });
     }
-  }, [dispatch, error, success, navigate]);
+  }, [dispatch, error, success, appreciation, navigate, hero]);
 
   const submitHandler = (e) => {
     e.preventDefault();
 
     const formData = new FormData();
+    formData.set("hero", hero);
     formData.set("summary", summary);
     formData.set("story", story);
     formData.set("image", image);
@@ -61,6 +62,10 @@ const NewUserAppreciation = () => {
     //formData.set("video", video);
 
     dispatch(newAppreciation(formData));
+  };
+
+  const storyChange = (story) => {
+    setStory(story);
   };
 
   const onChange = (e) => {
@@ -85,11 +90,13 @@ const NewUserAppreciation = () => {
       ) : (
         <Fragment>
           <MetaData title={"Register a new hero"} />
-          <ErrorBoundary>
-            <Container>
+          <Container>
+            <ErrorBoundary>
               <Row className="justify-content-center">
                 <Col md={4} className="mb-5">
-                  <h2 className="pw-bolder text-center">name your hero</h2>
+                  <h2 className="pw-bolder text-center">
+                    appreciate your hero
+                  </h2>
                   <div className="mt-5 sc-logincontrol">
                     <Form
                       onSubmit={submitHandler}
@@ -134,13 +141,12 @@ const NewUserAppreciation = () => {
                         <Editor
                           apiKey="0z5qmo7cx8rjieka6xxb9nz2y1b8k8rdyluiq9zv9r0t6du2"
                           value={story}
+                          plugins="wordcount fullscreen"
                           init={{
                             height: 500,
                             menubar: false,
                           }}
-                          onChange={(e) => {
-                            setStory(e.target.value);
-                          }}
+                          onEditorChange={storyChange}
                         />
                       </Form.Group>
 
@@ -193,8 +199,8 @@ const NewUserAppreciation = () => {
                 draggable
                 pauseOnHover
               />
-            </Container>
-          </ErrorBoundary>
+            </ErrorBoundary>
+          </Container>
         </Fragment>
       )}
     </Fragment>

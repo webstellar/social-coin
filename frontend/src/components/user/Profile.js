@@ -6,6 +6,7 @@ import Loader from "../layout/Loader";
 import ProfileTab from "./ProfileTab";
 import MyHeroes from "./MyHeroes";
 import MyAppreciations from "./MyAppreciations";
+import { Link } from "react-router-dom";
 import { BsPlus } from "react-icons/bs";
 
 const Profile = () => {
@@ -24,10 +25,15 @@ const Profile = () => {
                 <Nav>
                   <button
                     type="button"
-                    className="btn btn-dark rounded-pill px-4"
+                    className="btn btn-dark rounded-pill px-3 me-3"
                   >
-                    <BsPlus />
-                    APPRECIATE
+                    <Link
+                      to="/appreciation/new"
+                      className="text-light text-decoration-none"
+                    >
+                      <BsPlus />
+                      APPRECIATE
+                    </Link>
                   </button>
                 </Nav>
               </Container>

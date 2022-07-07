@@ -18,7 +18,7 @@ const Hero = ({ hero }) => {
           }}
         >
           <Card.Img
-            src={hero.profilePicture.url}
+            src={hero.profilePicture?.url}
             alt="Card image"
             className="img-fluid"
           />
@@ -30,13 +30,13 @@ const Hero = ({ hero }) => {
                     <span>
                       <MdMessage />
                     </span>
-                    <span className="ps-1">{hero.appreciationsCount}</span>
+                    <span className="ps-1">{hero.appreciations.length}</span>
                   </div>
                 </Col>
               </Row>
             </Card.Body>
             <div className="sc-summary-text p-3 text-center card-bg-color">
-              {appr?.summary}
+              {appr?.summary.substring(0, 40)}...
             </div>
           </Card.ImgOverlay>
         </Card>

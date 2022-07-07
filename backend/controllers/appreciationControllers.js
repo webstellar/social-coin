@@ -10,6 +10,7 @@ const cloudinary = require("cloudinary");
 
 //create new appreciation => /api/v1/appreciation/new
 exports.newAppreciation = catchAsyncErrors(async (req, res, next) => {
+  //create the appreciation
   req.body.user = req.user.id;
   req.body.hero = toId(req.body.hero);
 
@@ -18,13 +19,11 @@ exports.newAppreciation = catchAsyncErrors(async (req, res, next) => {
   });
 
   req.body.image = image;
-
   const appreciation = await Appreciation.create(req.body);
 
-  req.params.id = req.body.hero;
-  if (!req.params.id) {
-    return next(new ErrorHandler("Hero not found", 404));
-  }
+  //connect appreciation to  hero
+  appreciation.id = await appreciation._id;
+  req.params.id = await appreciation.hero;
 
   const hero = await Hero.findById(req.params.id);
   hero.appreciations.push(appreciation);
@@ -38,12 +37,68 @@ exports.newAppreciation = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
+/*
+  hero = await Hero.findById(req.params.id);
+  console.log(hero);
+*/
+
+/*
+  const hero = await Hero.findByIdAndUpdate(
+    req.params.id,
+    { $push: { appreciations: appreciation } },
+    { $push: { appreciations: appreciation } },
+    { safe: true, upsert: false }
+    function (err, docs) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log("Updated Hero : ", docs);
+      }
+    }
+  );*/
+
+/*
+    const filter = { _id: req.params.id };
+    const update = { $push: { appreciations: appreciation } };
+    const safety = { safe: true, upsert: true };
+
+    
+  const hero = await Hero.findOneAndUpdate(
+    { _id: req.params.id },
+    { $push: { appreciations: appreciation } },
+    { safe: true, upsert: true }
+  );
+  */
+/*
+  console.log("appreciation hero", req.params.id);
+
+  const hero = await Hero.findById(req.params.id);
+  console.log("Hero Id", hero);
+  */
+
+/*
+  const hero = await Hero.findByIdAndUpdate(
+    req.params.id,
+    { $push: { appreciations: appreciation } },
+    { safe: true, upsert: false },
+    function (err, docs) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log("Updated Hero : ", docs);
+      }
+    }
+  );
+*/
+
 //Get all appreciations => /api/v1/appreciations
 exports.getAppreciations = catchAsyncErrors(async (req, res, next) => {
   const appreciationsCount = await Appreciation.countDocuments();
 
   const apiFeatures = new APIFeatures(
-    Appreciation.find().populate("hero"),
+    Appreciation.find()
+      .populate("hero")
+      .populate({ path: "user", select: ["name", "profilePicture"] }),
     req.query
   )
     .search()

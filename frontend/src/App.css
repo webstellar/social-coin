@@ -254,3 +254,8 @@ h6 span {
 .sc-summary-text {
   font-size: 14px !important;
 }
+
+.form-check-input:checked {
+  background-color: #000000 !important;
+  color: #000000 !important;
+}

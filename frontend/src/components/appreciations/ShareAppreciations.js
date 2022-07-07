@@ -1,5 +1,13 @@
-import React, { Fragment, useEffect } from "react";
-import { Container, Row, Col, Navbar, Image } from "react-bootstrap";
+import React, { Fragment, useEffect, useState } from "react";
+import {
+  Container,
+  Row,
+  Col,
+  Navbar,
+  Image,
+  Modal,
+  Button,
+} from "react-bootstrap";
 import ErrorBoundary from "../../ErrorBoundary";
 import Loader from "../layout/Loader";
 import MetaData from "../../components/layout/MetaData";
@@ -30,15 +38,24 @@ import {
 import { toast, ToastContainer } from "react-toastify";
 import { Parser } from "html-to-react";
 
-const AppreciationDetails = () => {
+const ShareAppreciations = () => {
   const params = useParams();
   const dispatch = useDispatch();
+
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  //const handleShow = () => setShow(true);
 
   const { loading, error, appreciation } = useSelector(
     (state) => state.appreciationDetails
   );
 
   useEffect(() => {
+    setTimeout(() => {
+      setShow(true);
+    }, 1000);
+    //return () => clearTimeout(timer);
+
     dispatch(getAppreciationDetails(params.id));
 
     if (error) {
@@ -57,6 +74,53 @@ const AppreciationDetails = () => {
       ) : (
         <Fragment>
           <MetaData title={"appreciation"} />
+          <Modal show={show} onHide={handleClose}>
+            <Modal.Header closeButton>
+              <Modal.Title>Let everyone know</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <p>Share on:</p>
+              <div>
+                <FacebookShareButton
+                  url={`${shareUrl}`}
+                  quote={appreciation.summary}
+                  hashtag={"#socialcoin"}
+                  description={appreciation.story}
+                  className="pe-2"
+                >
+                  <FacebookIcon size={40} round />
+                </FacebookShareButton>
+
+                <TwitterShareButton
+                  title={appreciation.summary}
+                  url={`${shareUrl}`}
+                  hashtags={["appreciatio", "socialcoin"]}
+                  className="pe-2"
+                >
+                  <TwitterIcon size={40} round />
+                </TwitterShareButton>
+                <LinkedinShareButton
+                  title={appreciation.summary}
+                  summary={appreciation.story}
+                  url={`${shareUrl}`}
+                  className="pe-2"
+                >
+                  <LinkedinIcon size={40} round />
+                </LinkedinShareButton>
+                <EmailShareButton
+                  subject={appreciation.summary}
+                  body={appreciation.story}
+                >
+                  <EmailIcon size={40} round />
+                </EmailShareButton>
+              </div>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleClose}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
           <Container>
             <ErrorBoundary>
               <Row>
@@ -168,4 +232,4 @@ const AppreciationDetails = () => {
   );
 };
 
-export default AppreciationDetails;
+export default ShareAppreciations;

@@ -18,6 +18,7 @@ router.route("/appreciation/:id").get(getSingleAppreciation);
 
 //users
 router.route("/appreciation/new").post(isAuthenticatedUser, newAppreciation);
+//router.route("/appreciation/new").all(isAuthenticatedUser, newAppreciation);
 
 router
   .route("/appreciation/:id")
@@ -27,6 +28,7 @@ router
 router.route("/appreciations/me").get(isAuthenticatedUser, myAppreciations);
 
 //Admin
+//router.route("/appreciation/new").all(isAuthenticatedUser, newAppreciation);
 router.route("/appreciation/new").post(isAuthenticatedUser, newAppreciation);
 
 router.route("/admin/appreciations").get(getAdminAppreciations);

@@ -108,7 +108,7 @@ export const newAppreciationReducer = (
       return {
         loading: false,
         success: action.payload.success,
-        appreciation: action.payload.product,
+        appreciation: action.payload.appreciation,
       };
 
     case NEW_APPRECIATION_FAIL:
