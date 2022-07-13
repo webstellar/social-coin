@@ -19,20 +19,19 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: [true, "Please enter your password"],
+    //required: [true, "Please enter your password"],
     minlength: [8, "Your password must be longer than 8 characters"],
     select: false,
   },
   profilePicture: {
     public_id: {
       type: String,
-      required: true,
     },
     url: {
       type: String,
-      required: true,
     },
   },
+
   role: {
     type: String,
     default: "user",

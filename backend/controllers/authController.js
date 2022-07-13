@@ -31,6 +31,28 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
   sendToken(user, 200, res);
 });
 
+exports.registerGoogleUser = catchAsyncErrors(async (req, res, next) => {
+  const result = await cloudinary.v2.uploader.upload(req.body.profilePicture, {
+    folder: "social-coin/user_avatar",
+    width: 150,
+    crop: "scale",
+  });
+
+  const { name, email, password } = req.body;
+
+  const user = await User.create({
+    name,
+    email,
+    password,
+    profilePicture: {
+      public_id: result.public_id,
+      url: result.secure_url,
+    },
+  });
+
+  sendToken(user, 200, res);
+});
+
 //Login User =>/api/v1/login/
 exports.loginUser = catchAsyncErrors(async (req, res, next) => {
   const { email, password } = req.body;
@@ -156,7 +178,7 @@ exports.updatePassword = catchAsyncErrors(async (req, res, next) => {
   if (!isMatched) {
     return next(new ErrorHandler("Old password is incorrect", 400));
   }
-  
+
   user.password = req.body.password;
   await user.save();
 

@@ -21,6 +21,7 @@ const ProtectedRoute = ({ children, isAdmin }) => {
 
   if (!loading && isAuthenticated) {
     if (isAdmin === true && user.role !== "admin") {
+      //navigate to previous menu
       navigate(-1);
     }
     return children;

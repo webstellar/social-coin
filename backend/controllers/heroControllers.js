@@ -15,9 +15,7 @@ exports.newHero = catchAsyncErrors(async (req, res, next) => {
   });
 
   req.body.profilePicture = result;
-
   req.body.user = req.user.id;
-
   const hero = await Hero.create(req.body);
 
   res.status(201).json({

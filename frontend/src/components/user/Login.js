@@ -1,15 +1,19 @@
+/* eslint-disable react/no-unescaped-entities */
 import React, { Fragment, useState, useEffect } from "react";
 import MetaData from "../layout/MetaData";
 import Loader from "../layout/Loader";
 import ErrorBoundary from "../../ErrorBoundary";
 
-import Google from "../../images/google.svg";
 import Linkedin from "../../images/linkedin.svg";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { login, clearErrors } from "../../actions/userAction";
 import { ToastContainer, toast } from "react-toastify";
+import { useScript } from "../hooks/useScript";
+import jwt_decode from "jwt-decode";
+
+
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -21,6 +25,41 @@ const Login = () => {
   const { isAuthenticated, error, loading } = useSelector(
     (state) => state.auth
   );
+
+  const onGoogleSignIn = (user) => {
+    let userCred = user.credential;
+    let payload = jwt_decode(userCred);
+    let userData = {
+      email: payload.email,
+      password: payload.sub,
+    };
+
+    dispatch(login(userData.email, userData.password));
+  };
+
+  //Google SignIn
+  useScript("https://accounts.google.com/gsi/client", () => {
+    window.google.accounts.id.initialize({
+      client_id:
+        "325099659570-jkocn6hrpui6cbee63img4vicvnnvvil.apps.googleusercontent.com",
+      callback: onGoogleSignIn,
+    });
+
+    window.google.accounts.id.renderButton(
+      document.getElementById("signInDiv"),
+      {
+        theme: "outline",
+        size: "large",
+        shape: "pill",
+        text: "signin_with",
+        context: "signin",
+        width: "400",
+        logo_alignment: "center",
+      }
+    );
+
+    //window.google.accounts.id.prompt();
+  });
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -100,17 +139,10 @@ const Login = () => {
                       <hr />
                     </div>
 
-                    <div className="d-grid gap-2 mb-3">
-                      <Button className="sc-disablefocus rounded-pill btn-labeled btn-light btn-outline-dark">
-                        <img
-                          src={Google}
-                          alt="linkedin icon"
-                          style={{ width: 18, height: 18 }}
-                          className="pe-1"
-                        />
-                        sign in with Google
-                      </Button>
-                    </div>
+                    <div
+                      className="d-grid gap-2 mb-3 signUpDiv"
+                      id="signInDiv"
+                    ></div>
                     <div className="d-grid gap-2 mb-3">
                       <Button className="sc-disablefocus rounded-pill btn-labeled btn-light btn-outline-dark mb-3">
                         <img

@@ -259,3 +259,13 @@ h6 span {
   background-color: #000000 !important;
   color: #000000 !important;
 }
+.sc-modal-control {
+  display: "flex";
+  justify-content: "center";
+  align-items: "center" !important;
+}
+
+div.nsm7Bb-HzV7m-LgbsSe {
+  border: solid 1px #000 !important;
+  max-width: fit-content !important;
+}

@@ -56,7 +56,11 @@ const AppreciationDetails = () => {
         <Loader />
       ) : (
         <Fragment>
-          <MetaData title={"appreciation"} />
+          <MetaData
+            title={`${appreciation.summary}`}
+            description={`${appreciation.story}`}
+            image={`${appreciation.image?.url}`}
+          />
           <Container>
             <ErrorBoundary>
               <Row>
@@ -101,7 +105,7 @@ const AppreciationDetails = () => {
                         <TwitterShareButton
                           title={appreciation.summary}
                           url={`${shareUrl}`}
-                          hashtags={["appreciatio", "socialcoin"]}
+                          hashtags={["appreciation", "socialcoin"]}
                           className="pe-2"
                         >
                           <TwitterIcon size={25} round />

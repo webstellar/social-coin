@@ -1,16 +1,25 @@
+/* eslint-disable no-unused-vars */
 import React, { Fragment, useState, useEffect, useRef } from "react";
 import MetaData from "../layout/MetaData";
 import Loader from "../layout/Loader";
 import ErrorBoundary from "../../ErrorBoundary";
-
-import Google from "../../images/google.svg";
+import jwt_decode from "jwt-decode";
 import Linkedin from "../../images/linkedin.svg";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { register, clearErrors } from "../../actions/userAction";
+import {
+  register,
+  clearErrors,
+  googleRegister,
+} from "../../actions/userAction";
 
 import { toast, ToastContainer } from "react-toastify";
+import { useScript } from "../hooks/useScript";
+
+import { useLinkedIn } from "react-linkedin-login-oauth2";
+// You can use provided image shipped by this package or using your own
+import linkedin from "react-linkedin-login-oauth2/assets/linkedin.png";
 
 const Register = () => {
   const confirmPassword = useRef();
@@ -18,7 +27,6 @@ const Register = () => {
   const [showErrorMessage, setShowErrorMessage] = useState(false);
   const [cPasswordClass, setCPasswordClass] = useState("form-control");
   const [isCPasswordDirty, setIsCPasswordDirty] = useState(false);
-
   const [user, setUser] = useState({
     name: "",
     email: "",
@@ -44,14 +52,65 @@ const Register = () => {
     if (isCPasswordDirty) {
       if (newPassword.current.value === confirmPassword.current.value) {
         setShowErrorMessage(false);
-        setCPasswordClass("form-control is-valid");
+        setCPasswordClass("form-control is-valid isValid");
       } else {
         setShowErrorMessage(true);
-        setCPasswordClass("form-control is-invalid");
+        setCPasswordClass("form-control is-invalid isInvalid");
       }
     }
   };
 
+  const onGoogleSignIn = (user) => {
+    let userCred = user.credential;
+    let payload = jwt_decode(userCred);
+    let userData = {
+      name: payload.name,
+      email: payload.email,
+      profilePicture: payload.picture,
+      password: payload.sub,
+    };
+
+    dispatch(googleRegister(userData));
+  };
+
+  //Google Signup
+  useScript("https://accounts.google.com/gsi/client", () => {
+    window.google.accounts.id.initialize({
+      client_id:
+        "325099659570-jkocn6hrpui6cbee63img4vicvnnvvil.apps.googleusercontent.com",
+      callback: onGoogleSignIn,
+    });
+
+    window.google.accounts.id.renderButton(
+      document.getElementById("signUpDiv"),
+      {
+        theme: "outline",
+        size: "large",
+        shape: "pill",
+        text: "signup_with",
+        context: "signup",
+        width: "400",
+        logo_alignment: "center",
+      }
+    );
+
+    //window.google.accounts.id.prompt();
+  });
+
+  //LinkedIn
+
+  const { linkedInLogin } = useLinkedIn({
+    clientId: "86vhj2q7ukf83q",
+    redirectUri: `${window.location.origin}/linkedin`,
+    onSuccess: (code) => {
+      console.log("Code: " + code);
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
+  //Email Signup
   useEffect(() => {
     if (isCPasswordDirty) {
       if (newPassword.current.value === confirmPassword.current.value) {
@@ -230,22 +289,20 @@ const Register = () => {
                       <hr />
                     </div>
 
-                    <div class="d-grid gap-2 mb-3">
-                      <Button className="sc-disablefocus rounded-pill btn-labeled btn-light btn-outline-dark">
-                        <img
-                          src={Google}
-                          alt="linkedin icon"
-                          style={{ width: 18, height: 18 }}
-                          className="pe-1"
-                        />
-                        sign up with Google
-                      </Button>
-                    </div>
-                    <div class="d-grid gap-2 mb-3">
-                      <Button className="sc-disablefocus rounded-pill btn-labeled btn-light btn-outline-dark">
+                    <div
+                      className="d-grid gap-2 mb-3 signUpDiv"
+                      id="signUpDiv"
+                    ></div>
+
+                    <div className="d-grid gap-2 mb-3">
+                      <Button
+                        className="sc-disablefocus rounded-pill btn-labeled btn-light btn-outline-dark"
+                        onClick={linkedInLogin}
+                        style={{ cursor: "pointer" }}
+                      >
                         <img
                           src={Linkedin}
-                          alt="linkedin icon"
+                          alt="Sing up with LinkedIn"
                           style={{ width: 18, height: 18 }}
                           className="pe-1"
                         />

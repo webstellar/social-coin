@@ -15,11 +15,13 @@ const {
   getUserDetails,
   updateUser,
   deleteUser,
+  registerGoogleUser,
 } = require("../controllers/authController");
 
 const { isAuthenticatedUser, authorizeRoles } = require("../middlewares/auth");
 
 router.route("/register").post(registerUser);
+router.route("/register").post(registerGoogleUser);
 router.route("/login").post(loginUser);
 router.route("/password/forgot").post(forgotPassword);
 router.route("/password/reset/:token").put(resetPassword);

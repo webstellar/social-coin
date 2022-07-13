@@ -33,6 +33,8 @@ import NewAdminAppreciation from "./components/admin/NewAdminAppreciation";
 import NewUserHero from "./components/user/NewUserHero";
 import NewUserAppreciation from "./components/user/NewUserAppreciation";
 
+import { LinkedInCallback } from "react-linkedin-login-oauth2";
+
 import { loadUser } from "./actions/userAction";
 import store from "./store";
 
@@ -58,6 +60,8 @@ function App() {
           element={<ShareAppreciations />}
           exact
         />
+        <Route path="/linkedin" element={<LinkedInCallback />} exact />
+
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route

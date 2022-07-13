@@ -73,8 +73,12 @@ const ShareAppreciations = () => {
         <Loader />
       ) : (
         <Fragment>
-          <MetaData title={"appreciation"} />
-          <Modal show={show} onHide={handleClose}>
+          <MetaData
+            title={`${appreciation.summary}`}
+            description={`${appreciation.story}`}
+            image={`${appreciation.image?.url}`}
+          />
+          <Modal show={show} onHide={handleClose} className="sc-modal-control">
             <Modal.Header closeButton>
               <Modal.Title>Let everyone know</Modal.Title>
             </Modal.Header>

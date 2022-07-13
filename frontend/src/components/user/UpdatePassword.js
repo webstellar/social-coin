@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { Fragment, useState, useEffect, useRef } from "react";
 import MetaData from "../layout/MetaData";
 import Loader from "../layout/Loader";
