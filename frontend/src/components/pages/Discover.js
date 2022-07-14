@@ -63,74 +63,77 @@ const Discover = () => {
                   className="py-5"
                 >
                   {heroes &&
-                    heroes.slice(0, 4).map((hero) => {
-                      const appreciations = hero.appreciations;
-                      const appr = appreciations[appreciations.length - 1];
-                      return (
-                        <Carousel.Item key={hero._id}>
-                          <Row>
-                            <Col xs={6} md={4} className="align-self-center">
-                              <img
-                                className="w-100"
-                                src={
-                                  appr.image
-                                    ? appr.image.url
-                                    : "https://picsum.photos/200"
-                                }
-                                alt="First slide"
-                                height="300"
-                              />
-                            </Col>
-                            <Col xs={12} md={8} className="align-self-center">
-                              <div>
-                                <span className="border border-1 rounded-pill border-dark py-2 px-5 text-dark">
-                                  LATEST
-                                </span>
-                                <h3 className="fw-bolder mt-3">
-                                  {appr.summary.substring(0, 45)}...
-                                </h3>
-                                <div className="mt-2">
-                                  <ListGroup.Item
-                                    as={Link}
-                                    to={`/appreciation/${appr?._id}`}
-                                    style={{
-                                      backgroundColor: "rgba(0, 0, 0, 0)",
-                                    }}
-                                    className="sc-sidedarlink mb-1"
-                                  >
-                                    <Navbar className="justify-content-start">
-                                      <Navbar.Brand>
-                                        <img
-                                          src={hero.profilePicture.url}
-                                          alt="mdo"
-                                          width="80"
-                                          height="80"
-                                          className="rounded-circle"
-                                        />
-                                      </Navbar.Brand>
-                                      <Navbar.Brand>
-                                        <span
-                                          className="fw-bold"
-                                          style={{ fontSize: "20px" }}
-                                        >
-                                          {hero.name}
-                                        </span>
-                                        <span
-                                          className="d-flex"
-                                          style={{ fontSize: "16px" }}
-                                        >
-                                          {hero.country}
-                                        </span>
-                                      </Navbar.Brand>
-                                    </Navbar>
-                                  </ListGroup.Item>
+                    heroes
+                      .slice(0, 4)
+                      .reverse()
+                      .map((hero, i, arr) => {
+                        const appreciations = hero.appreciations;
+                        const appr = appreciations[appreciations.length - 1];
+                        return (
+                          <Carousel.Item key={hero._id}>
+                            <Row>
+                              <Col xs={6} md={4} className="align-self-center">
+                                <img
+                                  className="w-100"
+                                  src={
+                                    appr.image
+                                      ? appr.image.url
+                                      : "https://picsum.photos/200"
+                                  }
+                                  alt="First slide"
+                                  height="300"
+                                />
+                              </Col>
+                              <Col xs={12} md={8} className="align-self-center">
+                                <div>
+                                  <span className="border border-1 rounded-pill border-dark py-2 px-5 text-dark">
+                                    LATEST
+                                  </span>
+                                  <h3 className="fw-bolder mt-3">
+                                    {appr.summary.substring(0, 45)}...
+                                  </h3>
+                                  <div className="mt-2">
+                                    <ListGroup.Item
+                                      as={Link}
+                                      to={`/appreciation/${appr?._id}`}
+                                      style={{
+                                        backgroundColor: "rgba(0, 0, 0, 0)",
+                                      }}
+                                      className="sc-sidedarlink mb-1"
+                                    >
+                                      <Navbar className="justify-content-start">
+                                        <Navbar.Brand>
+                                          <img
+                                            src={hero.profilePicture.url}
+                                            alt="mdo"
+                                            width="80"
+                                            height="80"
+                                            className="rounded-circle"
+                                          />
+                                        </Navbar.Brand>
+                                        <Navbar.Brand>
+                                          <span
+                                            className="fw-bold"
+                                            style={{ fontSize: "20px" }}
+                                          >
+                                            {hero.name}
+                                          </span>
+                                          <span
+                                            className="d-flex"
+                                            style={{ fontSize: "16px" }}
+                                          >
+                                            {hero.country}
+                                          </span>
+                                        </Navbar.Brand>
+                                      </Navbar>
+                                    </ListGroup.Item>
+                                  </div>
                                 </div>
-                              </div>
-                            </Col>
-                          </Row>
-                        </Carousel.Item>
-                      );
-                    })}
+                              </Col>
+                            </Row>
+                          </Carousel.Item>
+                        );
+                      })}
                 </Carousel>
               </ErrorBoundary>
             </Row>
