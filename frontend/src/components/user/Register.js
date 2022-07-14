@@ -60,6 +60,7 @@ const Register = () => {
     }
   };
 
+  //Google Signup
   const onGoogleSignIn = (user) => {
     let userCred = user.credential;
     let payload = jwt_decode(userCred);
@@ -73,7 +74,6 @@ const Register = () => {
     dispatch(googleRegister(userData));
   };
 
-  //Google Signup
   useScript("https://accounts.google.com/gsi/client", () => {
     window.google.accounts.id.initialize({
       client_id:

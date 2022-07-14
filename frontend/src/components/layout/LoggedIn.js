@@ -28,7 +28,7 @@ const LoggedIn = ({ user }) => {
         <Dropdown.Toggle>
           <div className="position-relative">
             <BsBell className="text-dark h5 pt-1" />
-            <span className="position-absolute top-0 start-100 translate-middle badge border border-light rounded-circle bg-danger p-2">
+            <span className="position-absolute top-0 start-100 translate-middle border border-light rounded-circle bg-danger p-2">
               <span className="visually-hidden">unread messages</span>
             </span>
           </div>

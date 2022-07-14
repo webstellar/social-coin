@@ -18,7 +18,7 @@ const HeroDetailsSideBar = ({ hero }) => {
       />
       <h5 className="mt-0 fw-bold">{hero.name}</h5>
       <span className="mt-1 fw-bold pe-1">{appr?.length}</span>
-      {hero.appreciations > 1 ? (
+      {appr?.length > 1 ? (
         <span className="mt-1 fw-bold">Appreciations</span>
       ) : (
         <span className="mt-1 fw-bold">Appreciation</span>

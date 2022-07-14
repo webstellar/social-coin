@@ -269,3 +269,26 @@ div.nsm7Bb-HzV7m-LgbsSe {
   border: solid 1px #000 !important;
   max-width: fit-content !important;
 }
+
+.carousel-dark,
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  filter: none !important;
+}
+
+.carousel-control-next-icon {
+  background-image: url("./images/arrow-right-circle.svg") !important;
+}
+
+.carousel-control-prev-icon {
+  content: url("./images/arrow-left-circle.svg") !important;
+}
+/*
+.carousel-control-next-icon:after {
+  content: url("./images/arrow-right-circle.svg");
+}
+
+.carousel-control-prev-icon:after {
+  content: url("./images/arrow-left-circle.svg");
+}
+*/

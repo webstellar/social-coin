@@ -2,7 +2,7 @@ import React, { Fragment, useState } from "react";
 import { GrSearch } from "react-icons/gr";
 import { useNavigate } from "react-router-dom";
 
-const SearchBar = () => {
+const DiscoverSearchBar = () => {
   const navigate = useNavigate();
   const [keyword, setKeyword] = useState("");
 
@@ -10,9 +10,9 @@ const SearchBar = () => {
     e.preventDefault();
 
     if (keyword.trim()) {
-      navigate(`/search/${keyword}`);
+      navigate(`/discover/search/${keyword}`);
     } else {
-      navigate("/");
+      navigate("/discover");
     }
   };
 
@@ -43,4 +43,4 @@ const SearchBar = () => {
   );
 };
 
-export default SearchBar;
+export default DiscoverSearchBar;
