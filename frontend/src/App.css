@@ -281,7 +281,7 @@ div.nsm7Bb-HzV7m-LgbsSe {
 }
 
 .carousel-control-prev-icon {
-  content: url("./images/arrow-left-circle.svg") !important;
+  background-image: url("./images/arrow-left-circle.svg") !important;
 }
 /*
 .carousel-control-next-icon:after {
