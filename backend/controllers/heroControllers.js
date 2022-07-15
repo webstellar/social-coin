@@ -32,7 +32,7 @@ exports.getHeroes = catchAsyncErrors(async (req, res, next) => {
   //const apiFeatures = new APIFeatures(Hero.find(), req.query).search();
 
   apiFeatures = new APIFeatures(
-    Hero.find().populate("appreciations"),
+    Hero.find().populate("appreciations").populate("user"),
     req.query
   ).search();
 

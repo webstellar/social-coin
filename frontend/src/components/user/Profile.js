@@ -28,7 +28,7 @@ const Profile = () => {
                     className="btn btn-dark rounded-pill px-3 me-3"
                   >
                     <Link
-                      to="/appreciation/new"
+                      to="/hero/new"
                       className="text-light text-decoration-none"
                     >
                       <BsPlus />

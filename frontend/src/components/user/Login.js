@@ -13,8 +13,6 @@ import { ToastContainer, toast } from "react-toastify";
 import { useScript } from "../hooks/useScript";
 import jwt_decode from "jwt-decode";
 
-
-
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -119,6 +117,7 @@ const Login = () => {
                           }}
                         />
                       </Form.Group>
+
                       <div className="d-grid gap-2">
                         <Button
                           type="submit"

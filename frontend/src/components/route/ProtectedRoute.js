@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate, useNavigate, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { loadUser } from "../../actions/userAction";
 
@@ -12,6 +12,7 @@ const ProtectedRoute = ({ children, isAdmin }) => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     if (!user) {
@@ -22,6 +23,7 @@ const ProtectedRoute = ({ children, isAdmin }) => {
   if (!loading && isAuthenticated) {
     if (isAdmin === true && user.role !== "admin") {
       //navigate to previous menu
+      //location.reload();
       navigate(-1);
     }
     return children;

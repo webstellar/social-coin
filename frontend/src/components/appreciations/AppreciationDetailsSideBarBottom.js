@@ -25,17 +25,11 @@ const AppreciationDetailsSideBarBottom = () => {
       <SearchBar />
       <div>
         <button type="button" className="btn btn-dark rounded-pill px-3 me-3">
-          <Link
-            to="/appreciation/new"
-            className="text-light text-decoration-none"
-          >
+          <Link to="/hero/new" className="text-light text-decoration-none">
             <BsPlus />
             APPRECIATE
           </Link>
         </button>
-        <span className="border border-2 border-dark text-dark rounded-circle p-2">
-          <Envelope />
-        </span>
       </div>
       {loading ? (
         <Loader />
@@ -53,6 +47,7 @@ const AppreciationDetailsSideBarBottom = () => {
             {heroes &&
               heroes
                 .slice(0, 5)
+                .filter((hero) => hero.appreciations.createdAt)
                 .map((heroes, i) => (
                   <HeroAppreciationLink
                     key={i}

@@ -66,7 +66,8 @@ const Discover = () => {
                     heroes
                       .slice(0, 4)
                       .reverse()
-                      .map((hero, i, arr) => {
+                      .filter((hero) => hero.appreciations.length >= 1)
+                      .map((hero) => {
                         const appreciations = hero.appreciations;
                         const appr = appreciations[appreciations.length - 1];
                         return (
@@ -144,7 +145,9 @@ const Discover = () => {
             <Row sm={3} md={6}>
               <ErrorBoundary>
                 {heroes &&
-                  heroes.map((hero) => <Hero key={hero._id} hero={hero} />)}
+                  heroes
+                    .filter((hero) => hero.appreciations.length >= 1)
+                    .map((hero) => <Hero key={hero._id} hero={hero} />)}
               </ErrorBoundary>
             </Row>
             <ToastContainer

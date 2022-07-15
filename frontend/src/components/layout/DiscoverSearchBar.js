@@ -10,7 +10,7 @@ const DiscoverSearchBar = () => {
     e.preventDefault();
 
     if (keyword.trim()) {
-      navigate(`/discover/search/${keyword}`);
+      navigate(`/search/${keyword}`);
     } else {
       navigate("/discover");
     }

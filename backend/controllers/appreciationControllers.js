@@ -96,9 +96,7 @@ exports.getAppreciations = catchAsyncErrors(async (req, res, next) => {
   const appreciationsCount = await Appreciation.countDocuments();
 
   const apiFeatures = new APIFeatures(
-    Appreciation.find()
-      .populate("hero")
-      .populate({ path: "user", select: ["name", "profilePicture"] }),
+    Appreciation.find().populate("hero").populate("user"),
     req.query
   )
     .search()

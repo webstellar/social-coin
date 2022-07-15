@@ -127,6 +127,20 @@ const ShareAppreciations = () => {
           </Modal>
           <Container>
             <ErrorBoundary>
+              <Row className="justify-content-center mb-5">
+                <ul className="sc-progressbar">
+                  <li className="active">
+                    <Link
+                      to="/hero/new"
+                      className="active text-dark text-decoration-none"
+                    >
+                      name your hero
+                    </Link>
+                  </li>
+                  <li className="active">appreciate your hero</li>
+                  <li className="active">share your appreciate</li>
+                </ul>
+              </Row>
               <Row>
                 <Col sm={8} className="hero-details-col pe-5">
                   <Navbar className="justify-content-start mb-5">

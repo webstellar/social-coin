@@ -1,11 +1,19 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { Form, Button, Container, Row, Col } from "react-bootstrap";
+import {
+  Form,
+  Button,
+  Container,
+  Row,
+  Col,
+  ListGroup,
+  Navbar,
+} from "react-bootstrap";
 import ErrorBoundary from "../../ErrorBoundary";
 import MetaData from "../layout/MetaData";
 import Loader from "../layout/Loader";
 import { Editor } from "@tinymce/tinymce-react";
 
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   newAppreciation,
@@ -28,6 +36,9 @@ const NewUserAppreciation = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const data = location.state?.data._id;
 
   const { loading, error, success, appreciation } = useSelector(
     (state) => state.newAppreciation
@@ -89,14 +100,63 @@ const NewUserAppreciation = () => {
         <Loader />
       ) : (
         <Fragment>
-          <MetaData title={"Register a new hero"} />
+          <MetaData title={"Appreciation your hero"} />
           <Container>
             <ErrorBoundary>
+              <Row className="justify-content-center mb-5">
+                <ul className="sc-progressbar">
+                  <li className="active">
+                    <Link
+                      to="/hero/new"
+                      className="active text-dark text-decoration-none"
+                    >
+                      name your hero
+                    </Link>
+                  </li>
+                  <li className="active">appreciate your hero</li>
+                  <li>share your appreciate</li>
+                </ul>
+              </Row>
               <Row className="justify-content-center">
                 <Col md={4} className="mb-5">
                   <h2 className="pw-bolder text-center">
                     appreciate your hero
                   </h2>
+                  <ListGroup variant="flush">
+                    {heroes &&
+                      heroes
+                        .filter((hero) => hero._id === data)
+                        .map((hero) => (
+                          <ListGroup.Item className="sc-sidedarlink mb-1">
+                            <Navbar className="justify-content-start">
+                              <Navbar.Brand>
+                                <img
+                                  src={hero.profilePicture.url}
+                                  alt={hero.name}
+                                  width="80"
+                                  height="80"
+                                  className="rounded-circle me-2"
+                                />
+                              </Navbar.Brand>
+                              <Navbar.Brand>
+                                <span
+                                  className="fw-bold"
+                                  style={{ fontSize: "2rem" }}
+                                >
+                                  {hero.name}
+                                </span>
+                                <span
+                                  className="d-flex"
+                                  style={{ fontSize: "1rem" }}
+                                >
+                                  {hero.country}
+                                </span>
+                              </Navbar.Brand>
+                            </Navbar>
+                          </ListGroup.Item>
+                        ))}
+                  </ListGroup>
+
                   <div className="mt-5 sc-logincontrol">
                     <Form
                       onSubmit={submitHandler}
@@ -104,18 +164,35 @@ const NewUserAppreciation = () => {
                     >
                       <Form.Group className="mb-3">
                         <Form.Label htmlFor="fullname_field">hero</Form.Label>
-                        <Form.Select
-                          className="sc-disablefocus rounded-pill border-dark"
-                          value={hero._id}
-                          onChange={(e) => setHero(e.target.value)}
-                        >
-                          {heroes &&
-                            heroes.map((hero) => (
-                              <option key={hero._id} value={hero._id}>
-                                {hero.name}
-                              </option>
-                            ))}
-                        </Form.Select>
+                        {data ? (
+                          <Form.Select
+                            className="sc-disablefocus rounded-pill border-dark"
+                            value={hero._id}
+                            onChange={(e) => setHero(e.target.value.toString())}
+                          >
+                            {heroes &&
+                              heroes
+                                .filter((hero) => hero._id === data)
+                                .map((hero) => (
+                                  <option key={hero._id} value={hero._id}>
+                                    {hero.name}
+                                  </option>
+                                ))}
+                          </Form.Select>
+                        ) : (
+                          <Form.Select
+                            className="sc-disablefocus rounded-pill border-dark"
+                            value={hero._id}
+                            onChange={(e) => setHero(e.target.value)}
+                          >
+                            {heroes &&
+                              heroes.map((hero) => (
+                                <option key={hero._id} value={hero._id}>
+                                  {hero.name}
+                                </option>
+                              ))}
+                          </Form.Select>
+                        )}
                       </Form.Group>
 
                       <Form.Group className="mb-3">
@@ -181,7 +258,7 @@ const NewUserAppreciation = () => {
                           className="rounded-pill btn-dark btn-outline-light border-dark"
                           disabled={loading ? true : false}
                         >
-                          register
+                          appreciate
                         </Button>
                       </div>
                     </Form>

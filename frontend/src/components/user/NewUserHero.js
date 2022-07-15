@@ -5,7 +5,7 @@ import MetaData from "../layout/MetaData";
 import Loader from "../layout/Loader";
 import data from "../../data.json";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { newHero, clearErrors } from "../../actions/heroActions";
 import { NEW_HERO_RESET } from "../../constants/heroConstant";
@@ -33,6 +33,9 @@ const NewUserHero = () => {
   const navigate = useNavigate();
 
   const { loading, error, success } = useSelector((state) => state.newHero);
+  const { loading, error, hero, success } = useSelector(
+    (state) => state.newHero
+  );
 
   useEffect(() => {
     if (error) {
@@ -41,11 +44,11 @@ const NewUserHero = () => {
     }
 
     if (success) {
-      navigate("/appreciation/new");
+      navigate("/appreciation/new", { state: { data: hero } });
       toast.success("Hero created successfully");
       dispatch({ type: NEW_HERO_RESET });
     }
-  }, [dispatch, error, success, navigate]);
+  }, [dispatch, error, success, hero, navigate]);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -89,6 +92,20 @@ const NewUserHero = () => {
           <MetaData title={"Register a new hero"} />
           <ErrorBoundary>
             <Container>
+              <Row className="justify-content-center mb-5">
+                <ul className="sc-progressbar">
+                  <li className="active">name your hero</li>
+                  <li>
+                    <Link
+                      to="/appreciation/new"
+                      className="text-dark text-decoration-none"
+                    >
+                      appreciate your hero
+                    </Link>
+                  </li>
+                  <li>share your appreciate</li>
+                </ul>
+              </Row>
               <Row className="justify-content-center">
                 <Col md={4} className="mb-5">
                   <h2 className="pw-bolder text-center">name your hero</h2>
@@ -249,13 +266,21 @@ const NewUserHero = () => {
                           </Col>
                         </Row>
                       </Form.Group>
-                      <div className="d-grid gap-2">
+                      <div className="d-flex justify-content-between">
                         <Button
                           type="submit"
-                          className="rounded-pill btn-dark btn-outline-light border-dark"
+                          className="w-100 rounded-pill btn-dark btn-outline-light border-dark me-2"
                           disabled={loading ? true : false}
                         >
-                          next
+                          {loading ? "Loading" : "next"}
+                        </Button>
+                        <Button
+                          as={Link}
+                          to="/appreciation/new"
+                          variant="secondary"
+                          className="w-50 rounded-pill"
+                        >
+                          skip
                         </Button>
                       </div>
                     </Form>

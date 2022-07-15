@@ -118,12 +118,16 @@ const ProfileTab = ({ user }) => {
                   See Who Got Appreciated Today
                 </span>
                 {heroes &&
-                  heroes.map((heroes, i) => (
-                    <HeroAppreciationLink
-                      key={i}
-                      heroes={heroes}
-                    ></HeroAppreciationLink>
-                  ))}
+                  heroes
+                    .filter((heroes) => heroes.appreciations.length >= 1)
+                    .slice(3, -1)
+                    .reverse()
+                    .map((heroes, i) => (
+                      <HeroAppreciationLink
+                        key={i}
+                        heroes={heroes}
+                      ></HeroAppreciationLink>
+                    ))}
               </ListGroup>
             </Fragment>
           </Col>

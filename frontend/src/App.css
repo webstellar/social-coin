@@ -283,12 +283,57 @@ div.nsm7Bb-HzV7m-LgbsSe {
 .carousel-control-prev-icon {
   background-image: url("./images/arrow-left-circle.svg") !important;
 }
-/*
-.carousel-control-next-icon:after {
-  content: url("./images/arrow-right-circle.svg");
+
+.sc-progressbar {
+  counter-reset: step;
 }
 
-.carousel-control-prev-icon:after {
-  content: url("./images/arrow-left-circle.svg");
+.sc-progressbar li {
+  position: relative;
+  list-style: none;
+  float: left;
+  width: 33.33%;
+  text-align: center;
 }
-*/
+
+/* Circles */
+.sc-progressbar li:before {
+  content: counter(step);
+  counter-increment: step;
+  width: 40px;
+  height: 40px;
+  border: 1px solid #000000;
+  display: block;
+  text-align: center;
+  margin: 0 auto 10px auto;
+  border-radius: 50%;
+  background-color: #ffffff;
+
+  /* Center # in circle */
+  line-height: 39px;
+}
+
+.sc-progressbar li:after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  background: #000000;
+  top: 20px; /*half of height Parent (li) */
+  left: -50%;
+  z-index: -1;
+}
+
+.sc-progressbar li:first-child:after {
+  content: none;
+}
+
+.sc-progressbar li.active:before {
+  border: 1px solid #00e676;
+  background: #00e676;
+  content: "✔";
+}
+
+.sc-progressbar li.active + li:after {
+  background: #00e676;
+}

@@ -25,10 +25,7 @@ const HeroDetailsSideBar = ({ hero }) => {
       )}
       <p className="mt-1 mb-4">{hero.description}</p>
       <button type="button" className="btn btn-dark rounded-pill px-3 me-3">
-        <Link
-          to="/appreciation/new"
-          className="text-light text-decoration-none"
-        >
+        <Link to="/hero/new" className="text-light text-decoration-none">
           <BsPlus />
           APPRECIATE
         </Link>

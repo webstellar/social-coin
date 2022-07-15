@@ -25,7 +25,11 @@ const Home = () => {
       return toast.error(error);
     }
 
-    dispatch(getHeroes(keyword));
+    if (!keyword) {
+      dispatch(getHeroes());
+    } else {
+      dispatch(getHeroes(keyword));
+    }
   }, [dispatch, keyword, error]);
 
   return (
@@ -39,7 +43,9 @@ const Home = () => {
             <Row sm={3} md={6}>
               <ErrorBoundary>
                 {heroes &&
-                  heroes.map((hero) => <Hero key={hero._id} hero={hero} />)}
+                  heroes
+                    .filter((hero) => hero.appreciations.length >= 1)
+                    .map((hero) => <Hero key={hero._id} hero={hero} />)}
               </ErrorBoundary>
             </Row>
             <ToastContainer
