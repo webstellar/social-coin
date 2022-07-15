@@ -32,7 +32,6 @@ const NewUserHero = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { loading, error, success } = useSelector((state) => state.newHero);
   const { loading, error, hero, success } = useSelector(
     (state) => state.newHero
   );
