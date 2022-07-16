@@ -48,7 +48,7 @@ const Home = () => {
           <Container>
             <div className="w-100 col-xxl-8 mb-5">
               <div className="row flex-lg-row-reverse align-items-center g-5 pb-5">
-                <div className="col-6 col-sm-12 col-lg-6">
+                <div className="col-6 col-sm-12 col-md-12 col-lg-6">
                   <img
                     src={heroImg}
                     className="d-block mx-lg-auto img-fluid"
@@ -58,7 +58,7 @@ const Home = () => {
                     loading="lazy"
                   />
                 </div>
-                <div className="col-6 col-lg-6 col-sm-12">
+                <div className="col-6 col-lg-6 col-sm-12 col-md-12">
                   <h1 className="display-5 fw-bold lh-sm mb-3">
                     Say something to the ones who changed your life immensely.
                   </h1>
@@ -97,7 +97,7 @@ const Home = () => {
                     loading="lazy"
                   />
                 </div>
-                <div className="col-6 col-lg-6 col-sm-12">
+                <div className="col-6 col-lg-6 col-sm-12 col-md-12">
                   <h2 className="display-6 fw-bold lh-sm mb-3">
                     Apprecial that special one
                   </h2>
@@ -129,7 +129,7 @@ const Home = () => {
                     loading="lazy"
                   />
                 </div>
-                <div className="col-4 col-lg-4 col-sm-12">
+                <div className="col-4 col-lg-4 col-md-12 col-sm-12">
                   <p className="lead">
                     Begin a Memorial Board in honor of a loved one. Attach
                     messages, photos, and videos to the online memorial
@@ -140,7 +140,7 @@ const Home = () => {
 
             <div className="w-100 col-xxl-8 mb-2">
               <div className="row align-items-center g-5">
-                <div className="col-4 col-sm-12 col-lg-4">
+                <div className="col-4 col-sm-12 col-md-12 col-lg-4">
                   <img
                     src={memorialImg}
                     className="d-block mx-lg-auto img-fluid"
@@ -150,7 +150,7 @@ const Home = () => {
                     loading="lazy"
                   />
                 </div>
-                <div className="col-4 col-lg-4 col-sm-12">
+                <div className="col-4 col-lg-4 col-sm-12 col-md-12">
                   <p className="lead">
                     Begin a Memorial Board in honor of a loved one. Attach
                     messages, photos, and videos to the online memorial
@@ -161,7 +161,7 @@ const Home = () => {
 
             <div className="w-100 col-xxl-8 mb-5">
               <div className="row flex-lg-row-reverse align-items-center g-5">
-                <div className="col-6 col-sm-12 col-lg-6">
+                <div className="col-6 col-sm-12 col-md-12 col-lg-6">
                   <img
                     src={boardImg}
                     className="d-block mx-lg-auto img-fluid"
@@ -171,7 +171,7 @@ const Home = () => {
                     loading="lazy"
                   />
                 </div>
-                <div className="col-4 col-lg-4 col-sm-12">
+                <div className="col-4 col-lg-4 col-sm-12 col-md-12">
                   <p className="lead">
                     Begin a Memorial Board in honor of a loved one. Attach
                     messages, photos, and videos to the online memorial
