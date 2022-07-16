@@ -59,7 +59,7 @@ const Discover = () => {
                   variant="dark"
                   activeIndex={index}
                   onSelect={handleSelect}
-                  style={{ backgroundColor: "#E4E4E4" }}
+                  style={{ backgroundColor: "rgb(228, 228, 228, 0.2)" }}
                   className="py-5"
                 >
                   {heroes &&
