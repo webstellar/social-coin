@@ -48,8 +48,7 @@ exports.getHeroes = catchAsyncErrors(async (req, res, next) => {
 
 //Get All Heroes => /api/v1/admin/heroes
 exports.getAdminHeroes = catchAsyncErrors(async (req, res, next) => {
-  const heroes = await Hero.find().populate("appreciations");
-  //const heroes = await Hero.find();
+  const heroes = await Hero.find();
 
   res.status(200).json({
     success: true,
@@ -129,12 +128,48 @@ exports.deleteHero = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
-//Get logged in user heros => /api/v1/hero/me
+//Get logged in user heros => /api/v1/me/heroes/:id
 exports.myHeroes = catchAsyncErrors(async (req, res, next) => {
   const heroes = await Hero.find({ user: req.user.id });
 
   res.status(200).json({
     success: true,
     heroes,
+  });
+});
+
+//Update logged in user heros => /api/v1/me/hero/:id
+exports.updateMyHero = catchAsyncErrors(async (req, res, next) => {
+  let hero = await Hero.findById(req.params.id).populate({
+    user: req.user.id,
+  });
+
+  if (!hero) {
+    return next(new ErrorHandler("Unable to Update Hero", 404));
+  }
+
+  hero = await Hero.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+  });
+
+  res.status(200).json({
+    success: true,
+    hero,
+  });
+});
+
+//Delete logged in user heros => /api/v1/me/hero/:id
+exports.deleteHero = catchAsyncErrors(async (req, res, next) => {
+  const hero = await Hero.findById(req.params.id);
+
+  if (!hero) {
+    return next(new ErrorHandler("Hero not found", 404));
+  }
+
+  await hero.deleteOne();
+  res.status(200).json({
+    success: true,
+    message: "Hero successfully deleted",
   });
 });

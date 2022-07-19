@@ -7,14 +7,12 @@ import {
   heroDetailsReducer,
   newHeroReducer,
   heroReducer,
-  myHeroesReducer,
 } from "./reducers/heroReducers";
 import {
   appreciationsReducer,
   appreciationDetailsReducer,
   newAppreciationReducer,
   appreciationReducer,
-  myAppreciationsReducer,
 } from "./reducers/appreciationReducers";
 import {
   authReducer,
@@ -29,12 +27,10 @@ const reducer = combineReducers({
   heroDetails: heroDetailsReducer,
   newHero: newHeroReducer,
   hero: heroReducer,
-  myHeroes: myHeroesReducer,
   newAppreciation: newAppreciationReducer,
   appreciation: appreciationReducer,
   appreciations: appreciationsReducer,
   appreciationDetails: appreciationDetailsReducer,
-  myAppreciations: myAppreciationsReducer,
   auth: authReducer,
   user: userReducer,
   allUsers: allUsersReducer,

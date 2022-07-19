@@ -121,7 +121,7 @@ exports.getAdminAppreciations = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
-//get a single product detail => /api/v1/appreciation/:id
+//get a single appreciation detail => /api/v1/appreciation/:id
 exports.getSingleAppreciation = catchAsyncErrors(async (req, res, next) => {
   const appreciation = await Appreciation.findById(req.params.id);
 
@@ -167,26 +167,87 @@ exports.deleteAppreciation = catchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHandler("Appreciation not found", 404));
   }
 
-  //Deleting images associated with the appreciation
+  //Deleting image associated with the appreciation
   const imageResult = await cloudinary.v2.uploader.destroy(
     appreciation.image.public_id
   );
 
   await appreciation.deleteOne();
+
   res.status(200).json({
     success: true,
     message: "Appreciation has been deleted",
   });
 });
 
-//Get logged in user appreciations => /api/v1/appreciation/me
+//Get logged in user appreciations => /api/v1/me/appreciations
 exports.myAppreciations = catchAsyncErrors(async (req, res, next) => {
-  const appreciations = await Appreciation.find({ user: req.user.id });
+  const appreciations = await Appreciation.find({
+    user: req.user.id,
+  });
+
+  let heroesIDs = [];
+
+  for (let i = 0; i < appreciations.length; i++) {
+    result = await appreciations[i];
+    heroesIDs.push(result.hero);
+  }
+
+  req.params.id = heroesIDs;
+
+  const heroes = await Hero.find({
+    _id: {
+      $in: req.params.id,
+    },
+  });
 
   res.status(200).json({
     success: true,
     appreciations,
+    heroes,
   });
 });
 
-//restapitutorial.com/httpstatuscodes.html
+//Update logged in user Appreciation => /api/v1/me/appreciation/:id
+exports.updateMyAppreciation = catchAsyncErrors(async (req, res, next) => {
+  let appreciation = await Appreciation.findById(req.params.id).populate({
+    user: req.user.id,
+  });
+
+  if (!appreciation) {
+    return next(new ErrorHandler("Appreciation not found", 404));
+  }
+
+  appreciation = await Appreciation.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+  });
+
+  res.status(200).json({
+    success: true,
+    appreciation,
+  });
+});
+
+//Delete Appreciation => /api/v1/me/appreciation/:id
+exports.deleteMyAppreciation = catchAsyncErrors(async (req, res, next) => {
+  const appreciation = await Appreciation.findById(req.params.id).populate({
+    user: req.user.id,
+  });
+
+  if (!appreciation) {
+    return next(new ErrorHandler("Appreciation not found", 404));
+  }
+
+  //Deleting image associated with the appreciation
+  const imageResult = await cloudinary.v2.uploader.destroy(
+    appreciation.image.public_id
+  );
+
+  await appreciation.deleteOne();
+
+  res.status(200).json({
+    success: true,
+    message: "Appreciation has been deleted",
+  });
+});

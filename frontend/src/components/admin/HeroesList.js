@@ -16,18 +16,21 @@ import {
   clearErrors,
 } from "../../actions/heroActions";
 import { DELETE_HERO_RESET } from "../../constants/heroConstant";
+import { toast, ToastContainer } from "react-toastify";
 
 const HeroesList = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const { loading, error, heroes } = useSelector((state) => state.heroes);
+  
   const { error: deleteError, isDeleted } = useSelector((state) => state.hero);
 
   useEffect(() => {
     dispatch(getAdminHeroes());
 
     if (error) {
+      toast.error(deleteError);
       dispatch(clearErrors());
     }
 
@@ -36,16 +39,15 @@ const HeroesList = () => {
     }
 
     if (isDeleted) {
+      toast.success("your hero was deleted successfully");
       navigate("/admin/heroes");
       dispatch({ type: DELETE_HERO_RESET });
     }
   }, [dispatch, error, deleteError, isDeleted, navigate]);
 
-  /*
   const deleteHeroHandler = (id) => {
     dispatch(deleteHero(id));
   };
-  */
 
   const setHeroes = () => {
     const data = {
@@ -96,7 +98,7 @@ const HeroesList = () => {
         gender: hero?.gender,
         country: hero?.country,
         email: hero?.email,
-        appreciationsCount: hero?.appreciations.Length,
+        appreciationsCount: hero?.appreciations.length,
         actions: (
           <Fragment>
             <Link
@@ -112,17 +114,11 @@ const HeroesList = () => {
         ),
       });
     });
-  };
 
-  /*   
-  onClick={deleteHeroHandler(hero._id)}
-            <Button
-              className="rounded-pill btn-danger py-1 px-2 ml-2"
-              onClick={deleteHeroHandler(hero._id)}
-            >
-              <BsTrash />
-            </Button>
-  */
+    //onClick={deleteHeroHandler(hero._id)}
+
+    return data;
+  };
 
   return (
     <Fragment>
@@ -137,16 +133,21 @@ const HeroesList = () => {
             {loading ? (
               <Loader />
             ) : (
-              <MDBDataTable
-                data={setHeroes()}
-                className="px-3"
-                bordered
-                striped
-                hover
-              />
+              <MDBDataTable data={setHeroes()} className="px-3" hover />
             )}
           </Col>
         </Row>
+        <ToastContainer
+          position="bottom-left"
+          autoClose={5000}
+          hideProgressBar={true}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
       </Container>
     </Fragment>
   );

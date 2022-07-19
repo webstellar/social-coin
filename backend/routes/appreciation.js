@@ -10,32 +10,30 @@ const {
   deleteAppreciation,
   getAdminAppreciations,
   myAppreciations,
+  updateMyAppreciation,
+  deleteMyAppreciation,
 } = require("../controllers/appreciationControllers");
-const { isAuthenticatedUser } = require("../middlewares/auth");
+const { isAuthenticatedUser, authorizeRoles } = require("../middlewares/auth");
 
 router.route("/appreciations").get(getAppreciations);
 router.route("/appreciation/:id").get(getSingleAppreciation);
 
 //users
 router.route("/appreciation/new").post(isAuthenticatedUser, newAppreciation);
-//router.route("/appreciation/new").all(isAuthenticatedUser, newAppreciation);
-
+router.route("/me/appreciations").get(isAuthenticatedUser, myAppreciations);
 router
-  .route("/appreciation/:id")
-  .put(isAuthenticatedUser, updateAppreciation)
-  .delete(isAuthenticatedUser, deleteAppreciation);
-
-router.route("/appreciations/me").get(isAuthenticatedUser, myAppreciations);
+  .route("/me/appreciation/:id")
+  .put(isAuthenticatedUser, updateMyAppreciation)
+  .delete(isAuthenticatedUser, deleteMyAppreciation);
 
 //Admin
-//router.route("/appreciation/new").all(isAuthenticatedUser, newAppreciation);
 router.route("/appreciation/new").post(isAuthenticatedUser, newAppreciation);
-
-router.route("/admin/appreciations").get(getAdminAppreciations);
-
 router
-  .route("/appreciation/:id")
-  .put(isAuthenticatedUser, updateAppreciation)
-  .delete(isAuthenticatedUser, deleteAppreciation);
+  .route("/admin/appreciations")
+  .get(isAuthenticatedUser, getAdminAppreciations);
+router
+  .route("/admin/appreciation/:id")
+  .put(isAuthenticatedUser, authorizeRoles("admin"), updateAppreciation)
+  .delete(isAuthenticatedUser, authorizeRoles("admin"), deleteAppreciation);
 
 module.exports = router;

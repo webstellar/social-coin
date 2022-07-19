@@ -10,21 +10,24 @@ import {
   ADMIN_HEROES_REQUEST,
   ADMIN_HEROES_SUCCESS,
   ADMIN_HEROES_FAIL,
-  MY_HEROES_REQUEST,
-  MY_HEROES_SUCCESS,
-  MY_HEROES_FAIL,
   NEW_HERO_REQUEST,
   NEW_HERO_SUCCESS,
-  NEW_HERO_RESET,
   NEW_HERO_FAIL,
   UPDATE_HERO_REQUEST,
   UPDATE_HERO_SUCCESS,
-  UPDATE_HERO_RESET,
   UPDATE_HERO_FAIL,
   DELETE_HERO_REQUEST,
   DELETE_HERO_SUCCESS,
-  DELETE_HERO_RESET,
   DELETE_HERO_FAIL,
+  MY_HEROES_REQUEST,
+  MY_HEROES_SUCCESS,
+  MY_HEROES_FAIL,
+  UPDATE_MY_HERO_REQUEST,
+  UPDATE_MY_HERO_SUCCESS,
+  UPDATE_MY_HERO_FAIL,
+  DELETE_MY_HERO_REQUEST,
+  DELETE_MY_HERO_SUCCESS,
+  DELETE_MY_HERO_FAIL,
 } from "../constants/heroConstant";
 
 //Get all the heroes from the backend
@@ -111,31 +114,6 @@ export const newHero = (heroData) => async (dispatch) => {
   }
 };
 
-//newHeroAppreciation
-/*
-export const newHeroAppreciation =
-  (heroid, appreciationid) => async (dispatch) => {
-    try {
-      dispatch({ type: NEW_HERO_APPRECIATION_REQUEST });
-
-      const { hero } = await axios.get(`/api/v1/hero/${heroid}`);
-      const { appreciation } = await axios.get(
-        `/api/v1/appreciation/${appreciationid}`
-      );
-
-      dispatch({
-        type: NEW_HERO_APPRECIATION_SUCCESS,
-        payload: hero._id && appreciation._id,
-      });
-    } catch (error) {
-      dispatch({
-        type: NEW_HERO_APPRECIATION_FAIL,
-        payload: error.response.data.message,
-      });
-    }
-  };
-  */
-
 // Delete Hero (Admin)
 export const deleteHero = (id) => async (dispatch) => {
   try {
@@ -192,7 +170,7 @@ export const clearErrors = () => async (dispatch) => {
 export const myHeroes = () => async (dispatch) => {
   try {
     dispatch({ type: MY_HEROES_REQUEST });
-    const { data } = await axios.get("/api/v1/heroes/me");
+    const { data } = await axios.get("/api/v1/me/heroes");
 
     dispatch({
       type: MY_HEROES_SUCCESS,

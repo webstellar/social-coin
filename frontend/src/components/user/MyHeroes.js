@@ -4,7 +4,7 @@ import { MDBDataTable } from "mdbreact";
 import { Container } from "react-bootstrap";
 import { BsPencil, BsTrash } from "react-icons/bs";
 
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { myHeroes, deleteHero, clearErrors } from "../../actions/heroActions";
 import { DELETE_HERO_RESET } from "../../constants/heroConstant";
@@ -16,13 +16,12 @@ import Loader from "../layout/Loader";
 const MyHeroes = ({ user }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const params = useParams();
 
-  const { loading, error, heroes } = useSelector((state) => state.myHeroes);
+  const { loading, error, heroes } = useSelector((state) => state.heroes);
   const { error: deleteError, isDeleted } = useSelector((state) => state.hero);
 
   useEffect(() => {
-    dispatch(myHeroes(params.id));
+    dispatch(myHeroes());
 
     if (error) {
       toast.error(error);
@@ -39,7 +38,7 @@ const MyHeroes = ({ user }) => {
       navigate("/me");
       dispatch({ type: DELETE_HERO_RESET });
     }
-  }, [dispatch, error, deleteError, isDeleted, navigate, params.id]);
+  }, [dispatch, error, deleteError, isDeleted, navigate]);
 
   const setHeroes = () => {
     const data = {
@@ -90,11 +89,11 @@ const MyHeroes = ({ user }) => {
         gender: hero?.gender,
         country: hero?.country,
         email: hero?.email,
-        appreciationsCount: hero?.appreciations.Length,
+        appreciationsCount: hero?.appreciations.length,
         actions: (
           <Fragment>
             <Link
-              to={`/admin/hero/${hero?._id}`}
+              to={`/me/hero/${hero?._id}`}
               className="btn btn-Primary py-1 px-2"
             >
               <BsPencil />
@@ -106,6 +105,8 @@ const MyHeroes = ({ user }) => {
         ),
       });
     });
+
+    return data;
   };
 
   const deleteHeroHandler = (id) => {
@@ -122,8 +123,6 @@ const MyHeroes = ({ user }) => {
             <MDBDataTable
               data={setHeroes()}
               className="px-3"
-              bordered
-              striped
               hover
             />
             <ToastContainer

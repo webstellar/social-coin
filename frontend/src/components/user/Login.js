@@ -51,7 +51,7 @@ const Login = () => {
         shape: "pill",
         text: "signin_with",
         context: "signin",
-        width: "400",
+        width: "360",
         logo_alignment: "center",
       }
     );

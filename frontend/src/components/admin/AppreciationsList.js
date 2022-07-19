@@ -73,8 +73,8 @@ const AppreciationsList = () => {
           sort: "asc",
         },
         {
-          label: "Like",
-          field: "likeCount",
+          label: "Summary",
+          field: "summary",
           sort: "asc",
         },
         {
@@ -89,9 +89,9 @@ const AppreciationsList = () => {
     appreciations.forEach((appreciation) => {
       data.rows.push({
         id: appreciation?._id,
-        hero: appreciation?.name,
+        hero: appreciation?.hero,
         user: appreciation?.user,
-        likeCount: appreciation?.likeCount,
+        summary: appreciation?.summary.substring(0, 20),
         actions: (
           <Fragment>
             <Link
@@ -100,13 +100,15 @@ const AppreciationsList = () => {
             >
               <BsPencil />
             </Link>
-            <button className="rounded-pill btn-danger py-1 px-2 ml-2">
+            <button className="rounded-pill btn btn-danger py-1 px-2 ml-2">
               <BsTrash />
             </button>
           </Fragment>
         ),
       });
     });
+
+    return data;
   };
 
   return (

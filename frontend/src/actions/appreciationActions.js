@@ -9,9 +9,6 @@ import {
   ADMIN_APPRECIATIONS_REQUEST,
   ADMIN_APPRECIATIONS_SUCCESS,
   ADMIN_APPRECIATIONS_FAIL,
-  MY_APPRECIATIONS_REQUEST,
-  MY_APPRECIATIONS_SUCCESS,
-  MY_APPRECIATIONS_FAIL,
   NEW_APPRECIATION_REQUEST,
   NEW_APPRECIATION_SUCCESS,
   NEW_APPRECIATION_FAIL,
@@ -22,6 +19,15 @@ import {
   UPDATE_APPRECIATION_SUCCESS,
   UPDATE_APPRECIATION_FAIL,
   CLEAR_ERRORS,
+  MY_APPRECIATIONS_REQUEST,
+  MY_APPRECIATIONS_SUCCESS,
+  MY_APPRECIATIONS_FAIL,
+  UPDATE_MY_APPRECIATION_REQUEST,
+  UPDATE_MY_APPRECIATION_SUCCESS,
+  UPDATE_MY_APPRECIATION_FAIL,
+  DELETE_MY_APPRECIATION_REQUEST,
+  DELETE_MY_APPRECIATION_SUCCESS,
+  DELETE_MY_APPRECIATION_FAIL,
 } from "../constants/appreciationConstant";
 
 //Get all the appreciations from the backend
@@ -67,7 +73,7 @@ export const getAdminAppreciations = () => async (dispatch) => {
   try {
     dispatch({ type: ADMIN_APPRECIATIONS_REQUEST });
 
-    const { data } = await axios.get("/api/v1/admin/appreciations");
+    const { data } = await axios.get(`/api/v1/admin/appreciations`);
 
     dispatch({
       type: ADMIN_APPRECIATIONS_SUCCESS,
@@ -159,23 +165,15 @@ export const updateAppreciation =
     }
   };
 
-//clear errors
-export const clearErrors = () => async (dispatch) => {
-  dispatch({
-    type: CLEAR_ERRORS,
-  });
-};
-
 //USER
-
 export const myAppreciations = () => async (dispatch) => {
   try {
     dispatch({ type: MY_APPRECIATIONS_REQUEST });
-    const { data } = await axios.get("/api/v1/appreciations/me");
+    const { data } = await axios.get("/api/v1/me/appreciations");
 
     dispatch({
       type: MY_APPRECIATIONS_SUCCESS,
-      payload: data.appreciations,
+      payload: data,
     });
   } catch (error) {
     dispatch({
@@ -183,4 +181,11 @@ export const myAppreciations = () => async (dispatch) => {
       payload: error.response.data.message,
     });
   }
+};
+
+//clear errors
+export const clearErrors = () => async (dispatch) => {
+  dispatch({
+    type: CLEAR_ERRORS,
+  });
 };
