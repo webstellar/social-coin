@@ -7,6 +7,7 @@ import {
   Image,
   Modal,
   Button,
+  Badge,
 } from "react-bootstrap";
 import ErrorBoundary from "../../ErrorBoundary";
 import Loader from "../layout/Loader";
@@ -37,6 +38,7 @@ import {
 
 import { toast, ToastContainer } from "react-toastify";
 import { Parser } from "html-to-react";
+import { Player } from "video-react";
 
 const ShareAppreciations = () => {
   const params = useParams();
@@ -225,6 +227,28 @@ const ShareAppreciations = () => {
                       )}
                     </div>
                     <p>{Parser().parse(appreciation.story)}</p>
+
+                    <div className="mb-3">
+                      {appreciation.tags &&
+                        appreciation.tags.map((tag, i) => {
+                          <Badge pill bg="dark" key={i}>
+                            {tag}
+                          </Badge>;
+                        })}
+                      <Badge pill bg="dark">
+                        {appreciation.tags}
+                      </Badge>
+                    </div>
+
+                    <div>
+                      {appreciation.video ? (
+                        <Player>
+                          <source src={appreciation.video?.url} />
+                        </Player>
+                      ) : (
+                        ""
+                      )}
+                    </div>
                   </div>
                 </Col>
                 <Col sm={4} className="ps-5">

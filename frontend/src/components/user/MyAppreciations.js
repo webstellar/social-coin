@@ -113,13 +113,7 @@ const MyAppreciations = ({ user }) => {
       ) : (
         <Fragment>
           <Container>
-            <MDBDataTable
-              data={setAppreciations()}
-              className="px-3"
-              bordered
-              striped
-              hover
-            />
+            <MDBDataTable data={setAppreciations()} className="px-3" hover />
             <ToastContainer
               position="bottom-left"
               autoClose={5000}

@@ -259,9 +259,9 @@ h6 span {
   background-color: #000000 !important;
   color: #000000 !important;
 }
-.sc-modal-control {
-  display: "flex";
-  justify-content: "center";
+.sc-modal-control .modal .show {
+  display: "flex" !important;
+  justify-content: "center" !important;
   align-items: "center" !important;
 }
 
@@ -336,4 +336,43 @@ div.nsm7Bb-HzV7m-LgbsSe {
 
 .sc-progressbar li.active + li:after {
   background: #00e676;
+}
+
+.tox-editor-container {
+  border: 1px #000 solid !important;
+  border-radius: 5px 5px 0 0 !important;
+}
+
+.tags-input-container {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5em;
+}
+
+.tag-item {
+  background-color: rgb(218, 216, 216);
+  display: inline-block;
+  padding: 0.5em 0.75em;
+  border-radius: 20px;
+}
+
+.tag-item .close {
+  height: 20px;
+  width: 20px;
+  background-color: rgb(48, 48, 48);
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 0.5em;
+  color: #fff;
+  border-radius: 50%;
+  font-size: 18px;
+}
+
+.tags-input {
+  flex-grow: 1;
+  padding: 0.5em 0;
+  border: none;
+  outline: none;
 }

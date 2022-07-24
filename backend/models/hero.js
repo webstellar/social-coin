@@ -7,12 +7,12 @@ const heroSchema = new mongoose.Schema(
       type: String,
       required: [true, "Please provide your hero's name"],
       trim: true,
-      maxLength: [100, "Please your hero's name cannot exceed 100 characters"],
+      maxLength: [200, "Please your hero's name cannot exceed 100 characters"],
     },
     description: {
       type: String,
       required: [true, "Please provide a summary of Hero personality"],
-      maxLength: [1000, "Please summary cannot exceed 1000 characters"],
+      maxLength: [1500, "Please summary cannot exceed 1000 characters"],
     },
     profilePicture: {
       public_id: {

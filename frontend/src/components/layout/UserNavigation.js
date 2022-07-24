@@ -1,58 +1,43 @@
-import React, { useEffect } from "react";
-import "./App.css";
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import ProtectedRoute from "../route/ProtectedRoute";
+import HeaderNav from "../layout/HeaderNav";
+import FooterNav from "../layout/FooterNav";
 
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
-import ProtectedRoute from "./components/route/ProtectedRoute";
-import HeaderNav from "./components/layout/HeaderNav";
-import FooterNav from "./components/layout/FooterNav";
+import Home from "../pages/Home";
+import Discover from "../pages/Discover";
+import FAQs from "../pages/FAQs";
+import HelpCenter from "../pages/HelpCenter";
+import Donate from "../pages/Donate";
+import ContactUs from "../pages/ContactUs";
 
-import Home from "./components/pages/Home";
-import Discover from "./components/pages/Discover";
-import FAQs from "./components/pages/FAQs";
-import HelpCenter from "./components/pages/HelpCenter";
-import Donate from "./components/pages/Donate";
-import ContactUs from "./components/pages/ContactUs";
+import HeroDetails from "../heroes/hero/HeroDetails";
+import AppreciationDetails from "../appreciations/AppreciationDetails";
+import ShareAppreciations from "../appreciations/ShareAppreciations";
 
-import HeroDetails from "./components/heroes/hero/HeroDetails";
-import AppreciationDetails from "./components/appreciations/AppreciationDetails";
-import ShareAppreciations from "./components/appreciations/ShareAppreciations";
+import Register from "../user/Register";
+import Login from "../user/Login";
+import Profile from "../user/Profile";
+import UpdateProfile from "../user/UpdateProfile";
+import UpdatePassword from "../user/UpdatePassword";
+import ForgotPassword from "../user/ForgotPassword";
+import NewPassword from "../user/NewPassword";
 
-import Register from "./components/user/Register";
-import Login from "./components/user/Login";
-import Profile from "./components/user/Profile";
-import UpdateProfile from "./components/user/UpdateProfile";
-import UpdatePassword from "./components/user/UpdatePassword";
-import ForgotPassword from "./components/user/ForgotPassword";
-import NewPassword from "./components/user/NewPassword";
-
-import Dashboard from "./components/admin/Dashboard";
-import HeroesList from "./components/admin/HeroesList";
-import AppreciationsList from "./components/admin/AppreciationsList";
-import UsersList from "./components/admin/UsersList";
-import NewAdminHero from "./components/admin/NewAdminHero";
-import NewAdminAppreciation from "./components/admin/NewAdminAppreciation";
-import NewUserHero from "./components/user/NewUserHero";
-import NewUserAppreciation from "./components/user/NewUserAppreciation";
+import Dashboard from "../admin/Dashboard";
+import HeroesList from "../admin/HeroesList";
+import AppreciationsList from "../admin/AppreciationsList";
+import UsersList from "../admin/UsersList";
+import NewAdminHero from "../admin/NewAdminHero";
+import NewAdminAppreciation from "../admin/NewAdminAppreciation";
+import NewUserHero from "../user/NewUserHero";
+import NewUserAppreciation from "../user/NewUserAppreciation";
 
 import { LinkedInCallback } from "react-linkedin-login-oauth2";
 
-import { loadUser } from "./actions/userAction";
-import { useSelector } from "react-redux";
-import store from "./store";
-
-function App() {
-  useEffect(() => {
-    store.dispatch(loadUser());
-  }, []);
-
-  //const location = useLocation();
-
-  const { user, isAuthenticated, loading } = useSelector((state) => state.auth);
-
+const UserNavigation = () => {
   return (
     <BrowserRouter>
-      {Location.pathname !== "/dashboard" && <HeaderNav />}
-
+      <HeaderNav />
       <Routes>
         <Route path="/" element={<Home />} exact />
         <Route path="/search/:keyword" element={<Home />} />
@@ -149,9 +134,9 @@ function App() {
         <Route path="/donate" element={<Donate />} />
         <Route path="/contact-us" element={<ContactUs />} />
       </Routes>
-      {Location.pathname !== "/dashboard" && <FooterNav />}
+      <FooterNav />
     </BrowserRouter>
   );
-}
+};
 
-export default App;
+export default UserNavigation;

@@ -7,7 +7,7 @@ const appreciationSchema = new mongoose.Schema(
       type: String,
       required: [true, "Please provide a summary of your appreciation"],
       trim: true,
-      maxLength: [150, "Please sumary cannot exceed 65 characters"],
+      maxLength: [200, "Please sumary cannot exceed 65 characters"],
     },
     story: {
       type: String,
@@ -24,14 +24,6 @@ const appreciationSchema = new mongoose.Schema(
       required: true,
     },
     image: {
-      public_id: {
-        type: String,
-      },
-      url: {
-        type: String,
-      },
-    },
-    audio: {
       public_id: {
         type: String,
       },

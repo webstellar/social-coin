@@ -43,7 +43,7 @@ const NewAdminHero = () => {
     }
 
     if (success) {
-      navigate("/appreciation/new");
+      navigate("/admin/appreciation", { state: { data: hero } });
       toast.success("Hero created successfully");
       dispatch({ type: NEW_HERO_RESET });
     }
@@ -96,7 +96,7 @@ const NewAdminHero = () => {
               </Col>
               <Col>
                 <ErrorBoundary>
-                  <h2 className="pw-bolder text-center">sign up</h2>
+                  <h2 className="pw-bolder text-center">create a new hero</h2>
                   <div className="mt-5 sc-logincontrol">
                     <Form
                       onSubmit={submitHandler}

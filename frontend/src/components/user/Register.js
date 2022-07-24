@@ -76,8 +76,7 @@ const Register = () => {
 
   useScript("https://accounts.google.com/gsi/client", () => {
     window.google.accounts.id.initialize({
-      client_id:
-        "325099659570-jkocn6hrpui6cbee63img4vicvnnvvil.apps.googleusercontent.com",
+      client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
       callback: onGoogleSignIn,
     });
 

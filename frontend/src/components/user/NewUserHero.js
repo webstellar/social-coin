@@ -12,6 +12,9 @@ import { NEW_HERO_RESET } from "../../constants/heroConstant";
 import { toast, ToastContainer } from "react-toastify";
 
 const NewUserHero = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [gender, setGender] = useState("Male");
@@ -28,9 +31,6 @@ const NewUserHero = () => {
 
   const genders = ["Male", "Female", "Others"];
   const countries = data;
-
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const { loading, error, hero, success } = useSelector(
     (state) => state.newHero

@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect } from "react";
-import { Container, Row, Col, Navbar, Image } from "react-bootstrap";
+import { Container, Row, Col, Navbar, Image, Badge } from "react-bootstrap";
 import ErrorBoundary from "../../ErrorBoundary";
 import Loader from "../layout/Loader";
 import MetaData from "../../components/layout/MetaData";
@@ -29,6 +29,7 @@ import {
 
 import { toast, ToastContainer } from "react-toastify";
 import { Parser } from "html-to-react";
+import { Player } from "video-react";
 
 const AppreciationDetails = () => {
   const params = useParams();
@@ -48,6 +49,7 @@ const AppreciationDetails = () => {
   }, [dispatch, error, params.id]);
 
   const apprDate = dayjs(appreciation.createdAt).format("MMM D, YYYY");
+
   let shareUrl = window.location.href;
 
   return (
@@ -146,7 +148,29 @@ const AppreciationDetails = () => {
                         />
                       )}
                     </div>
-                    <p>{Parser().parse(appreciation.story)}</p>
+                    <p className="mb-4">{Parser().parse(appreciation.story)}</p>
+
+                    <div className="mb-3">
+                      {appreciation.tags &&
+                        appreciation.tags.map((tag, i) => {
+                          <Badge pill bg="dark" key={i}>
+                            {tag}
+                          </Badge>;
+                        })}
+                      <Badge pill bg="dark">
+                        {appreciation.tags}
+                      </Badge>
+                    </div>
+
+                    <div>
+                      {appreciation.video ? (
+                        <Player>
+                          <source src={appreciation.video?.url} />
+                        </Player>
+                      ) : (
+                        ""
+                      )}
+                    </div>
                   </div>
                 </Col>
                 <Col sm={4} className="ps-5">

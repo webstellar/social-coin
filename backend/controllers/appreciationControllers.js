@@ -2,6 +2,7 @@ const Appreciation = require("../models/appreciation");
 const Hero = require("../models/hero");
 const mongoose = require("mongoose");
 const toId = mongoose.Types.ObjectId;
+const { ObjectId } = require("mongodb");
 
 const ErrorHandler = require("../utils/errorHandler");
 const catchAsyncErrors = require("../middlewares/catchAsyncErrors");
@@ -18,7 +19,14 @@ exports.newAppreciation = catchAsyncErrors(async (req, res, next) => {
     folder: "social-coin/appreciations/images",
   });
 
+  const video = await cloudinary.v2.uploader.upload_large(req.body.video, {
+    resource_type: "video",
+    folder: "social-coin/appreciations/videos",
+    chunk_size: 6000000,
+  });
+
   req.body.image = image;
+  req.body.video = video;
   const appreciation = await Appreciation.create(req.body);
 
   //connect appreciation to  hero

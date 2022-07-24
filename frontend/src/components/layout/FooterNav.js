@@ -47,7 +47,7 @@ const FooterNav = () => {
       <Navbar>
         <Container>
           <Nav>
-            <Nav.Link as={Link} to="/">
+            <Nav.Link as={Link} to="/discover">
               {" "}
               discover
             </Nav.Link>
