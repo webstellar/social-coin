@@ -3,7 +3,7 @@ const app = express();
 const path = require("path");
 
 const cookieParser = require("cookie-parser");
-const bodyparser = require("body-parser");
+const bodyParser = require("body-parser");
 const fileUpload = require("express-fileupload");
 
 //Middlewares
@@ -14,7 +14,14 @@ if (process.env.NODE_ENV !== "PRODUCTION")
 
 //express.json() function will parse incoming requests with JSON payloads
 app.use(express.json({ limit: "50mb" }));
-app.use(bodyparser.urlencoded({ limit: "50mb", extended: true })); //cloudinary
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(
+  bodyParser.urlencoded({
+    limit: "50mb",
+    extended: true,
+    parameterLimit: 50000,
+  })
+); //cloudinary
 app.use(cookieParser());
 app.use(fileUpload());
 
