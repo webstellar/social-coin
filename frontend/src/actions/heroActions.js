@@ -119,7 +119,7 @@ export const deleteHero = (id) => async (dispatch) => {
   try {
     dispatch({ type: DELETE_HERO_REQUEST });
 
-    const { data } = await axios.delete(`/api/v1/hero/${id}`);
+    const { data } = await axios.delete(`/api/v1/admin/hero/${id}`);
 
     dispatch({
       type: DELETE_HERO_SUCCESS,
@@ -144,7 +144,11 @@ export const updateHero = (id, heroData) => async (dispatch) => {
       },
     };
 
-    const { data } = await axios.put(`/api/v1/hero/${id}`, heroData, config);
+    const { data } = await axios.put(
+      `/api/v1/admin/hero/${id}`,
+      heroData,
+      config
+    );
 
     dispatch({
       type: UPDATE_HERO_SUCCESS,

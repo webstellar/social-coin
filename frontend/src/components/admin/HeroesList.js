@@ -23,7 +23,7 @@ const HeroesList = () => {
   const navigate = useNavigate();
 
   const { loading, error, heroes } = useSelector((state) => state.heroes);
-  
+
   const { error: deleteError, isDeleted } = useSelector((state) => state.hero);
 
   useEffect(() => {
@@ -44,10 +44,6 @@ const HeroesList = () => {
       dispatch({ type: DELETE_HERO_RESET });
     }
   }, [dispatch, error, deleteError, isDeleted, navigate]);
-
-  const deleteHeroHandler = (id) => {
-    dispatch(deleteHero(id));
-  };
 
   const setHeroes = () => {
     const data = {
@@ -107,7 +103,10 @@ const HeroesList = () => {
             >
               <BsPencil />
             </Link>
-            <button className="rounded-pill btn-danger py-1 px-2 ml-2">
+            <button
+              className="rounded-pill btn-danger py-1 px-2 ml-2"
+              onClick={deleteHeroHandler(hero._id)}
+            >
               <BsTrash />
             </button>
           </Fragment>
@@ -115,9 +114,11 @@ const HeroesList = () => {
       });
     });
 
-    //onClick={deleteHeroHandler(hero._id)}
-
     return data;
+  };
+
+  const deleteHeroHandler = (id) => {
+    dispatch(deleteHero(id));
   };
 
   return (

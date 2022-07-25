@@ -121,7 +121,7 @@ export const deleteAppreciation = (id) => async (dispatch) => {
   try {
     dispatch({ type: DELETE_APPRECIATION_REQUEST });
 
-    const { data } = await axios.delete(`/api/v1/appreciation/${id}`);
+    const { data } = await axios.delete(`/api/v1/admin/appreciation/${id}`);
 
     dispatch({
       type: DELETE_APPRECIATION_SUCCESS,
@@ -148,7 +148,7 @@ export const updateAppreciation =
       };
 
       const { data } = await axios.put(
-        `/api/v1/appreciation/${id}`,
+        `/api/v1/admin/appreciation/${id}`,
         appreciationData,
         config
       );

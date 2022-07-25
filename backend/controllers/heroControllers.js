@@ -121,6 +121,9 @@ exports.deleteHero = catchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHandler("Hero not found", 404));
   }
 
+  const image_id = hero.profilePicture.public_id;
+  await cloudinary.v2.uploader.destroy(image_id);
+
   await hero.deleteOne();
   res.status(200).json({
     success: true,

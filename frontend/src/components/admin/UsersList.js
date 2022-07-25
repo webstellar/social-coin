@@ -20,7 +20,6 @@ const UsersList = () => {
   const navigate = useNavigate();
 
   const { loading, error, users } = useSelector((state) => state.allUsers);
-
   const { error: deleteError, isDeleted } = useSelector((state) => state.user);
 
   useEffect(() => {
@@ -41,10 +40,6 @@ const UsersList = () => {
       dispatch({ type: DELETE_USER_RESET });
     }
   }, [dispatch, error, deleteError, isDeleted, navigate]);
-
-  const deleteUserHandler = (id) => {
-    dispatch(deleteUser(id));
-  };
 
   const setUsers = () => {
     const data = {
@@ -70,11 +65,6 @@ const UsersList = () => {
           sort: "asc",
         },
         {
-          label: "ProfilePicture",
-          field: "profilePicture",
-          sort: "asc",
-        },
-        {
           label: "Actions",
           field: "actions",
         },
@@ -89,7 +79,6 @@ const UsersList = () => {
         name: user?.name,
         email: user?.email,
         role: user?.role,
-        profilePicture: user?.profilePicture,
         actions: (
           <Fragment>
             <Link
@@ -98,7 +87,10 @@ const UsersList = () => {
             >
               <BsPencil />
             </Link>
-            <button className="rounded-pill btn-danger py-1 px-2 ml-2">
+            <button
+              className="rounded-pill btn-danger py-1 px-2 ml-2"
+              onClick={deleteUserHandler(user._id)}
+            >
               <BsTrash />
             </button>
           </Fragment>
@@ -107,6 +99,10 @@ const UsersList = () => {
     });
 
     return data;
+  };
+
+  const deleteUserHandler = (id) => {
+    dispatch(deleteUser(id));
   };
 
   return (

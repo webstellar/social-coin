@@ -50,10 +50,6 @@ const AppreciationsList = () => {
     }
   }, [dispatch, deleteError, isDeleted, navigate, error]);
 
-  const deleteAppreciationHandler = (id) => {
-    dispatch(deleteAppreciation(id));
-  };
-
   const setAppreciations = () => {
     const data = {
       columns: [
@@ -100,7 +96,10 @@ const AppreciationsList = () => {
             >
               <BsPencil />
             </Link>
-            <button className="rounded-pill btn btn-danger py-1 px-2 ml-2">
+            <button
+              className="rounded-pill btn btn-danger py-1 px-2 ml-2"
+              onClick={deleteAppreciationHandler(appreciation._id)}
+            >
               <BsTrash />
             </button>
           </Fragment>
@@ -109,6 +108,10 @@ const AppreciationsList = () => {
     });
 
     return data;
+  };
+
+  const deleteAppreciationHandler = (id) => {
+    dispatch(deleteAppreciation(id));
   };
 
   return (
