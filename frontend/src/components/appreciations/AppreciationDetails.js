@@ -30,6 +30,7 @@ import {
 import { toast, ToastContainer } from "react-toastify";
 import { Parser } from "html-to-react";
 import { Player } from "video-react";
+import { shareOnLinkedIn, shareOnFacebook } from "../../utils/SocialShare";
 
 const AppreciationDetails = () => {
   const params = useParams();
@@ -94,16 +95,13 @@ const AppreciationDetails = () => {
                     <Navbar.Toggle />
                     <Navbar.Collapse className="justify-content-end sc-appreciation-icon">
                       <div>
-                        <FacebookShareButton
-                          url={`${shareUrl}`}
-                          quote={appreciation.summary}
-                          hashtag={"#socialcoin"}
-                          description={appreciation.story}
-                          className="pe-2"
-                        >
-                          <FacebookIcon size={25} round />
-                        </FacebookShareButton>
-
+                        <button 
+                            onClick = {shareOnFacebook}
+                            className="pe-2"
+                            style={{ background: "transparent", border: "none"}}
+                          >
+                            <FacebookIcon size={25} round />
+                        </button>
                         <TwitterShareButton
                           title={appreciation.summary}
                           url={`${shareUrl}`}
@@ -112,14 +110,13 @@ const AppreciationDetails = () => {
                         >
                           <TwitterIcon size={25} round />
                         </TwitterShareButton>
-                        <LinkedinShareButton
-                          title={appreciation.summary}
-                          summary={appreciation.story}
-                          url={`${shareUrl}`}
+                        <button 
+                          onClick = {shareOnLinkedIn}
                           className="pe-2"
+                          style={{ background: "transparent", border: "none"}}
                         >
                           <LinkedinIcon size={25} round />
-                        </LinkedinShareButton>
+                        </button>
                         <EmailShareButton
                           subject={appreciation.summary}
                           body={appreciation.story}

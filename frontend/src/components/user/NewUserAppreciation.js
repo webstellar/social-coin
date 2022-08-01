@@ -114,7 +114,7 @@ const NewUserAppreciation = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-
+    console.log(story)
     const formData = new FormData();
     formData.set("hero", data || hero);
     formData.set("summary", summary);

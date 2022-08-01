@@ -39,6 +39,7 @@ import {
 import { toast, ToastContainer } from "react-toastify";
 import { Parser } from "html-to-react";
 import { Player } from "video-react";
+import { shareOnLinkedIn, shareOnFacebook } from "../../utils/SocialShare";
 
 const ShareAppreciations = () => {
   const params = useParams();
@@ -87,16 +88,13 @@ const ShareAppreciations = () => {
             <Modal.Body>
               <p>Share on:</p>
               <div>
-                <FacebookShareButton
-                  url={`${shareUrl}`}
-                  quote={appreciation.summary}
-                  hashtag={"#socialcoin"}
-                  description={appreciation.story}
-                  className="pe-2"
-                >
-                  <FacebookIcon size={40} round />
-                </FacebookShareButton>
-
+                <button 
+                    onClick = {shareOnFacebook}
+                    className="pe-2"
+                    style={{ background: "transparent", border: "none"}}
+                  >
+                    <FacebookIcon size={40} round />
+                </button>
                 <TwitterShareButton
                   title={appreciation.summary}
                   url={`${shareUrl}`}
@@ -105,14 +103,13 @@ const ShareAppreciations = () => {
                 >
                   <TwitterIcon size={40} round />
                 </TwitterShareButton>
-                <LinkedinShareButton
-                  title={appreciation.summary}
-                  summary={appreciation.story}
-                  url={`${shareUrl}`}
+                <button 
+                  onClick = {shareOnLinkedIn}
                   className="pe-2"
+                  style={{ background: "transparent", border: "none"}}
                 >
                   <LinkedinIcon size={40} round />
-                </LinkedinShareButton>
+                </button>
                 <EmailShareButton
                   subject={appreciation.summary}
                   body={appreciation.story}
@@ -172,16 +169,13 @@ const ShareAppreciations = () => {
                     <Navbar.Toggle />
                     <Navbar.Collapse className="justify-content-end sc-appreciation-icon">
                       <div>
-                        <FacebookShareButton
-                          url={`${shareUrl}`}
-                          quote={appreciation.summary}
-                          hashtag={"#socialcoin"}
-                          description={appreciation.story}
-                          className="pe-2"
-                        >
-                          <FacebookIcon size={25} round />
-                        </FacebookShareButton>
-
+                        <button 
+                            onClick = {shareOnFacebook}
+                            className="pe-2"
+                            style={{ background: "transparent", border: "none"}}
+                          >
+                            <FacebookIcon size={25} round />
+                        </button>
                         <TwitterShareButton
                           title={appreciation.summary}
                           url={`${shareUrl}`}
