@@ -30,7 +30,7 @@ import {
 import { toast, ToastContainer } from "react-toastify";
 import { Parser } from "html-to-react";
 import { Player } from "video-react";
-import { shareOnLinkedIn } from "../../utils/SocialShare";
+import { shareOnLinkedIn, shareOnFacebook } from "../../utils/SocialShare";
 
 const AppreciationDetails = () => {
   const params = useParams();
@@ -95,16 +95,13 @@ const AppreciationDetails = () => {
                     <Navbar.Toggle />
                     <Navbar.Collapse className="justify-content-end sc-appreciation-icon">
                       <div>
-                        <FacebookShareButton
-                          url={`${shareUrl}`}
-                          quote={appreciation.summary}
-                          hashtag={"#socialcoin"}
-                          description={appreciation.story}
-                          className="pe-2"
-                        >
-                          <FacebookIcon size={25} round />
-                        </FacebookShareButton>
-
+                        <button 
+                            onClick = {shareOnFacebook}
+                            className="pe-2"
+                            style={{ background: "transparent", border: "none"}}
+                          >
+                            <FacebookIcon size={25} round />
+                        </button>
                         <TwitterShareButton
                           title={appreciation.summary}
                           url={`${shareUrl}`}
