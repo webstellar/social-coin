@@ -39,6 +39,7 @@ import {
 import { toast, ToastContainer } from "react-toastify";
 import { Parser } from "html-to-react";
 import { Player } from "video-react";
+import { shareOnLinkedIn } from "../../utils/SocialShare";
 
 const ShareAppreciations = () => {
   const params = useParams();
@@ -105,14 +106,13 @@ const ShareAppreciations = () => {
                 >
                   <TwitterIcon size={40} round />
                 </TwitterShareButton>
-                <LinkedinShareButton
-                  title={appreciation.summary}
-                  summary={appreciation.story}
-                  url={`${shareUrl}`}
+                <button 
+                  onClick = {shareOnLinkedIn}
                   className="pe-2"
+                  style={{ background: "transparent", border: "none"}}
                 >
                   <LinkedinIcon size={40} round />
-                </LinkedinShareButton>
+                </button>
                 <EmailShareButton
                   subject={appreciation.summary}
                   body={appreciation.story}

@@ -62,7 +62,7 @@ const Discover = () => {
                   style={{ backgroundColor: "rgb(228, 228, 228, 0.2)" }}
                   className="py-5"
                 >
-                  {heroes &&
+                  {heroes.length > 0 &&
                     heroes
                       .slice(0, 4)
                       .reverse()
