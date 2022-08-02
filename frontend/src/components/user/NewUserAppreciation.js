@@ -114,16 +114,15 @@ const NewUserAppreciation = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    console.log(story)
-    const formData = new FormData();
-    formData.set("hero", data || hero);
-    formData.set("summary", summary);
-    formData.set("story", story);
-    formData.set("image", image);
-    formData.set("tags", tags);
-    formData.set("video", video);
-
-    dispatch(newAppreciation(formData));
+    const formdata = {
+      hero : data || hero,
+      summary: summary,
+      story: story,
+      image: image==='' ? null : image,
+      video: video==='' ? null : video,
+      tags: tags
+    }
+    dispatch(newAppreciation(formdata));
   };
 
   const tinymce = "0z5qmo7cx8rjieka6xxb9nz2y1b8k8rdyluiq9zv9r0t6du2";

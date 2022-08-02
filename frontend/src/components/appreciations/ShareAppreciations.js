@@ -69,7 +69,6 @@ const ShareAppreciations = () => {
 
   const apprDate = dayjs(appreciation.createdAt).format("MMM D, YYYY");
   let shareUrl = window.location.href;
-
   return (
     <Fragment>
       {loading ? (
@@ -224,14 +223,15 @@ const ShareAppreciations = () => {
 
                     <div className="mb-3">
                       {appreciation.tags &&
-                        appreciation.tags.map((tag, i) => {
-                          <Badge pill bg="dark" key={i}>
-                            {tag}
-                          </Badge>;
-                        })}
-                      <Badge pill bg="dark">
-                        {appreciation.tags}
-                      </Badge>
+                        appreciation.tags.map((tag, i) => { 
+                          return (
+                            <><Badge pill bg="dark" key={i}>
+                              {tag}
+                            </Badge>&nbsp;</>
+                          )}
+                        )
+                      }
+                      
                     </div>
 
                     <div>
