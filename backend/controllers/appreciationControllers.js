@@ -14,21 +14,23 @@ exports.newAppreciation = catchAsyncErrors(async (req, res, next) => {
   //create the appreciation
   req.body.user = req.user.id;
   req.body.hero = toId(req.body.hero);
-
-  const image = await cloudinary.v2.uploader.upload(req.body.image, {
-    folder: "social-coin/appreciations/images",
-  });
-
-  const video = await cloudinary.v2.uploader.upload_large(req.body.video, {
-    resource_type: "video",
-    folder: "social-coin/appreciations/videos",
-    chunk_size: 6000000,
-  });
+  let image, video;
+  if(req.body.image){
+    image = await cloudinary.v2.uploader.upload(req.body.image, {
+      folder: "social-coin/appreciations/images",
+    });
+  }
+  if(req.body.video){
+    video = await cloudinary.v2.uploader.upload_large(req.body.video, {
+      resource_type: "video",
+      folder: "social-coin/appreciations/videos",
+      chunk_size: 6000000,
+    });
+  }
 
   req.body.image = image;
   req.body.video = video;
   const appreciation = await Appreciation.create(req.body);
-
   //connect appreciation to  hero
   appreciation.id = await appreciation._id;
   req.params.id = await appreciation.hero;
