@@ -29,15 +29,17 @@ const NewUserAppreciation = () => {
 
   const data = location.state?.data._id;
 
+  const [uploading, setUploading] = useState(false);
   const [summary, setSummary] = useState("");
   const [story, setStory] = useState("");
   const [hero, setHero] = useState("");
   const [image, setImage] = useState("");
   const [tags, setTags] = useState(["daring"]);
-  const [video, setVideo] = useState("");
+  const [video, setVideo] = useState(null);
   const [imagePreview, setImagePreview] = useState(
     "https://res.cloudinary.com/dja7mdaul/image/upload/v1655345210/social-coin/user_avatar/defaultProfile_ouwetk.jpg"
   );
+
 
   const { loading, error, success, appreciation } = useSelector(
     (state) => state.newAppreciation
@@ -71,7 +73,11 @@ const NewUserAppreciation = () => {
   const onChange = (e) => {
     if (e.target.name === "image") {
       const reader = new FileReader();
-
+      const file = e.target.files[0];
+      if(file > 8e+6){
+        alert("Max Limit is: 8mb")
+        return;
+      }
       reader.onload = () => {
         if (reader.readyState === 2) {
           setImage(reader.result);
@@ -79,19 +85,96 @@ const NewUserAppreciation = () => {
         }
       };
 
-      reader.readAsDataURL(e.target.files[0]);
+      reader.readAsDataURL(file);
     }
   };
 
   //video
-  const onUpload = (e) => {
-    if (e.target.name === "video") {
-      const reader = new FileReader();
-      reader.onload = () => {
-        setVideo(reader.result);
-      };
-      reader.readAsDataURL(e.target.files[0]);
+  const onUpload = async (e) => {
+    var file = e.target.files[0];
+    if(file.size>2.5e+7){
+      alert("Max Limit is: 25mb")
+      return;
     }
+    var POST_URL =
+      "https://api.cloudinary.com/v1_1/" + process.env.REACT_APP_YOUR_CLOUD_NAME + "/auto/upload";
+
+    var XUniqueUploadId = +new Date();
+    
+    setUploading(true);
+    await processFile();
+    async function processFile(e) {
+      console.log("inside")
+      var size = file.size;
+      var sliceSize = 20000000;
+      var start = 0;
+
+      setTimeout(loop, 3);
+
+      async function loop() {
+        var end = start + sliceSize;
+
+        if (end > size) {
+          end = size;
+        }
+        var s = slice(file, start, end);
+        await send(s, start, end - 1, size);
+        if (end < size) {
+          start += sliceSize;
+          setTimeout(loop, 3);
+        }
+      }
+    }
+
+    async function send(piece, start, end, size) {
+      console.log("start ", start);
+      console.log("end", end);
+
+      var formdata = new FormData();
+      console.log(XUniqueUploadId);
+
+      formdata.append("file", piece);
+      formdata.append("cloud_name", process.env.REACT_APP_YOUR_CLOUD_NAME);
+      formdata.append("upload_preset", process.env.REACT_APP_YOUR_UNSIGNED_UPLOAD_PRESET);
+      formdata.append("public_id", "myChunkedFile2");
+      formdata.append("folder", "social-coin/appreciations/videos");
+
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", POST_URL, false);
+      xhr.setRequestHeader("X-Unique-Upload-Id", XUniqueUploadId);
+      xhr.setRequestHeader(
+        "Content-Range",
+        "bytes " + start + "-" + end + "/" + size
+      );
+
+      xhr.onload = function () {
+        // do something to response
+        const result = JSON.parse(this.responseText);
+        console.log(this.responseText)
+        console.log({"public_id": result.public_id,
+          "url": result.url})
+        setVideo({public_id: result.public_id,
+          url: result.url})
+        setUploading(false);
+      };
+
+      await xhr.send(formdata);
+    }
+
+    function slice(file, start, end) {
+      var slice = file.mozSlice
+        ? file.mozSlice
+        : file.webkitSlice
+        ? file.webkitSlice
+        : file.slice
+        ? file.slice
+        : noop;
+
+      return slice.bind(file)(start, end);
+    }
+
+    function noop() {}
+
   };
 
   //remove tags
@@ -119,9 +202,10 @@ const NewUserAppreciation = () => {
       summary: summary,
       story: story,
       image: image==='' ? null : image,
-      video: video==='' ? null : video,
+      video: video,
       tags: tags
     }
+    console.log(formdata)
     dispatch(newAppreciation(formdata));
   };
 
@@ -314,9 +398,9 @@ const NewUserAppreciation = () => {
                         <Button
                           type="submit"
                           className="rounded-pill btn-dark btn-outline-light border-dark"
-                          disabled={loading ? true : false}
+                          disabled={loading || uploading ? true : false}
                         >
-                          appreciate
+                          { loading || uploading ? 'uploading...' : 'appreciate'}
                         </Button>
                       </div>
                     </Form>
