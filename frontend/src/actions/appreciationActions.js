@@ -135,6 +135,25 @@ export const deleteAppreciation = (id) => async (dispatch) => {
   }
 };
 
+// Delete appreciation (User)
+export const deleteMyAppreciation = (id) => async (dispatch) => {
+  try {
+    dispatch({ type: DELETE_APPRECIATION_REQUEST });
+
+    const { data } = await axios.delete(`/api/v1/me/appreciation/${id}`);
+
+    dispatch({
+      type: DELETE_APPRECIATION_SUCCESS,
+      payload: data.success,
+    });
+  } catch (error) {
+    dispatch({
+      type: DELETE_APPRECIATION_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
 // Update Appreciation (ADMIN)
 export const updateAppreciation =
   (id, appreciationData) => async (dispatch) => {

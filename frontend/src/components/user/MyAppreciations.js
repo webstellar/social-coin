@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   myAppreciations,
-  deleteAppreciation,
+  deleteMyAppreciation,
   clearErrors,
 } from "../../actions/appreciationActions";
 import { DELETE_APPRECIATION_RESET } from "../../constants/appreciationConstant";
@@ -44,6 +44,11 @@ const MyAppreciations = ({ user }) => {
       dispatch({ type: DELETE_APPRECIATION_RESET });
     }
   }, [dispatch, error, deleteError, isDeleted, navigate]);
+
+
+  const deleteAppreciationHandler = (id) => {
+    dispatch(deleteMyAppreciation(id));
+  };
 
   const setAppreciations = () => {
     const data = {
@@ -91,7 +96,7 @@ const MyAppreciations = ({ user }) => {
             >
               <BsPencil />
             </Link>
-            <button className="rounded-pill btn btn-danger py-1 px-2 ml-2">
+            <button onClick={() => deleteAppreciationHandler(appreciation?._id)} className="rounded-pill btn btn-danger py-1 px-2 ml-2">
               <BsTrash />
             </button>
           </Fragment>
@@ -100,10 +105,6 @@ const MyAppreciations = ({ user }) => {
     });
 
     return data;
-  };
-
-  const deleteAppreciationHandler = (id) => {
-    dispatch(deleteAppreciation(id));
   };
 
   return (
