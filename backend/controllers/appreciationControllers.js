@@ -12,7 +12,11 @@ const cloudinary = require("cloudinary");
 //create new appreciation => /api/v1/appreciation/new
 exports.newAppreciation = catchAsyncErrors(async (req, res, next) => {
   //create the appreciation
-  req.body.user = req.user.id;
+  req.body.user = {
+    id: req.user.id,
+    name: req.user.name,
+    profilePicture: req.user.profilePicture
+  };
   req.body.hero = toId(req.body.hero);
   if(req.body.image){
     image = await cloudinary.v2.uploader.upload(req.body.image, {
@@ -192,9 +196,9 @@ exports.deleteAppreciation = catchAsyncErrors(async (req, res, next) => {
 //Get logged in user appreciations => /api/v1/me/appreciations
 exports.myAppreciations = catchAsyncErrors(async (req, res, next) => {
   const appreciations = await Appreciation.find({
-    user: req.user.id,
+    "user.id": req.user.id
   });
-
+  console.log(appreciations)
   let heroesIDs = [];
 
   for (let i = 0; i < appreciations.length; i++) {

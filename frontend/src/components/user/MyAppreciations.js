@@ -86,7 +86,7 @@ const MyAppreciations = ({ user }) => {
       data.rows.push({
         id: appreciation?._id,
         hero: appreciation.hero,
-        user: appreciation?.user,
+        user: appreciation?.user.id,
         summary: appreciation?.summary.substring(0, 20),
         actions: (
           <Fragment>
