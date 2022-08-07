@@ -19,7 +19,18 @@ const appreciationSchema = new mongoose.Schema(
       ref: "Hero",
     },
     user: {
-      type: mongoose.Schema.ObjectId,
+      type: {
+        id: mongoose.Schema.ObjectId,
+        name: String,
+        profilePicture: { 
+          public_id: {
+            type: String,
+          },
+          url: {
+            type: String,
+          }
+        },
+      },
       ref: "User",
       required: true,
     },
