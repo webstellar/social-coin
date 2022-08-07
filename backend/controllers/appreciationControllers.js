@@ -14,7 +14,6 @@ exports.newAppreciation = catchAsyncErrors(async (req, res, next) => {
   //create the appreciation
   req.body.user = req.user.id;
   req.body.hero = toId(req.body.hero);
-  let image;
   if(req.body.image){
     image = await cloudinary.v2.uploader.upload(req.body.image, {
       folder: "social-coin/appreciations/images",
@@ -28,7 +27,6 @@ exports.newAppreciation = catchAsyncErrors(async (req, res, next) => {
   //   });
   // }
 
-  req.body.image = image;
   const appreciation = await Appreciation.create(req.body);
   //connect appreciation to  hero
   appreciation.id = await appreciation._id;
@@ -242,21 +240,24 @@ exports.updateMyAppreciation = catchAsyncErrors(async (req, res, next) => {
 
 //Delete Appreciation => /api/v1/me/appreciation/:id
 exports.deleteMyAppreciation = catchAsyncErrors(async (req, res, next) => {
-  const appreciation = await Appreciation.findById(req.params.id).populate({
-    user: req.user.id,
-  });
-
+  const appreciation = await Appreciation.findById(ObjectId(req.params.id));
   if (!appreciation) {
     return next(new ErrorHandler("Appreciation not found", 404));
   }
-
+  
   //Deleting image associated with the appreciation
-  const imageResult = await cloudinary.v2.uploader.destroy(
-    appreciation.image.public_id
-  );
-
-  await appreciation.deleteOne();
-
+  if(appreciation.image && appreciation.image.public_id)
+    await cloudinary.v2.uploader.destroy(appreciation.image.public_id);
+  
+  if(appreciation.video && appreciation.video.public_id)
+    await cloudinary.v2.uploader.destroy(appreciation.video.public_id)
+  
+  try {
+    await Appreciation.deleteOne({ "_id" : ObjectId(req.params.id) });
+  } catch (e) {
+    return next(new ErrorHandler("Appreciation deletion failed", 400));
+  }
+  
   res.status(200).json({
     success: true,
     message: "Appreciation has been deleted",
