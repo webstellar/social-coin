@@ -40,6 +40,10 @@ const MyHeroes = ({ user }) => {
     }
   }, [dispatch, error, deleteError, isDeleted, navigate]);
 
+  const deleteHeroHandler = (id) => {
+    dispatch(deleteHero(id));
+  };
+
   const setHeroes = () => {
     const data = {
       columns: [
@@ -98,7 +102,7 @@ const MyHeroes = ({ user }) => {
             >
               <BsPencil />
             </Link>
-            <button className="rounded-pill btn-danger py-1 px-2 ml-2">
+            <button onClick={() => deleteHeroHandler(hero?._id)} className="rounded-pill btn-danger py-1 px-2 ml-2">
               <BsTrash />
             </button>
           </Fragment>
@@ -109,9 +113,6 @@ const MyHeroes = ({ user }) => {
     return data;
   };
 
-  const deleteHeroHandler = (id) => {
-    dispatch(deleteHero(id));
-  };
 
   return (
     <Fragment>
