@@ -71,8 +71,8 @@ const AppreciationDetails = () => {
                     <Navbar.Brand as={Link} to="/">
                       <img
                         src={
-                          appreciation.user?.profilePicture
-                            ? appreciation.user.profilePicture
+                          appreciation.user?.profilePicture.url
+                            ? appreciation.user.profilePicture.url
                             : "https://picsum.photos/200"
                         }
                         alt="mdo"
