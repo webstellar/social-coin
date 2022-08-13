@@ -4,25 +4,14 @@ const ErrorHandler = require("../utils/errorHandler");
 const catchAsyncErrors = require("../middlewares/catchAsyncErrors");
 const sendToken = require("../utils/jwtToken");
 const sendEmail = require("../utils/sendEmail");
-const { getAccessToken, getUserEmail, getUserProfile } = require("../utils/authLinkedin")
 const crypto = require("crypto");
 const cloudinary = require("cloudinary");
 
 const axios = require('axios');
-const qs = require('query-string');
 
 // urls
 const urlToGetUserEmail = 'https://api.linkedin.com/v2/clientAwareMemberHandles?q=members&projection=(elements*(primary,type,handle~))';
 const urlToGetLinkedInAccessToken = 'https://www.linkedin.com/oauth/v2/accessToken';
-
-function userBuilder(userProfile,userEmail) {
-  return {
-    firstName: userProfile.firstName,
-    lastName: userProfile.lastName,
-    profileImageURL: userProfile.profileImageURL,
-    email: userEmail
-  }
-}
 
 /**
  * Get access token from LinkedIn
