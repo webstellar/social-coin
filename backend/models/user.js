@@ -31,7 +31,10 @@ const userSchema = new mongoose.Schema({
       type: String,
     },
   },
-
+  linkedinId: {
+    type: String,
+    default: null
+  },
   role: {
     type: String,
     default: "user",
