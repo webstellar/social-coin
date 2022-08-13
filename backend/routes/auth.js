@@ -16,11 +16,13 @@ const {
   updateUser,
   deleteUser,
   registerGoogleUser,
+  signupLinkedin,
 } = require("../controllers/authController");
 
 const { isAuthenticatedUser, authorizeRoles } = require("../middlewares/auth");
 
 router.route("/register").post(registerUser);
+router.route("/linkedInRegister").get(signupLinkedin)
 router.route("/register").post(registerGoogleUser);
 router.route("/login").post(loginUser);
 router.route("/password/forgot").post(forgotPassword);
