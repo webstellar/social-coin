@@ -13,6 +13,7 @@ import {
   clearErrors,
   googleRegister,
 } from "../../actions/userAction";
+import axios from "axios";
 
 import { toast, ToastContainer } from "react-toastify";
 import { useScript } from "../hooks/useScript";
@@ -20,6 +21,8 @@ import { useScript } from "../hooks/useScript";
 import { useLinkedIn } from "react-linkedin-login-oauth2";
 // You can use provided image shipped by this package or using your own
 import linkedin from "react-linkedin-login-oauth2/assets/linkedin.png";
+import { LinkedInApi, NodeServer } from "../config/linkedinConfig";
+import { LOGIN_SUCCESS } from "../../constants/userConstant";
 
 const Register = () => {
   const confirmPassword = useRef();
@@ -32,7 +35,8 @@ const Register = () => {
     email: "",
     password: "",
   });
-
+  const [linkedinUser, setLinkedinUser] = useState(null);
+  const [authCode, setAuthCode] = useState(null);
   const { name, email, password } = user;
 
   const [profilePicture, setProfilePicture] = useState("");
@@ -96,18 +100,6 @@ const Register = () => {
     //window.google.accounts.id.prompt();
   });
 
-  //LinkedIn
-
-  const { linkedInLogin } = useLinkedIn({
-    clientId: "86vhj2q7ukf83q",
-    redirectUri: `${window.location.origin}/linkedin`,
-    onSuccess: (code) => {
-      console.log("Code: " + code);
-    },
-    onError: (error) => {
-      console.log(error);
-    },
-  });
 
   //Email Signup
   useEffect(() => {
@@ -161,6 +153,43 @@ const Register = () => {
     }
   };
 
+  const showLinkedinPopup = () => {
+    let { clientId, redirectUrl, oauthUrl, scope, state } = LinkedInApi;
+    oauthUrl = `${oauthUrl}&client_id=${clientId}&scope=${scope}&state=${state}&redirect_uri=${redirectUrl}`;
+    window.open(oauthUrl,"_self")
+  };
+
+  const getUserCredentials = async (code) => {
+    const res = await axios.get(`${NodeServer.baseURL}${NodeServer.registerPath}?code=${code}`)
+    console.log(res)
+    return res;
+  };
+  
+  const signupLinkedin = async () => {
+    const url = window.location.href;
+    if(url.includes("code=") && url.includes("state=")){
+      const code = url.split("code=")[1].split("&")[0]
+      setAuthCode(code)
+      const res = await getUserCredentials(code); 
+      dispatch({
+        type: LOGIN_SUCCESS,
+        payload: res.data.user,
+      });
+
+    }; 
+  }
+
+  // For LinkedIn only  
+  useEffect(() => {
+    const url = window.location.href;
+    if(url.includes("code=") && url.includes("state=")){
+      const code = url.split("code=")[1].split("&")[0]
+      console.log(code);
+      if(authCode!==code && linkedinUser===null)
+        signupLinkedin();
+    }    
+  },[])
+  
   return (
     <Fragment>
       {loading ? (
@@ -296,7 +325,7 @@ const Register = () => {
                     <div className="d-grid gap-2 mb-3">
                       <Button
                         className="sc-disablefocus rounded-pill btn-labeled btn-light btn-outline-dark"
-                        onClick={linkedInLogin}
+                        onClick={showLinkedinPopup}
                         style={{ cursor: "pointer" }}
                       >
                         <img

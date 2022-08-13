@@ -4,9 +4,87 @@ const ErrorHandler = require("../utils/errorHandler");
 const catchAsyncErrors = require("../middlewares/catchAsyncErrors");
 const sendToken = require("../utils/jwtToken");
 const sendEmail = require("../utils/sendEmail");
-
 const crypto = require("crypto");
 const cloudinary = require("cloudinary");
+
+const axios = require('axios');
+
+// urls
+const urlToGetUserEmail = 'https://api.linkedin.com/v2/clientAwareMemberHandles?q=members&projection=(elements*(primary,type,handle~))';
+const urlToGetLinkedInAccessToken = 'https://www.linkedin.com/oauth/v2/accessToken';
+
+/**
+ * Get access token from LinkedIn
+ * @param code returned from step 1
+ * @returns accessToken if successful or null if request fails 
+ */
+async function getUserFromLinkedin(code) {
+    let accessToken = null;
+    const parameters = {
+      "grant_type": "authorization_code",
+      "code": code,
+      "state":123456,
+      "redirect_uri": process.env.REDIRECT_URI,
+      "client_id": process.env.CLIENT_ID,
+      "client_secret": process.env.CLIENT_SECRET,
+    };
+    const access_config = {
+      headers: { "Content-Type": 'x-www-form-urlencoded' },
+      params: parameters,
+    };
+    let userProfile = {}
+    try {
+      const res_token = await axios.post(urlToGetLinkedInAccessToken,{},access_config);
+      accessToken = res_token.data["access_token"];
+      const res_profile = await axios.get(`https://api.linkedin.com/v2/me?oauth2_access_token=${accessToken}`);
+      userProfile.firstName = res_profile.data["localizedFirstName"];
+      userProfile.lastName = res_profile.data["localizedLastName"];
+      userProfile.id = res_profile.data["id"]
+      const email_config = {
+        headers: {
+          "oauth2_access_token": `Bearer ${accessToken}`
+        }
+      };
+      const res_email = await axios.get(`${urlToGetUserEmail}&oauth2_access_token=${accessToken}`,{},email_config)
+      userProfile.email = res_email.data.elements[0]['handle~'].emailAddress;
+    }
+    catch(err){
+        return {error: true, response: "failed to fetch linkedin profile"};
+    }
+    return { error: false, response: userProfile };
+  }
+
+exports.signupLinkedin = catchAsyncErrors( async(req,res,next) => {
+  const code = req.query.code;
+  const response = await getUserFromLinkedin(code);
+  if( response.error ){
+    return next(new ErrorHandler("Unable to fetch profile data from linkedin"), 400);
+  }
+  else{
+    const userProfile = response.response;
+    try {
+      const user = await User.findOne({ linkedinId: userProfile.id });
+      if(user){
+        console.log("1st")
+        sendToken(user, 200, res);
+      }
+      else{
+        console.log("2nd")
+        const newUser = await User.create({
+          name: `${userProfile.firstName} ${userProfile.lastName}`,
+          email: userProfile.email,
+          linkedinId: userProfile.id
+        });
+        sendToken(newUser, 201, res);        
+      }
+
+    } catch (error) {
+      console.log(error);
+      return next(new ErrorHandler("Sorry!!, Maybe you already have an account with this email"), 400);
+    }
+  }
+})
+
 
 //Register  user => /api/v1/register
 exports.registerUser = catchAsyncErrors(async (req, res, next) => {

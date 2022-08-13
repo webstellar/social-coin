@@ -10,7 +10,6 @@ import "react-toastify/dist/ReactToastify.css";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>
-    <React.StrictMode>
       <ToastContainer
         position="bottom-left"
         autoClose={5000}
@@ -23,6 +22,5 @@ root.render(
         pauseOnHover
       />
       <App />
-    </React.StrictMode>
   </Provider>
 );
