@@ -1,19 +1,35 @@
 import React, { Fragment, useState } from "react";
 import { GrSearch } from "react-icons/gr";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { getHeroes } from "../../actions/heroActions";
 
 const DiscoverSearchBar = () => {
   const navigate = useNavigate();
-  const [keyword, setKeyword] = useState("");
+  const dispatch = useDispatch();
 
-  const searchHandler = (e) => {
-    e.preventDefault();
-
-    if (keyword.trim()) {
-      navigate(`/search/${keyword}`);
+  // const [keyword, setKeyword] = useState("");
+  let debounceTimeout = 0;
+  
+  /* Debounce Search */
+  const searchHandler = (value) => {
+    if (value!=="") {
+      /* api call for keyword search: TODO: -> change the state of heroes array */
+      dispatch(getHeroes(value));
     } else {
       navigate("/discover");
     }
+  };
+  const debounceSearch = (event) => {
+    const value = event.target.value;
+
+    if (debounceTimeout) {
+      clearTimeout(debounceTimeout);
+    }
+    
+    debounceTimeout = setTimeout(() => {
+      searchHandler(value);
+    }, 300);
   };
 
   return (
@@ -35,7 +51,7 @@ const DiscoverSearchBar = () => {
             placeholder="Search for a hero..."
             aria-describedby="button-addon4"
             className="form-control bg-none border-0"
-            onChange={(e) => setKeyword(e.target.value)}
+            onChange={(e) => debounceSearch(e)}
           />
         </div>
       </form>
