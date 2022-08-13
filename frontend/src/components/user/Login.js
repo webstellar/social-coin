@@ -12,10 +12,14 @@ import { login, clearErrors } from "../../actions/userAction";
 import { ToastContainer, toast } from "react-toastify";
 import { useScript } from "../hooks/useScript";
 import jwt_decode from "jwt-decode";
+import { LinkedInApi, NodeServer } from "../config/linkedinConfig";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  
+  const [linkedinUser, setLinkedinUser] = useState(null);
+  const [authCode, setAuthCode] = useState(null);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -73,6 +77,12 @@ const Login = () => {
     e.preventDefault();
     dispatch(login(email, password));
     toast.success("Logged in successfully.");
+  };
+
+  const showLinkedinPopup = () => {
+    let { clientId, redirectUrl, oauthUrl, scope, state } = LinkedInApi;
+    oauthUrl = `${oauthUrl}&client_id=${clientId}&scope=${scope}&state=${state}&redirect_uri=${redirectUrl}`;
+    window.open(oauthUrl,"_self")
   };
 
   return (
@@ -142,7 +152,7 @@ const Login = () => {
                       id="signInDiv"
                     ></div>
                     <div className="d-grid gap-2 mb-3">
-                      <Button className="sc-disablefocus rounded-pill btn-labeled btn-light btn-outline-dark mb-3">
+                      <Button onClick={showLinkedinPopup} className="sc-disablefocus rounded-pill btn-labeled btn-light btn-outline-dark mb-3">
                         <img
                           src={Linkedin}
                           alt="linkedin icon"
