@@ -151,9 +151,9 @@ exports.getSingleAppreciation = catchAsyncErrors(async (req, res, next) => {
 exports.updateAppreciation = catchAsyncErrors(async (req, res, next) => {
   //appreciation is referenced with LET meaning it's value will change after finding it
   //first we get the single appreciation
-  let appreciation = await Appreciation.findById(req.params.id).populate({
-    user: req.user.id,
-  });;
+  let appreciation = await Appreciation.findById(req.params.id).populate(
+    "user.id", req.user.id,
+  );
 
   //if not successful in find appreciation by Id
   if (!appreciation) {
@@ -174,21 +174,23 @@ exports.updateAppreciation = catchAsyncErrors(async (req, res, next) => {
 
 //Delete Appreciation => /api/v1/admin/appreciation/:id
 exports.deleteAppreciation = catchAsyncErrors(async (req, res, next) => {
-  const appreciation = await Appreciation.findById(req.params.id).populate({
-    user: req.user.id,
-  });;
+  const appreciation = await Appreciation.findById(req.params.id).populate(
+    "user.id", req.user.id,
+  );
 
   if (!appreciation) {
     return next(new ErrorHandler("Appreciation not found", 404));
   }
 
   //Deleting image associated with the appreciation
-  const image_id = appreciation.image.public_id;
-  await cloudinary.v2.uploader.destroy(image_id);
-
-  const video_id = appreciation.video.public_id;
-  await cloudinary.v2.uploader.destroy(video_id);
-
+  if(appreciation.image && appreciation.image.public_id){
+    const image_id = appreciation.image.public_id;
+    await cloudinary.v2.uploader.destroy(image_id);
+  }
+  if(appreciation.video && appreciation.video.public_id){
+    const video_id = appreciation.video.public_id;
+    await cloudinary.v2.uploader.destroy(video_id);
+  }
   await appreciation.deleteOne();
 
   res.status(200).json({
@@ -227,9 +229,9 @@ exports.myAppreciations = catchAsyncErrors(async (req, res, next) => {
 
 //Update logged in user Appreciation => /api/v1/me/appreciation/:id
 exports.updateMyAppreciation = catchAsyncErrors(async (req, res, next) => {
-  let appreciation = await Appreciation.findById(req.params.id).populate({
-    user: req.user.id,
-  });
+  let appreciation = await Appreciation.findById(req.params.id).populate(
+    "user.id", req.user.id,
+  );
 
   if (!appreciation) {
     return next(new ErrorHandler("Appreciation not found", 404));
