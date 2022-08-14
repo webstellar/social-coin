@@ -23,7 +23,9 @@ const UsersList = () => {
   const { error: deleteError, isDeleted } = useSelector((state) => state.user);
 
   useEffect(() => {
-    dispatch(allUsers());
+    const getHeroes = async () => {
+      dispatch(allUsers());
+    }
 
     if (error) {
       toast.error(deleteError);
@@ -39,6 +41,9 @@ const UsersList = () => {
       navigate("/admin/users");
       dispatch({ type: DELETE_USER_RESET });
     }
+
+    getHeroes();
+
   }, [dispatch, error, deleteError, isDeleted, navigate]);
 
   const setUsers = () => {
@@ -89,7 +94,7 @@ const UsersList = () => {
             </Link>
             <button
               className="rounded-pill btn-danger py-1 px-2 ml-2"
-              onClick={deleteUserHandler(user._id)}
+              onClick={() => deleteUserHandler(user._id)}
             >
               <BsTrash />
             </button>

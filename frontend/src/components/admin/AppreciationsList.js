@@ -31,7 +31,9 @@ const AppreciationsList = () => {
   );
 
   useEffect(() => {
-    dispatch(getAdminAppreciations());
+    const getAppreciationList = async () => {
+      dispatch(getAdminAppreciations());
+    }
 
     if (error) {
       toast.error(error);
@@ -48,6 +50,9 @@ const AppreciationsList = () => {
       navigate("/admin/appreciations");
       dispatch({ type: DELETE_APPRECIATION_RESET });
     }
+
+    getAppreciationList();
+
   }, [dispatch, deleteError, isDeleted, navigate, error]);
 
   const setAppreciations = () => {
@@ -83,12 +88,13 @@ const AppreciationsList = () => {
     };
 
     appreciations.forEach((appreciation) => {
+      console.log(appreciation)
       data.rows.push({
         id: appreciation?._id,
         hero: appreciation?.hero,
-        user: appreciation?.user,
-        summary: appreciation?.summary.substring(0, 20),
-        actions: (
+        user: appreciation?.user?.id,
+        summary: appreciation?.summary.substring(0, 5),
+        actions: 
           <Fragment>
             <Link
               to={`/admin/appreciation/${appreciation?._id}`}
@@ -98,12 +104,12 @@ const AppreciationsList = () => {
             </Link>
             <button
               className="rounded-pill btn btn-danger py-1 px-2 ml-2"
-              onClick={deleteAppreciationHandler(appreciation._id)}
+              onClick={() => deleteAppreciationHandler(appreciation._id)}
             >
               <BsTrash />
             </button>
           </Fragment>
-        ),
+        ,
       });
     });
 

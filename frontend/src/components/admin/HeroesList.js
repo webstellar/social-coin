@@ -26,8 +26,12 @@ const HeroesList = () => {
 
   const { error: deleteError, isDeleted } = useSelector((state) => state.hero);
 
+
   useEffect(() => {
-    dispatch(getAdminHeroes());
+
+    const getHeroes = async () => {
+      dispatch(getAdminHeroes());
+    }
 
     if (error) {
       toast.error(deleteError);
@@ -43,6 +47,9 @@ const HeroesList = () => {
       navigate("/admin/heroes");
       dispatch({ type: DELETE_HERO_RESET });
     }
+    
+    getHeroes();
+
   }, [dispatch, error, deleteError, isDeleted, navigate]);
 
   const setHeroes = () => {
@@ -105,7 +112,7 @@ const HeroesList = () => {
             </Link>
             <button
               className="rounded-pill btn-danger py-1 px-2 ml-2"
-              onClick={deleteHeroHandler(hero._id)}
+              onClick={() => {deleteHeroHandler(hero._id)}}
             >
               <BsTrash />
             </button>
