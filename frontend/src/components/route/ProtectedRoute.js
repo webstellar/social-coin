@@ -19,16 +19,23 @@ const ProtectedRoute = ({ children, isAdmin }) => {
       dispatch(loadUser());
     }
   }, [dispatch, user, isAuthenticated, loading]);
-
-  if (!loading && isAuthenticated) {
-    if (isAdmin === true && user.role !== "admin") {
-      //navigate to previous menu
-      //location.reload();
-      navigate(-1);
+  console.log("before",loading, isAuthenticated)
+  if (!loading) {
+    if(!isAuthenticated) { 
+      if(!window.location.href.includes("/login"))
+        navigate("/login") 
     }
-    return children;
-  } else {
-    return <Navigate to={"/login"} />;
+    else{
+      if (isAdmin === true){
+        if(user && user.role === "admin") {
+          return children;
+        }
+        else navigate(-1);
+      } 
+      else {
+        return children;
+      }
+    }
   }
 };
 
