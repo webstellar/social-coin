@@ -91,8 +91,8 @@ const AppreciationsList = () => {
       console.log(appreciation)
       data.rows.push({
         id: appreciation?._id,
-        hero: appreciation?.hero,
-        user: appreciation?.user?.id,
+        hero: appreciation?.hero.name,
+        user: appreciation?.user?.name,
         summary: appreciation?.summary.substring(0, 5),
         actions: 
           <Fragment>
