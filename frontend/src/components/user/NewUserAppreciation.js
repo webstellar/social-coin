@@ -136,7 +136,6 @@ const NewUserAppreciation = () => {
       formdata.append("file", piece);
       formdata.append("cloud_name", process.env.REACT_APP_YOUR_CLOUD_NAME);
       formdata.append("upload_preset", process.env.REACT_APP_YOUR_UNSIGNED_UPLOAD_PRESET);
-      formdata.append("public_id", "myChunkedFile2");
       formdata.append("folder", "social-coin/appreciations/videos");
 
       var xhr = new XMLHttpRequest();
