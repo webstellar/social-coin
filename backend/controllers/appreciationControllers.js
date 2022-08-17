@@ -12,12 +12,17 @@ const cloudinary = require("cloudinary");
 //create new appreciation => /api/v1/appreciation/new
 exports.newAppreciation = catchAsyncErrors(async (req, res, next) => {
   //create the appreciation
+  const hero = await Hero.findOne({_id:req.body.hero});
+  console.log(hero)
   req.body.user = {
     id: req.user.id,
     name: req.user.name,
     profilePicture: req.user.profilePicture
   };
-  req.body.hero = toId(req.body.hero);
+  req.body.hero = {
+    id:  hero._id,
+    name: hero.name
+  };
   if(req.body.image){
     image = await cloudinary.v2.uploader.upload(req.body.image, {
       folder: "social-coin/appreciations/images",
@@ -33,10 +38,9 @@ exports.newAppreciation = catchAsyncErrors(async (req, res, next) => {
 
   const appreciation = await Appreciation.create(req.body);
   //connect appreciation to  hero
+  console.log(appreciation, appreciation._id);
   appreciation.id = await appreciation._id;
-  req.params.id = await appreciation.hero;
 
-  const hero = await Hero.findById(req.params.id);
   hero.appreciations.push(appreciation);
   hero.markModified("appreciations");
   await hero.save();

@@ -91,7 +91,7 @@ const Discover = () => {
                                     LATEST
                                   </span>
                                   <h3 className="fw-bolder mt-3">
-                                    {appr.summary.substring(0, 45)}...
+                                    {appr.summary.substring(0, 10)}...
                                   </h3>
                                   <div className="mt-2">
                                     <ListGroup.Item

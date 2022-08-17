@@ -85,8 +85,8 @@ const MyAppreciations = ({ user }) => {
     appreciations.forEach((appreciation, i) => {
       data.rows.push({
         id: appreciation?._id,
-        hero: appreciation.hero,
-        user: appreciation?.user.id,
+        hero: appreciation.hero.name,
+        user: appreciation?.user.name,
         summary: appreciation?.summary.substring(0, 20),
         actions: (
           <Fragment>
