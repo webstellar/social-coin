@@ -36,13 +36,13 @@ app.use("/api/v1", appreciations);
 app.use("/api/v1", heroes);
 app.use("/api/v1", auth);
 
-
 //If using Heroku for both frontend and backend
+__dirname = path.resolve();
 if (process.env.NODE_ENV === "PRODUCTION") {
-  app.use(express.static(path.join(__dirname, "../frontend/build")));
+  app.use(express.static(path.join(__dirname, "/frontend/build")));
 
   app.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "../frontend/build/index.html"));
+    res.sendFile(path.resolve(__dirname, "frontend", "build", "index.html"));
   });
 }
 
