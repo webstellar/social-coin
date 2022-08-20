@@ -37,7 +37,7 @@ app.use("/api/v1", heroes);
 app.use("/api/v1", auth);
 
 //If using Heroku for both frontend and backend
-__dirname = path.resolve();
+const __dirname = path.resolve();
 if (process.env.NODE_ENV === "PRODUCTION") {
   app.use(express.static(path.join(__dirname, "/frontend/build")));
 
