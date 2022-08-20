@@ -37,7 +37,7 @@ app.use("/api/v1", heroes);
 app.use("/api/v1", auth);
 
 
-//Here's a problem
+//If using Heroku for both frontend and backend
 if (process.env.NODE_ENV === "PRODUCTION") {
   app.use(express.static(path.join(__dirname, "../frontend/build")));
 
