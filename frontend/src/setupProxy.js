@@ -4,7 +4,7 @@ module.exports = function (app) {
   app.use(
     "/api/v1",
     createProxyMiddleware({
-      target: `https://grati-tude.herokuapp.com/`,
+      target: "http://127.0.0.1:4000",
       changeOrigin: true,
     })
   );
@@ -13,3 +13,4 @@ module.exports = function (app) {
 };
 
 //"proxy": ""proxy": "https://grati-tude.herokuapp.com/",
+//"proxy": "http://127.0.0.1:4000",
