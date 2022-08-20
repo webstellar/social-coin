@@ -4,14 +4,9 @@
   "description": "social coin web app using mern stack",
   "main": "server.js",
   "scripts": {
-    "start": "SET node backend/server.js",
+    "start": "node backend/server.js",
     "dev": "SET NODE_ENV=DEVELOPMENT& nodemon backend/server",
-    "prod": "SET NODE_ENV=PRODUCTION& nodemon backend/server",
-    //"heroku-postbuild": "NPM_CONFIG_PRODUCTION=false && npm install --prefix frontend && npm run build --prefix frontend"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/webstellar/sc-project.git"
+    "prod": "SET NODE_ENV=PRODUCTION& nodemon backend/server"
   },
   "keywords": [
     "social",
@@ -37,6 +32,8 @@
     "mongoose": "^6.3.3",
     "node-fetch": "^3.2.10",
     "nodemailer": "^6.7.5",
+    "qs": "^6.11.0",
+    "query-string": "^7.1.1",
     "validator": "^13.7.0"
   },
   "devDependencies": {
