@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { Container, Row, Col, Navbar, Image, Badge } from "react-bootstrap";
 import ErrorBoundary from "../../ErrorBoundary";
 import Loader from "../layout/Loader";
@@ -31,27 +31,135 @@ import { toast, ToastContainer } from "react-toastify";
 import { Parser } from "html-to-react";
 import { Player } from "video-react";
 import { shareOnLinkedIn, shareOnFacebook } from "../../utils/SocialShare";
+import { BsHandThumbsDownFill, BsHandThumbsUpFill, BsPersonFill } from "react-icons/bs";
+import { TextField } from "@mui/material"
+
+const comment_feature_seperator = { 
+  background: "rgba(108, 100, 100, 1)",
+  borderRadius: "3px",
+  height: "3px", width: "3px", 
+  margin: "5.5%", marginRight: "2.5%"
+}
+const comment_feature_label = {
+  color: "rgba(108,100,100,1)",
+  cursor: "pointer",
+  fontFamily: "cursive",
+  whiteSpace: "nowrap"
+}
+
+const cm = [{replies: 1},{replies: 2},{replies: 2}]
 
 const AppreciationDetails = () => {
   const params = useParams();
   const dispatch = useDispatch();
+  const [participants, setParticipants] = useState(null);
 
   const { loading, error, appreciation } = useSelector(
     (state) => state.appreciationDetails
   );
 
-  useEffect(() => {
-    dispatch(getAppreciationDetails(params.id));
+  const getSeparatorComponent = () => (
+    <div style={{margin: "6.5% 4% 0% 4%"}}>
+      <div style={comment_feature_seperator} />
+    </div>
+  )
+  const getAvatarComponent = (profilePic, isReply) => (
+    <div>
+    { profilePic ? 
+      <img style={{    
+        borderRadius: "50%",
+        width: isReply ? "42px" : "50px",
+        height: isReply ? "42px" : "50px"
+      }} 
+      src="https://cdn.searchenginejournal.com/wp-content/uploads/2022/04/reverse-image-search-627b7e49986b0-sej-760x400.png"/> 
+      : 
+      <BsPersonFill style={{
+        fontSize: isReply ? "2.625em" : "3em",
+        background: "bisque",
+        borderRadius: "50%",
+        padding: "15%",
+      }} />
+    }
+    </div>
+  )
+  const getSubmitCommentComponent = () => (
+    <div style={{display: 'flex'}}>
+      {getAvatarComponent()}
+      <TextField
+        sx = {{ marginLeft: "2%"}}
+        id="outlined-multiline-flexible"
+        label="Comment"
+        multiline
+        maxRows={4}
+        fullWidth
+        placeholder="Add a comment..."
+      />
+    </div>
+  )
+  const getCommentComponent = (review, isReply=false) => {
+    const sc_user =  participants[review.userId];
+    return (
+    <div style={{marginTop: isReply ? "10%" : "3%"}}>
+      <div style={{display:'flex'}}>
+        {getAvatarComponent(sc_user.profilePic, isReply)}
+        <div style={{marginLeft: isReply ? "8%" : "2.5%"}}>
+          <div style={{display: 'flex'}}>
+            <span>{sc_user.userName}</span> 
+            <div style={{ background: "rgba(108, 100, 100, 1)", height: "6px", width: "6px", borderRadius: "6px", margin: "5.5%", marginRight: "2.5%"}} />
+            <span style={{fontSize: "0.8em", marginTop: "1.5%"}}>{'1h'}</span>
+          </div>
+          <p style={{whiteSpace: 'nowrap', marginBottom: 0}}>{ isReply ? review.reply : review.comment}</p>
+          <div> 
+            <div style={{display:'flex'}}> 
+              <p style={comment_feature_label} className="mb-0">{ isReply || review.replies.length < 0 ? `Reply` : `Show all ${review.replies.length} replies`}</p>
+              {getSeparatorComponent()}
+              {review.status.likes > 0 && <p style={comment_feature_label} className="mb-0">{`${ review.status.likes.length } Likes`}</p>} 
+              {getSeparatorComponent()}
+              <div>
+                <BsHandThumbsUpFill style={{ color: review.status.likes.includes(review.userId) ? 'blue' : "rgba(108, 100, 100, 1)" }} />
+              </div> 
+              <div style={{ marginLeft: "5%" }}>
+                <BsHandThumbsDownFill 
+                  style={{ color: review.status.dislikes.includes(review.userId) 
+                    ? 'blue' : "rgba(108, 100, 100, 1)" 
+                  }} 
+                />
+              </div>
+            </div>
+            {
+              review.replies.length > 0 && 
+                review.replies.map((sc_reply) => {
+                  getCommentComponent(sc_reply, true)
+              })
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  )}
 
+  useEffect(() => {
+    
+    dispatch(getAppreciationDetails(params.id));
+    if(appreciation.comments) {
+      let tmp = {}
+      appreciation.comments.participants.reduce((obj, item) => {
+        return {
+          ...obj,
+          [item['userId']]: item,
+        };
+      }, tmp)
+      setParticipants({...tmp})
+    }
     if (error) {
       toast.error(error);
       dispatch(clearErrors);
     }
   }, [dispatch, error, params.id]);
+  console.log(appreciation)
+  let shareUrl = window.location.href;
 
   const apprDate = dayjs(appreciation.createdAt).format("MMM D, YYYY");
-
-  let shareUrl = window.location.href;
   return (
     <Fragment>
       {loading ? (
@@ -168,6 +276,28 @@ const AppreciationDetails = () => {
                         ""
                       )}
                     </div>
+                  </div>
+                  <br/><hr/>
+                  <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                    <p style={{margin: 0}}>{`The Conversation (${5})`}</p>                
+                    <div>
+                      <label style={{ color: "rgba(108, 100, 100, 1)" }} htmlFor="sort-options">Sort By</label>&nbsp;
+                      <select style={{border: 'none'}} name="sort-options" id="sort-options">
+                        <option value="Best">Best</option>
+                        <option value="Hot">Hot</option>
+                      </select>
+                    </div>
+                  </div>
+                  <p style={{margin: 0, fontSize: "0.8em"}}>Start a discussion, not a fire, Post with kindness.</p>
+                  <hr/>
+                  
+                  <div>
+                    {getSubmitCommentComponent()}
+                    { JSON.stringify(appreciation)!=='{}' && 
+                      appreciation.comments.conversation.map((review) => (
+                        getCommentComponent(review)
+                      ))
+                    }
                   </div>
                 </Col>
                 <Col sm={4} className="ps-5">
