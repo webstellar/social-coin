@@ -277,3 +277,48 @@ exports.deleteMyAppreciation = catchAsyncErrors(async (req, res, next) => {
     message: "Appreciation has been deleted",
   });
 });
+
+exports.addCommentToAppreciation = catchAsyncErrors(async (req, res, next) => {
+  const appreciation = await Appreciation.findById(ObjectId(req.body.appreciationId));
+  // check if the comment is a reply to the user's comment
+  if(req.body.isReply) {
+    // find if comment of user exist
+    const indexOfcomment = appreciation.conversation.findIndex((element) => { return element.userId === req.body.comment.onUserId});
+    if(indexOfcomment === -1) 
+      return next(new ErrorHandler("Comment not found", 400));
+    // push the reply into its replies
+    appreciation.comments.conversation[indexOfcomment].replies.push({
+      userId: req.user.id,
+      reply: req.body.comment.content,
+      status: { likesCount: [], dislikesCount: [] },
+      postedDate: req.body.comment.onDate,
+    })
+  }
+  else { 
+    // else this is new comment not a reply
+    appreciation.comments.conversation.push({
+      userId: req.user.id,
+      comment: req.body.comment.content,
+      status: { likesCount: [], dislikesCount: [] },
+      postedDate: req.body.comment.onDate,
+      replies: [],
+    })
+  }
+  // check if the sender is new user in the conversation of that appreciation
+  const isSenderNew = appreciation.participants.findIndex((ele) => {return ele.userId === req.user.id})
+  // if not then push its details into the participants
+  if(isSenderNew === -1) { 
+    appreciation.participants.push({
+      userId: req.user.id,
+      userName: req.user.name,
+      profilePic: req.user.profilePicture.url,
+    })
+  }
+  await appreciation.save();
+  
+  res.status(201).json({
+    success: true,
+    message: `${req.body.isReply ? 'Reply' : 'Comment'} added successfully`,
+    data: appreciation
+  });
+})
