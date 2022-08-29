@@ -322,3 +322,39 @@ exports.addCommentToAppreciation = catchAsyncErrors(async (req, res, next) => {
     data: appreciation
   });
 })
+
+// like or dislike to a comment
+exports.addMyReactionToAppreciation = catchAsyncErrors(async (req, res, next) => {
+  const appreciation = await Appreciation.findById(ObjectId(req.body.appreciationId));
+  // find if comment of user exist
+  const indexOfcomment = appreciation.conversation.findIndex((element) => { return element.userId === req.body.reaction.onUserId});
+  if(indexOfcomment === -1) 
+    return next(new ErrorHandler("Comment not found", 400));
+  // check if the reaction is on a comment or on its reply
+  if(req.body.isReply) {
+    const replies = appreciation.comments.conversation[indexOfcomment].replies;
+    const indexOfReply = appreciation.comments.conversation[indexOfcomment].findIndex((ele) => ele.userId === req.body.reaction.onReplyId)
+    if(indexOfReply === -1) {
+      return next(new ErrorHandler("Reply not found", 400));
+    }
+    
+    if(req.body.reaction.type.toLowerCase() === "like")
+      appreciation.comments.conversation[indexOfcomment].replies[indexOfReply].status.likesCount.push(req.user.id);
+    else 
+      appreciation.comments.conversation[indexOfcomment].replies[indexOfReply].status.dislikesCount.push(req.user.id);
+  }
+  else{
+    if(req.body.reaction.type.toLowerCase() === "like")
+      appreciation.comments.conversation[indexOfcomment].status.likesCount.push(req.user.id);
+    else 
+      appreciation.comments.conversation[indexOfcomment].status.dislikesCount.push(req.user.id);  
+  }
+
+  await appreciation.save();
+
+  res.status(201).json({
+    success: true,
+    message: `${req.body.isReply ? 'Liked' : 'Disliked'} successfully`,
+    data: appreciation
+  }); 
+})
