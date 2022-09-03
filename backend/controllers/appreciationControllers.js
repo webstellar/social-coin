@@ -307,14 +307,12 @@ exports.addCommentToAppreciation = catchAsyncErrors(async (req, res, next) => {
     })
   }
   // check if the sender is new user in the conversation of that appreciation
-  const isSenderNew = appreciation.comments.participants.findIndex((ele) => {return ele.userId === req.user.id})
+
+  const isSenderNew = appreciation.comments.participants.findIndex((ele) => {
+    return ele.userId.toString() === req.user.id
+  })
   // if not then push its details into the participants
   if(isSenderNew === -1) { 
-    console.log({
-      userId: ObjectId(req.user.id),
-      userName: req.user.name,
-      profilePic: req.user.profilePicture.url,
-    })
     appreciation.comments.participants.push({
       userId: req.user.id,
       userName: req.user.name,

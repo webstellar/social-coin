@@ -99,8 +99,11 @@ const AppreciationDetails = () => {
         maxRows={4}
         fullWidth
         onKeyDown={ async (e) => { 
-          if(e.keyCode === 13)
+          if(e.keyCode === 13){
+            e.preventDefault()
             await handleComment(placeholder);
+            placeholder==='Reply' ? setReply("") : setComment("");
+          }
         }}
         placeholder={`Add a ${placeholder==='Reply' ? 'Reply' : 'Comment'}...`}
         value={placeholder==='Reply' ? reply : comment}
@@ -140,8 +143,8 @@ const AppreciationDetails = () => {
               {getSeparatorComponent()}
               
               {/* reactions - like/dislike */}
-              {review.status.likesCount > 0 && <p style={comment_feature_label} className="mb-0">{`${ review.status.likesCount.length } Likes`}</p>} 
-              {review.status.likesCount > 0 && getSeparatorComponent()}
+              {review.status.likesCount.length > 0 && <p style={comment_feature_label} className="mb-0">{`${ review.status.likesCount.length } Like${review.status.likesCount.length > 1 ? 's' : ''}`}</p>} 
+              {review.status.likesCount.length > 0 && getSeparatorComponent()}
               <div>
                 <BsHandThumbsUpFill 
                   onClick={async () => 
