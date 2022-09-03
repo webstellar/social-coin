@@ -184,6 +184,64 @@ export const updateAppreciation =
     }
   };
 
+  //add comment/reply to appreciation for user
+export const addCommentToAppreciation = (appreciationData) => async (dispatch) => {
+  try {
+    dispatch({ type: APPRECIATION_DETAILS_REQUEST });
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const { data } = await axios.post(
+      `/api/v1/me/appreciations/comment`,
+      appreciationData,
+      config
+    );
+
+    dispatch({
+      type: APPRECIATION_DETAILS_SUCCESS,
+      payload: data.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: APPRECIATION_DETAILS_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
+//add reaction i.e. like/dislike comment/reply for user
+export const addReactionToAppreciation = (appreciationData) => async (dispatch) => {
+  try {
+    dispatch({ type: APPRECIATION_DETAILS_REQUEST });
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const { data } = await axios.post(
+      `/api/v1/me/appreciations/reaction`,
+      appreciationData,
+      config
+    );
+    console.log(data, data.data)
+    dispatch({
+      type: APPRECIATION_DETAILS_SUCCESS,
+      payload: data.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: APPRECIATION_DETAILS_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
 //USER
 export const myAppreciations = () => async (dispatch) => {
   try {

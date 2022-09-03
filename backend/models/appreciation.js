@@ -58,6 +58,28 @@ const appreciationSchema = new mongoose.Schema(
         type: String,
       },
     ],
+    comments: {
+      type: {
+        participants: [{
+          userId: mongoose.Types.ObjectId,
+          userName: String,
+          profilePic: String,
+        }],
+        conversation: [{
+          userId: mongoose.Types.ObjectId,
+          comment: String,
+          status: { likesCount: [{ type: mongoose.Types.ObjectId }], dislikesCount: [{ type: mongoose.Types.ObjectId }] },
+          postedDate: Date,
+          replies: [{
+            userId: mongoose.Types.ObjectId,
+            reply: String,
+            status: { likesCount: [{ type: mongoose.Types.ObjectId }], dislikesCount: [{ type: mongoose.Types.ObjectId }] },
+            postedDate: Date,
+          }],
+        }]
+      },
+      default: { participants: [], conversation: [] }
+    },
     likeCount: {
       type: Number,
       default: 0,

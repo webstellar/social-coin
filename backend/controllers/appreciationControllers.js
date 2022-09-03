@@ -277,3 +277,118 @@ exports.deleteMyAppreciation = catchAsyncErrors(async (req, res, next) => {
     message: "Appreciation has been deleted",
   });
 });
+
+exports.addCommentToAppreciation = catchAsyncErrors(async (req, res, next) => {
+  const appreciation = await Appreciation.findById(req.body.appreciationId);
+  
+  // check if the comment is a reply to the user's comment
+  if(req.body.isReply) {
+    // find if comment of user exist
+    const indexOfcomment = appreciation.comments.conversation.findIndex((element) => { return element._id.toString() === req.body.comment.onConversationId});
+    if(indexOfcomment === -1) 
+      return next(new ErrorHandler("Comment not found", 400));
+    // push the reply into its replies
+    if(!appreciation.comments) { appreciation.comments.conversation=[]}
+    appreciation.comments.conversation[indexOfcomment].replies.push({
+      userId: req.user.id,
+      reply: req.body.comment.content,
+      status: { likesCount: [], dislikesCount: [] },
+      postedDate: req.body.comment.onDate,
+    })
+  }
+  else { 
+    // else this is new comment not a reply
+    appreciation.comments.conversation.push({
+      userId: req.user.id,
+      comment: req.body.comment.content,
+      status: { likesCount: [], dislikesCount: [] },
+      postedDate: req.body.comment.onDate,
+      replies: [],
+    })
+  }
+  // check if the sender is new user in the conversation of that appreciation
+
+  const isSenderNew = appreciation.comments.participants.findIndex((ele) => {
+    return ele.userId.toString() === req.user.id
+  })
+  // if not then push its details into the participants
+  if(isSenderNew === -1) { 
+    appreciation.comments.participants.push({
+      userId: req.user.id,
+      userName: req.user.name,
+      profilePic: req.user.profilePicture.url,
+    })
+  }
+  await appreciation.save();
+  
+  res.status(201).json({
+    success: true,
+    message: `${req.body.isReply ? 'Reply' : 'Comment'} added successfully`,
+    data: appreciation
+  });
+})
+
+// like or dislike to a comment
+exports.addMyReactionToAppreciation = catchAsyncErrors(async (req, res, next) => {
+  const appreciation = await Appreciation.findById(req.body.appreciationId);
+  // find if comment of user exist
+  console.log(appreciation)
+  const indexOfcomment = appreciation.comments.conversation.findIndex((element) => { return element._id.toString() === req.body.reaction.onConversationId});
+  if(indexOfcomment === -1) 
+    return next(new ErrorHandler("Comment not found", 400));
+  // check if the reaction is on a comment or on its reply
+  if(req.body.isReply) {
+    const replies = appreciation.comments.conversation[indexOfcomment].replies;
+    const indexOfReply = replies.findIndex((ele) => ele._id.toString() === req.body.reaction.onReplyId)
+    if(indexOfReply === -1) {
+      return next(new ErrorHandler("Reply not found", 400));
+    }
+    
+    if(req.body.reaction.type.toLowerCase() === "like") {
+      console.log("io")
+      if (replies[indexOfReply].status.likesCount.includes(req.user.id)) {
+        console.log("ine")
+        appreciation.comments.conversation[indexOfcomment].replies[indexOfReply].status.likesCount = [...appreciation.comments.conversation[indexOfcomment].replies[indexOfReply].status.likesCount.filter((ele) => ele.toString() !==req.user.id)]  
+      }
+      else {
+        appreciation.comments.conversation[indexOfcomment].replies[indexOfReply].status.likesCount.push(req.user.id);
+        appreciation.comments.conversation[indexOfcomment].replies[indexOfReply].status.dislikesCount = [...appreciation.comments.conversation[indexOfcomment].replies[indexOfReply].status.dislikesCount.filter((ele) => ele.toString() !==req.user.id)]  
+      }
+    }
+    else {
+      if (replies[indexOfReply].status.dislikesCount.includes(req.user.id))
+        appreciation.comments.conversation[indexOfcomment].replies[indexOfReply].status.dislikesCount = [...appreciation.comments.conversation[indexOfcomment].replies[indexOfReply].status.dislikesCount.filter((ele) => ele.toString() !==req.user.id)]  
+      else {
+        appreciation.comments.conversation[indexOfcomment].replies[indexOfReply].status.dislikesCount.push(req.user.id);
+        appreciation.comments.conversation[indexOfcomment].replies[indexOfReply].status.likesCount = [...appreciation.comments.conversation[indexOfcomment].replies[indexOfReply].status.likesCount.filter((ele) => ele.toString() !==req.user.id)]  
+      }
+    }
+  }
+  else{
+    if(req.body.reaction.type.toLowerCase() === "like") {
+      if (appreciation.comments.conversation[indexOfcomment].status.likesCount.includes(req.user.id)) {
+        appreciation.comments.conversation[indexOfcomment].status.likesCount = [...appreciation.comments.conversation[indexOfcomment].status.likesCount.filter((ele) => ele.toString()!==req.user.id)];
+      }
+      else{
+        appreciation.comments.conversation[indexOfcomment].status.likesCount.push(req.user.id);    
+        appreciation.comments.conversation[indexOfcomment].status.dislikesCount = [...appreciation.comments.conversation[indexOfcomment].status.dislikesCount.filter((ele) => ele.toString()!==req.user.id)];
+      }
+  }
+  else {
+    if (appreciation.comments.conversation[indexOfcomment].status.dislikesCount.includes(req.user.id))
+      appreciation.comments.conversation[indexOfcomment].status.dislikesCount = [...appreciation.comments.conversation[indexOfcomment].status.dislikesCount.filter((ele) => ele.toString()!==req.user.id)];
+    else {
+      appreciation.comments.conversation[indexOfcomment].status.dislikesCount.push(req.user.id);      
+      appreciation.comments.conversation[indexOfcomment].status.likesCount = [...appreciation.comments.conversation[indexOfcomment].status.likesCount.filter((ele) => ele.toString()!==req.user.id)];
+    }
+  } 
+  }
+
+  await appreciation.save();
+
+  res.status(201).json({
+    success: true,
+    message: `${req.body.isReply ? 'Liked' : 'Disliked'} successfully`,
+    data: appreciation
+  }); 
+})
