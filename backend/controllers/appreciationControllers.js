@@ -332,29 +332,58 @@ exports.addCommentToAppreciation = catchAsyncErrors(async (req, res, next) => {
 
 // like or dislike to a comment
 exports.addMyReactionToAppreciation = catchAsyncErrors(async (req, res, next) => {
-  const appreciation = await Appreciation.findById(ObjectId(req.body.appreciationId));
+  const appreciation = await Appreciation.findById(req.body.appreciationId);
   // find if comment of user exist
-  const indexOfcomment = appreciation.conversation.findIndex((element) => { return element.userId === req.body.reaction.onUserId});
+  console.log(appreciation)
+  const indexOfcomment = appreciation.comments.conversation.findIndex((element) => { return element._id.toString() === req.body.reaction.onConversationId});
   if(indexOfcomment === -1) 
     return next(new ErrorHandler("Comment not found", 400));
   // check if the reaction is on a comment or on its reply
   if(req.body.isReply) {
     const replies = appreciation.comments.conversation[indexOfcomment].replies;
-    const indexOfReply = appreciation.comments.conversation[indexOfcomment].findIndex((ele) => ele.userId === req.body.reaction.onReplyId)
+    const indexOfReply = replies.findIndex((ele) => ele._id.toString() === req.body.reaction.onReplyId)
     if(indexOfReply === -1) {
       return next(new ErrorHandler("Reply not found", 400));
     }
     
-    if(req.body.reaction.type.toLowerCase() === "like")
-      appreciation.comments.conversation[indexOfcomment].replies[indexOfReply].status.likesCount.push(req.user.id);
-    else 
-      appreciation.comments.conversation[indexOfcomment].replies[indexOfReply].status.dislikesCount.push(req.user.id);
+    if(req.body.reaction.type.toLowerCase() === "like") {
+      console.log("io")
+      if (replies[indexOfReply].status.likesCount.includes(req.user.id)) {
+        console.log("ine")
+        appreciation.comments.conversation[indexOfcomment].replies[indexOfReply].status.likesCount = [...appreciation.comments.conversation[indexOfcomment].replies[indexOfReply].status.likesCount.filter((ele) => ele.toString() !==req.user.id)]  
+      }
+      else {
+        appreciation.comments.conversation[indexOfcomment].replies[indexOfReply].status.likesCount.push(req.user.id);
+        appreciation.comments.conversation[indexOfcomment].replies[indexOfReply].status.dislikesCount = [...appreciation.comments.conversation[indexOfcomment].replies[indexOfReply].status.dislikesCount.filter((ele) => ele.toString() !==req.user.id)]  
+      }
+    }
+    else {
+      if (replies[indexOfReply].status.dislikesCount.includes(req.user.id))
+        appreciation.comments.conversation[indexOfcomment].replies[indexOfReply].status.dislikesCount = [...appreciation.comments.conversation[indexOfcomment].replies[indexOfReply].status.dislikesCount.filter((ele) => ele.toString() !==req.user.id)]  
+      else {
+        appreciation.comments.conversation[indexOfcomment].replies[indexOfReply].status.dislikesCount.push(req.user.id);
+        appreciation.comments.conversation[indexOfcomment].replies[indexOfReply].status.likesCount = [...appreciation.comments.conversation[indexOfcomment].replies[indexOfReply].status.likesCount.filter((ele) => ele.toString() !==req.user.id)]  
+      }
+    }
   }
   else{
-    if(req.body.reaction.type.toLowerCase() === "like")
-      appreciation.comments.conversation[indexOfcomment].status.likesCount.push(req.user.id);
-    else 
-      appreciation.comments.conversation[indexOfcomment].status.dislikesCount.push(req.user.id);  
+    if(req.body.reaction.type.toLowerCase() === "like") {
+      if (appreciation.comments.conversation[indexOfcomment].status.likesCount.includes(req.user.id)) {
+        appreciation.comments.conversation[indexOfcomment].status.likesCount = [...appreciation.comments.conversation[indexOfcomment].status.likesCount.filter((ele) => ele.toString()!==req.user.id)];
+      }
+      else{
+        appreciation.comments.conversation[indexOfcomment].status.likesCount.push(req.user.id);    
+        appreciation.comments.conversation[indexOfcomment].status.dislikesCount = [...appreciation.comments.conversation[indexOfcomment].status.dislikesCount.filter((ele) => ele.toString()!==req.user.id)];
+      }
+  }
+  else {
+    if (appreciation.comments.conversation[indexOfcomment].status.dislikesCount.includes(req.user.id))
+      appreciation.comments.conversation[indexOfcomment].status.dislikesCount = [...appreciation.comments.conversation[indexOfcomment].status.dislikesCount.filter((ele) => ele.toString()!==req.user.id)];
+    else {
+      appreciation.comments.conversation[indexOfcomment].status.dislikesCount.push(req.user.id);      
+      appreciation.comments.conversation[indexOfcomment].status.likesCount = [...appreciation.comments.conversation[indexOfcomment].status.likesCount.filter((ele) => ele.toString()!==req.user.id)];
+    }
+  } 
   }
 
   await appreciation.save();
