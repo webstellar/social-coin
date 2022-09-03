@@ -279,14 +279,16 @@ exports.deleteMyAppreciation = catchAsyncErrors(async (req, res, next) => {
 });
 
 exports.addCommentToAppreciation = catchAsyncErrors(async (req, res, next) => {
-  const appreciation = await Appreciation.findById(ObjectId(req.body.appreciationId));
+  const appreciation = await Appreciation.findById(req.body.appreciationId);
+  
   // check if the comment is a reply to the user's comment
   if(req.body.isReply) {
     // find if comment of user exist
-    const indexOfcomment = appreciation.conversation.findIndex((element) => { return element.userId === req.body.comment.onUserId});
+    const indexOfcomment = appreciation.comments.conversation.findIndex((element) => { return element._id.toString() === req.body.comment.onConversationId});
     if(indexOfcomment === -1) 
       return next(new ErrorHandler("Comment not found", 400));
     // push the reply into its replies
+    if(!appreciation.comments) { appreciation.comments.conversation=[]}
     appreciation.comments.conversation[indexOfcomment].replies.push({
       userId: req.user.id,
       reply: req.body.comment.content,
@@ -305,10 +307,15 @@ exports.addCommentToAppreciation = catchAsyncErrors(async (req, res, next) => {
     })
   }
   // check if the sender is new user in the conversation of that appreciation
-  const isSenderNew = appreciation.participants.findIndex((ele) => {return ele.userId === req.user.id})
+  const isSenderNew = appreciation.comments.participants.findIndex((ele) => {return ele.userId === req.user.id})
   // if not then push its details into the participants
   if(isSenderNew === -1) { 
-    appreciation.participants.push({
+    console.log({
+      userId: ObjectId(req.user.id),
+      userName: req.user.name,
+      profilePic: req.user.profilePicture.url,
+    })
+    appreciation.comments.participants.push({
       userId: req.user.id,
       userName: req.user.name,
       profilePic: req.user.profilePicture.url,
