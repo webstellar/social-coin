@@ -213,6 +213,35 @@ export const addCommentToAppreciation = (appreciationData) => async (dispatch) =
   }
 };
 
+//add reaction i.e. like/dislike comment/reply for user
+export const addReactionToAppreciation = (appreciationData) => async (dispatch) => {
+  try {
+    dispatch({ type: UPDATE_APPRECIATION_REQUEST });
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const { data } = await axios.post(
+      `/api/v1/me/appreciations/reaction`,
+      appreciationData,
+      config
+    );
+
+    dispatch({
+      type: UPDATE_APPRECIATION_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: UPDATE_APPRECIATION_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
 //USER
 export const myAppreciations = () => async (dispatch) => {
   try {
