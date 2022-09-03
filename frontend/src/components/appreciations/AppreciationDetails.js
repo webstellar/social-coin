@@ -25,6 +25,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getAppreciationDetails,
   clearErrors,
+  addCommentToAppreciation,
 } from "../../actions/appreciationActions";
 
 import { toast, ToastContainer } from "react-toastify";
@@ -33,6 +34,7 @@ import { Player } from "video-react";
 import { shareOnLinkedIn, shareOnFacebook } from "../../utils/SocialShare";
 import { BsHandThumbsDownFill, BsHandThumbsUpFill, BsPersonFill } from "react-icons/bs";
 import { TextField } from "@mui/material"
+import { getDate } from "../../utils/dateConvertor";
 
 const comment_feature_seperator = { 
   background: "rgba(108, 100, 100, 1)",
@@ -47,19 +49,22 @@ const comment_feature_label = {
   whiteSpace: "nowrap"
 }
 
-const cm = [{replies: 1},{replies: 2},{replies: 2}]
-
 const AppreciationDetails = () => {
   const params = useParams();
   const dispatch = useDispatch();
-  const [participants, setParticipants] = useState(null);
+  const [expandConversation, setExpandConversation] = useState(-1);
+  const [replyTo, setReplyTo] = useState(null);
+  const [reply, setReply] = useState("")
+  const [comment, setComment] = useState("")
+
+  let participants ={};
 
   const { loading, error, appreciation } = useSelector(
     (state) => state.appreciationDetails
   );
 
   const getSeparatorComponent = () => (
-    <div style={{margin: "6.5% 4% 0% 4%"}}>
+    <div style={{margin: "12px 8px"}}>
       <div style={comment_feature_seperator} />
     </div>
   )
@@ -71,7 +76,7 @@ const AppreciationDetails = () => {
         width: isReply ? "42px" : "50px",
         height: isReply ? "42px" : "50px"
       }} 
-      src="https://cdn.searchenginejournal.com/wp-content/uploads/2022/04/reverse-image-search-627b7e49986b0-sej-760x400.png"/> 
+      src={profilePic}/> 
       : 
       <BsPersonFill style={{
         fontSize: isReply ? "2.625em" : "3em",
@@ -82,81 +87,128 @@ const AppreciationDetails = () => {
     }
     </div>
   )
-  const getSubmitCommentComponent = () => (
-    <div style={{display: 'flex'}}>
+  const getSubmitCommentComponent = (placeholder='Comment', customStyle=null) => (
+    <div style={{display: 'flex', ...customStyle}}>
       {getAvatarComponent()}
       <TextField
         sx = {{ marginLeft: "2%"}}
         id="outlined-multiline-flexible"
-        label="Comment"
+        label={placeholder}
         multiline
         maxRows={4}
         fullWidth
-        placeholder="Add a comment..."
+        onKeyDown={ async (e) => { 
+          if(e.keyCode === 13)
+            await handleComment(placeholder);
+        }}
+        placeholder={`Add a ${placeholder==='Reply' ? 'Reply' : 'Comment'}...`}
+        value={placeholder==='Reply' ? reply : comment}
+        onChange={(e) => placeholder==='Reply' ? setReply(e.target.value) : setComment(e.target.value)}
       />
     </div>
   )
   const getCommentComponent = (review, isReply=false) => {
+    console.log(participants,review)
     const sc_user =  participants[review.userId];
     return (
-    <div style={{marginTop: isReply ? "10%" : "3%"}}>
+    <div style={{marginTop: isReply ? "12%" : "3%"}}>
       <div style={{display:'flex'}}>
-        {getAvatarComponent(sc_user.profilePic, isReply)}
+        
+        { // user profile pic
+          getAvatarComponent(sc_user.profilePic, isReply)
+        }
+
         <div style={{marginLeft: isReply ? "8%" : "2.5%"}}>
+          {/* user name and timing */}
           <div style={{display: 'flex'}}>
-            <span>{sc_user.userName}</span> 
-            <div style={{ background: "rgba(108, 100, 100, 1)", height: "6px", width: "6px", borderRadius: "6px", margin: "5.5%", marginRight: "2.5%"}} />
-            <span style={{fontSize: "0.8em", marginTop: "1.5%"}}>{'1h'}</span>
+            <span style={{ whiteSpace: 'nowrap' }}>{sc_user.userName}</span> 
+            <div style={{ background: "rgba(108, 100, 100, 1)", height: "1px", width: "1px", borderRadius: "50%", margin: "9px", padding: "3px" }} />
+            <span style={{fontSize: "0.8em", marginTop: "2px", whiteSpace: "nowrap"}}>{getDate(review.postedDate)}</span>
           </div>
+
           <p style={{whiteSpace: 'nowrap', marginBottom: 0}}>{ isReply ? review.reply : review.comment}</p>
+          
           <div> 
-            <div style={{display:'flex'}}> 
-              <p style={comment_feature_label} className="mb-0">{ isReply || review.replies.length < 0 ? `Reply` : `Show all ${review.replies.length} replies`}</p>
+            <div style={{display:'flex'}}>    
+              {/* add a reply */} 
+              <p onClick={() => {
+                  if(!isReply) { setExpandConversation(review._id) }
+                  setReplyTo(review.userId);
+                }} 
+              style={comment_feature_label} className="mb-0"> Reply </p>
               {getSeparatorComponent()}
-              {review.status.likes > 0 && <p style={comment_feature_label} className="mb-0">{`${ review.status.likes.length } Likes`}</p>} 
-              {getSeparatorComponent()}
+              
+              {/* reactions - like/dislike */}
+              {review.status.likesCount > 0 && <p style={comment_feature_label} className="mb-0">{`${ review.status.likesCount.length } Likes`}</p>} 
+              {review.status.likesCount > 0 && getSeparatorComponent()}
               <div>
-                <BsHandThumbsUpFill style={{ color: review.status.likes.includes(review.userId) ? 'blue' : "rgba(108, 100, 100, 1)" }} />
+                <BsHandThumbsUpFill 
+                  style={{ color: review.status.likesCount.includes(review.userId) ? 'blue' : "rgba(108, 100, 100, 1)" }} />
               </div> 
-              <div style={{ marginLeft: "5%" }}>
+              <div style={{ marginLeft: "10px" }}>
                 <BsHandThumbsDownFill 
-                  style={{ color: review.status.dislikes.includes(review.userId) 
-                    ? 'blue' : "rgba(108, 100, 100, 1)" 
-                  }} 
-                />
+                  style={{ color: review.status.dislikesCount.includes(review.userId) ? 'blue' : "rgba(108, 100, 100, 1)" }} />
               </div>
             </div>
             {
-              review.replies.length > 0 && 
-                review.replies.map((sc_reply) => {
+              // show/hide replies
+              review.replies && review.replies.length >0 && 
+                <p style={{...comment_feature_label, color:'blue'}} className="mb-0" onClick={() => {setReplyTo(null); setReply(null); setExpandConversation(expandConversation === review._id ? -1 : review._id)}}>             
+                  {`${expandConversation === review._id ? 'hide' : 'show'} all ${review.replies.length} replies`}
+                </p>
+            }  
+            
+            {
+              // replies
+              expandConversation === review._id && review.replies && review.replies.length > 0 && 
+                review.replies.map((sc_reply) => 
                   getCommentComponent(sc_reply, true)
-              })
+              )              
             }
           </div>
         </div>
       </div>
+      { // reply box
+        expandConversation === review._id && 
+          replyTo === sc_user.userId && getSubmitCommentComponent('Reply',{margin: "3% 8%"})
+      }
     </div>
   )}
 
+  const handleComment = async (type, content) => {
+    dispatch(addCommentToAppreciation({
+      "isReply" : type==='Reply',
+      "appreciationId": appreciation._id,
+      "comment" : {
+          "content": type==='Reply' ? reply : comment,
+          "onConversationId": expandConversation,
+          "onUserId": replyTo,
+          "onDate": new Date()
+      }}
+    ))
+  }
   useEffect(() => {
     
     dispatch(getAppreciationDetails(params.id));
-    if(appreciation.comments) {
-      let tmp = {}
-      appreciation.comments.participants.reduce((obj, item) => {
-        return {
-          ...obj,
-          [item['userId']]: item,
-        };
-      }, tmp)
-      setParticipants({...tmp})
-    }
     if (error) {
       toast.error(error);
       dispatch(clearErrors);
     }
   }, [dispatch, error, params.id]);
-  console.log(appreciation)
+
+  useEffect(() => {
+    if(replyTo) { setReply(`@${participants[replyTo].userName} ${comment}`)}
+    else { setReply('')}
+  },[replyTo])
+    
+  if(appreciation.comments)
+    participants = appreciation.comments.participants.reduce((obj, item) => {
+      return {
+        ...obj,
+        [item['userId']]: item,
+      };
+  }, {})
+  
   let shareUrl = window.location.href;
 
   const apprDate = dayjs(appreciation.createdAt).format("MMM D, YYYY");
