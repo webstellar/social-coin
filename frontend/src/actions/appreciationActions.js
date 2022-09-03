@@ -187,7 +187,7 @@ export const updateAppreciation =
   //add comment/reply to appreciation for user
 export const addCommentToAppreciation = (appreciationData) => async (dispatch) => {
   try {
-    dispatch({ type: UPDATE_APPRECIATION_REQUEST });
+    dispatch({ type: APPRECIATION_DETAILS_REQUEST });
 
     const config = {
       headers: {
@@ -202,12 +202,12 @@ export const addCommentToAppreciation = (appreciationData) => async (dispatch) =
     );
 
     dispatch({
-      type: UPDATE_APPRECIATION_SUCCESS,
-      payload: data,
+      type: APPRECIATION_DETAILS_SUCCESS,
+      payload: data.data,
     });
   } catch (error) {
     dispatch({
-      type: UPDATE_APPRECIATION_FAIL,
+      type: APPRECIATION_DETAILS_FAIL,
       payload: error.response.data.message,
     });
   }
@@ -216,7 +216,7 @@ export const addCommentToAppreciation = (appreciationData) => async (dispatch) =
 //add reaction i.e. like/dislike comment/reply for user
 export const addReactionToAppreciation = (appreciationData) => async (dispatch) => {
   try {
-    dispatch({ type: UPDATE_APPRECIATION_REQUEST });
+    dispatch({ type: APPRECIATION_DETAILS_REQUEST });
 
     const config = {
       headers: {
@@ -229,14 +229,14 @@ export const addReactionToAppreciation = (appreciationData) => async (dispatch) 
       appreciationData,
       config
     );
-
+    console.log(data, data.data)
     dispatch({
-      type: UPDATE_APPRECIATION_SUCCESS,
-      payload: data,
+      type: APPRECIATION_DETAILS_SUCCESS,
+      payload: data.data,
     });
   } catch (error) {
     dispatch({
-      type: UPDATE_APPRECIATION_FAIL,
+      type: APPRECIATION_DETAILS_FAIL,
       payload: error.response.data.message,
     });
   }

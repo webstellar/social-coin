@@ -34,8 +34,10 @@ import { Parser } from "html-to-react";
 import { Player } from "video-react";
 import { shareOnLinkedIn, shareOnFacebook } from "../../utils/SocialShare";
 import { BsHandThumbsDownFill, BsHandThumbsUpFill, BsPersonFill } from "react-icons/bs";
+
 import { TextField } from "@mui/material"
 import { getDate } from "../../utils/dateConvertor";
+import { GrSend } from "react-icons/gr";
 
 const comment_feature_seperator = { 
   background: "rgba(108, 100, 100, 1)",
@@ -98,17 +100,21 @@ const AppreciationDetails = () => {
         multiline
         maxRows={4}
         fullWidth
-        onKeyDown={ async (e) => { 
-          if(e.keyCode === 13){
-            e.preventDefault()
-            await handleComment(placeholder);
-            placeholder==='Reply' ? setReply("") : setComment("");
-          }
-        }}
         placeholder={`Add a ${placeholder==='Reply' ? 'Reply' : 'Comment'}...`}
         value={placeholder==='Reply' ? reply : comment}
         onChange={(e) => placeholder==='Reply' ? setReply(e.target.value) : setComment(e.target.value)}
       />
+      <button type="button" style={{
+        width: "60px",
+        background: "transparent",
+        border: "none",
+        fontSize: "1.5em"
+      }} onClick={ async () => {
+        await handleComment(placeholder);
+        placeholder==='Reply' ? setReply("") : setComment("");
+      }}>
+        <GrSend/> 
+      </button>
     </div>
   )
   const getCommentComponent = (review, isReply=false) => {
@@ -129,7 +135,7 @@ const AppreciationDetails = () => {
             <div style={{ background: "rgba(108, 100, 100, 1)", height: "1px", width: "1px", borderRadius: "50%", margin: "9px", padding: "3px" }} />
             <span style={{fontSize: "0.8em", marginTop: "2px", whiteSpace: "nowrap"}}>{getDate(review.postedDate)}</span>
           </div>
-
+          {/* user reply/comment content */}
           <p style={{whiteSpace: 'nowrap', marginBottom: 0}}>{ isReply ? review.reply : review.comment}</p>
           
           <div> 
@@ -193,7 +199,10 @@ const AppreciationDetails = () => {
     </div>
   )}
 
+  // submit comment/reply
   const handleComment = async (type) => {
+    if((type === 'Reply' && reply.trim() === "" ) || (type === 'Comment' && comment.trim() === "" ) )
+      return;
     dispatch(addCommentToAppreciation({
       "isReply" : type==='Reply',
       "appreciationId": appreciation._id,
@@ -205,6 +214,7 @@ const AppreciationDetails = () => {
       }}
     ))
   }
+  // submit reaction like/dislike
   const handleReactionSubmit = async (onReply, type, convId, onReplyId) => {
     dispatch(addReactionToAppreciation({
       "isReply" : onReply,
@@ -215,7 +225,9 @@ const AppreciationDetails = () => {
         "onReplyId": onReplyId,
       }
     }))
+    
   }
+
   useEffect(() => {
     
     dispatch(getAppreciationDetails(params.id));
