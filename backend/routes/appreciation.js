@@ -28,7 +28,7 @@ router
   .put(isAuthenticatedUser, updateMyAppreciation)
   .delete(isAuthenticatedUser, deleteMyAppreciation);
 router.route("/me/appreciations/comment").post(isAuthenticatedUser, addCommentToAppreciation);
-router.route("/me/appreciation/reaction").post(isAuthenticatedUser, addMyReactionToAppreciation)
+router.route("/me/appreciations/reaction").post(isAuthenticatedUser, addMyReactionToAppreciation)
 //Admin
 router.route("/appreciation/new").post(isAuthenticatedUser, newAppreciation);
 router
