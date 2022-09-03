@@ -343,41 +343,49 @@ exports.addMyReactionToAppreciation = catchAsyncErrors(async (req, res, next) =>
     if(indexOfReply === -1) {
       return next(new ErrorHandler("Reply not found", 400));
     }
-    
+    // if reaction is "like"
     if(req.body.reaction.type.toLowerCase() === "like") {
-      console.log("io")
+      // if its already like remove it 
       if (replies[indexOfReply].status.likesCount.includes(req.user.id)) {
-        console.log("ine")
         appreciation.comments.conversation[indexOfcomment].replies[indexOfReply].status.likesCount = [...appreciation.comments.conversation[indexOfcomment].replies[indexOfReply].status.likesCount.filter((ele) => ele.toString() !==req.user.id)]  
       }
+      // else add in likes and remove from dislike if exist
       else {
         appreciation.comments.conversation[indexOfcomment].replies[indexOfReply].status.likesCount.push(req.user.id);
         appreciation.comments.conversation[indexOfcomment].replies[indexOfReply].status.dislikesCount = [...appreciation.comments.conversation[indexOfcomment].replies[indexOfReply].status.dislikesCount.filter((ele) => ele.toString() !==req.user.id)]  
       }
     }
     else {
+      // if its already disliked remove it
       if (replies[indexOfReply].status.dislikesCount.includes(req.user.id))
         appreciation.comments.conversation[indexOfcomment].replies[indexOfReply].status.dislikesCount = [...appreciation.comments.conversation[indexOfcomment].replies[indexOfReply].status.dislikesCount.filter((ele) => ele.toString() !==req.user.id)]  
+      // else add in dislikes and remove from like if exist
       else {
         appreciation.comments.conversation[indexOfcomment].replies[indexOfReply].status.dislikesCount.push(req.user.id);
         appreciation.comments.conversation[indexOfcomment].replies[indexOfReply].status.likesCount = [...appreciation.comments.conversation[indexOfcomment].replies[indexOfReply].status.likesCount.filter((ele) => ele.toString() !==req.user.id)]  
       }
     }
   }
+  // else reaction is on comment 
   else{
+    // if reaction is "like"
     if(req.body.reaction.type.toLowerCase() === "like") {
+      // if its already like remove it 
       if (appreciation.comments.conversation[indexOfcomment].status.likesCount.includes(req.user.id)) {
         appreciation.comments.conversation[indexOfcomment].status.likesCount = [...appreciation.comments.conversation[indexOfcomment].status.likesCount.filter((ele) => ele.toString()!==req.user.id)];
       }
+      // else add in likes and remove from dislike if exist
       else{
         appreciation.comments.conversation[indexOfcomment].status.likesCount.push(req.user.id);    
         appreciation.comments.conversation[indexOfcomment].status.dislikesCount = [...appreciation.comments.conversation[indexOfcomment].status.dislikesCount.filter((ele) => ele.toString()!==req.user.id)];
       }
   }
   else {
+    // if its already disliked remove it
     if (appreciation.comments.conversation[indexOfcomment].status.dislikesCount.includes(req.user.id))
       appreciation.comments.conversation[indexOfcomment].status.dislikesCount = [...appreciation.comments.conversation[indexOfcomment].status.dislikesCount.filter((ele) => ele.toString()!==req.user.id)];
     else {
+      // else add in likes and remove from dislike if exist
       appreciation.comments.conversation[indexOfcomment].status.dislikesCount.push(req.user.id);      
       appreciation.comments.conversation[indexOfcomment].status.likesCount = [...appreciation.comments.conversation[indexOfcomment].status.likesCount.filter((ele) => ele.toString()!==req.user.id)];
     }
