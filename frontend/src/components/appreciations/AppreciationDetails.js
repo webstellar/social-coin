@@ -26,6 +26,7 @@ import {
   getAppreciationDetails,
   clearErrors,
   addCommentToAppreciation,
+  addReactionToAppreciation
 } from "../../actions/appreciationActions";
 
 import { toast, ToastContainer } from "react-toastify";
@@ -143,10 +144,24 @@ const AppreciationDetails = () => {
               {review.status.likesCount > 0 && getSeparatorComponent()}
               <div>
                 <BsHandThumbsUpFill 
+                  onClick={async () => 
+                    await handleReactionSubmit(
+                      isReply, 
+                      "like", 
+                      isReply ? expandConversation : review._id,
+                      review._id
+                    )}
                   style={{ color: review.status.likesCount.includes(review.userId) ? 'blue' : "rgba(108, 100, 100, 1)" }} />
               </div> 
               <div style={{ marginLeft: "10px" }}>
                 <BsHandThumbsDownFill 
+                  onClick={async () => 
+                    await handleReactionSubmit(
+                      isReply, 
+                      "dislike", 
+                      isReply ? expandConversation : review._id,
+                      review._id
+                    )}
                   style={{ color: review.status.dislikesCount.includes(review.userId) ? 'blue' : "rgba(108, 100, 100, 1)" }} />
               </div>
             </div>
@@ -175,7 +190,7 @@ const AppreciationDetails = () => {
     </div>
   )}
 
-  const handleComment = async (type, content) => {
+  const handleComment = async (type) => {
     dispatch(addCommentToAppreciation({
       "isReply" : type==='Reply',
       "appreciationId": appreciation._id,
@@ -186,6 +201,17 @@ const AppreciationDetails = () => {
           "onDate": new Date()
       }}
     ))
+  }
+  const handleReactionSubmit = async (onReply, type, convId, onReplyId) => {
+    dispatch(addReactionToAppreciation({
+      "isReply" : onReply,
+      "appreciationId": appreciation._id,
+      "reaction" : {
+        "type": type,
+        "onConversationId": convId,
+        "onReplyId": onReplyId,
+      }
+    }))
   }
   useEffect(() => {
     
