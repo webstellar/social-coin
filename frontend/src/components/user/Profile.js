@@ -41,17 +41,16 @@ const Profile = () => {
             <Tabs
               defaultActiveKey="my-profile"
               id="uncontrolled-tab-example"
-              className="mb-lg-5"
             >
+              <Tab eventKey="myheroes" title="Heroes" className="sc-tab">
+                <MyHeroes />
+              </Tab>
               <Tab
                 eventKey="myappreciation"
-                title="My Appreciations"
+                title="Appreciations"
                 className="sc-tab"
               >
                 <MyAppreciations />
-              </Tab>
-              <Tab eventKey="myheroes" title="My Heroes" className="sc-tab">
-                <MyHeroes />
               </Tab>
               <Tab eventKey="my-profile" title="My Profile" className="sc-tab">
                 <ProfileTab user={user} />
