@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import { logout } from "../../actions/userAction";
 import { getHeroes } from "../../actions/heroActions";
 
+import goToLink from "../../images/goToLink.svg"
 import { toast } from "react-toastify";
 
 const ProfileTab = ({ user }) => {
@@ -29,27 +30,28 @@ const ProfileTab = ({ user }) => {
       <Container>
         <Row>
           <Col xs={12} md={9}>
-            <Row md={4} className="align-content mb-5">
-              <Col>
-                <img
-                  src={user.profilePicture && user.profilePicture.url}
-                  alt={user && user.name}
-                  width="150"
-                  height="150"
-                  className="rounded-circle align-self-center"
-                  style={{ horizontalAlign: "center" }}
-                />
-              </Col>
-              <Col xs={10} className="align-self-center">
-                <span className="d-flex fw-bold" style={{ fontSize: "20px" }}>
-                  {user.name}
-                </span>
-                <span className="d-flex">{user.email}</span>
-                <span className="d-flex">
-                  <span className="pe-1 fw-bold mb-2">Date Joined:</span>
-                  {String(user.createdAt).substring(0, 10)}
-                </span>
-              </Col>
+            <Row md={4} className="mb-5" style={{padding: "56px 45px 56px 0px", background: "rgba(217, 217, 217, 0.3)"}}>
+                <div className="profile-img-container">
+                    <img 
+                      className="profile-img"
+                      alt={user && user.name}
+                      src={user.profilePicture && user.profilePicture.url}
+                    />
+                </div>
+                <div className="profile-info">
+                  <div className="profile-left">
+                      <p className="title">Full Name:</p>
+                      <p className="title">Email:</p>
+                      <p className="title">Phone:</p>
+                      <p className="title">Update Profile:</p>
+                  </div>
+                  <div className="profile-right">
+                      <p className="user-info">{user.name}</p>
+                      <p className="user-info">{user.email}</p> 
+                      <p className="user-info">{user.mobile ? user.mobile : "N/A"}</p>  
+                      <a className="update-link" href="#"><img src={goToLink}></img></a> 
+                  </div>
+                </div>
             </Row>
             <Row md={4}>
               <Col>
