@@ -376,3 +376,57 @@ div.nsm7Bb-HzV7m-LgbsSe {
   border: none;
   outline: none;
 }
+
+.profile-card {
+  display: flex;
+  flex-direction: row;
+  margin:15% auto;
+  margin-top: 0;
+  width: 1272px;
+  height: 332px;
+  background: rgba(217, 217, 217, 0.3);
+  align-items: center;
+}
+
+.profile-img-container{
+  margin: 0 5%;
+}
+
+.profile-img{
+  width: 213px;
+  height: 213px;
+  border-radius: 100%;
+}
+
+.profile-info{
+  display: flex;
+  gap: 2em;
+  font-size: 1.2em;
+  white-space: nowrap;
+  margin-top: 3.5% !important
+}
+
+.profile-right{
+  font-weight: 300;
+}
+
+.update-link img{
+  width: 1rem;
+}
+
+th {
+  border: none !important;
+  max-width: 15vw;
+}
+
+td > p {
+  max-width: 15vw;
+  margin-top: 8px !important;  
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.dropdown-toggle::after .dropdown-toggle {
+  display: none;
+}
