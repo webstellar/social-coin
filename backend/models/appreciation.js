@@ -25,6 +25,7 @@ const appreciationSchema = new mongoose.Schema(
       type: {
         id: mongoose.Schema.ObjectId,
         name: String,
+        email: String,
         profilePicture: { 
           public_id: {
             type: String,
@@ -64,6 +65,7 @@ const appreciationSchema = new mongoose.Schema(
           userId: mongoose.Types.ObjectId,
           userName: String,
           profilePic: String,
+          userEmail: String
         }],
         conversation: [{
           userId: mongoose.Types.ObjectId,
