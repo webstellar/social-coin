@@ -1,18 +1,20 @@
 const nodemailer = require("nodemailer");
 const hbs = require('nodemailer-express-handlebars');
+const path = require('path');
 
 const transport = nodemailer.createTransport({
-    service: 'gmail',
+    host: process.env.NODEMAILER_HOST,
+    port: process.env.NODEMAILER_PORT,
     auth: {
-        user: "// replace"//config.email.smtp
-
-    }
+      user: process.env.NODEMAILER_USER,
+      pass: process.env.NODEMAILER_PASS
+    },
 });
 
 transport
   .verify()
   .then(() => console.log('Connected to email server'))
-  .catch(() => console.log('Unable to connect to email server. Make sure you have configured the SMTP options in .env'));
+  .catch((err) => console.log(`Unable to connect to email server. Make sure you have configured the SMTP options in .env\n${err}`));
 
 const sendEmail = async (subject, template, to, data) => {
     transport.use(
@@ -20,15 +22,15 @@ const sendEmail = async (subject, template, to, data) => {
       hbs({
         viewEngine: {
           extName: '.hbs',
-          partialsDir: path.resolve('./src/views'),
+          partialsDir: path.resolve('backend/views'),
           defaultLayout: false,
         },
-        viewPath: path.resolve('./src/views'),
+        viewPath: path.resolve('backend/views'),
         extName: '.hbs',
       })
     );
     const mailOptions = {
-        from: "// replace",
+        from: process.env.NODEMAILER_USER,
         to,
         subject,
         template,
@@ -46,6 +48,7 @@ const sendEmail = async (subject, template, to, data) => {
     if (status === '250 Message received') {
       return true;
     }
+    console.log(response)
     return response;
 }
 
@@ -85,7 +88,7 @@ const sendEmail = async (subject, template, to, data) => {
   };
 
   const sendGeneralNotifiation = async (to, name, message) => {
-    const subject = "Social Coin - Someone Replied to your comment";
+    const subject = "Social Coin - We have an update for you";
     const template = "generalNotifications";
     const data = {
       name : `${name}`,
