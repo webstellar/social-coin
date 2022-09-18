@@ -6,6 +6,7 @@ const sendToken = require("../utils/jwtToken");
 const sendEmail = require("../utils/sendEmail");
 const crypto = require("crypto");
 const cloudinary = require("cloudinary");
+const { sendGeneralNotifiation } = require("../microservices/email.service");
 
 const axios = require('axios');
 
@@ -105,6 +106,7 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
       url: result.secure_url,
     },
   });
+  await sendGeneralNotifiation(email, name, `Hey ${name}, your account on Social Coin is created successfully`);
 
   sendToken(user, 200, res);
 });
@@ -127,6 +129,7 @@ exports.registerGoogleUser = catchAsyncErrors(async (req, res, next) => {
       url: result.secure_url,
     },
   });
+  await sendGeneralNotifiation(email, name, `Hey ${name}, your account on Social Coin is created successfully`);
 
   sendToken(user, 200, res);
 });
