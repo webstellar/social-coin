@@ -8,6 +8,7 @@ const ErrorHandler = require("../utils/errorHandler");
 const catchAsyncErrors = require("../middlewares/catchAsyncErrors");
 const APIFeatures = require("../utils/apiFeatures");
 const cloudinary = require("cloudinary");
+const { sendGeneralNotifiation } = require("../microservices/email.service");
 
 //create new appreciation => /api/v1/appreciation/new
 exports.newAppreciation = catchAsyncErrors(async (req, res, next) => {
@@ -17,6 +18,7 @@ exports.newAppreciation = catchAsyncErrors(async (req, res, next) => {
   req.body.user = {
     id: req.user.id,
     name: req.user.name,
+    email: req.user.email,
     profilePicture: req.user.profilePicture
   };
   req.body.hero = {
@@ -38,13 +40,12 @@ exports.newAppreciation = catchAsyncErrors(async (req, res, next) => {
 
   const appreciation = await Appreciation.create(req.body);
   //connect appreciation to  hero
-  console.log(appreciation, appreciation._id);
   appreciation.id = await appreciation._id;
 
   hero.appreciations.push(appreciation);
   hero.markModified("appreciations");
   await hero.save();
-
+  await sendGeneralNotifiation(req.user.email, req.user.name, `Your appreciation is created Successfully.`)
   res.status(201).json({
     success: true,
     appreciation,
@@ -129,7 +130,6 @@ exports.getAppreciations = catchAsyncErrors(async (req, res, next) => {
 //Get all appreciations => /api/v1/admin/appreciations
 exports.getAdminAppreciations = catchAsyncErrors(async (req, res, next) => {
   const appreciations = await Appreciation.find();
-
   res.status(200).json({
     success: true,
     appreciations,
@@ -295,6 +295,7 @@ exports.addCommentToAppreciation = catchAsyncErrors(async (req, res, next) => {
       status: { likesCount: [], dislikesCount: [] },
       postedDate: req.body.comment.onDate,
     })
+    await sendGeneralNotifiation(appreciation.user.email, appreciation.user.name, `${req.user.name} replied on your appreciation.`);
   }
   else { 
     // else this is new comment not a reply
@@ -305,6 +306,7 @@ exports.addCommentToAppreciation = catchAsyncErrors(async (req, res, next) => {
       postedDate: req.body.comment.onDate,
       replies: [],
     })
+    await sendGeneralNotifiation(appreciation.user.email, appreciation.user.name, `${req.user.name} added a comment on your appreciation.`);
   }
   // check if the sender is new user in the conversation of that appreciation
 
@@ -316,11 +318,12 @@ exports.addCommentToAppreciation = catchAsyncErrors(async (req, res, next) => {
     appreciation.comments.participants.push({
       userId: req.user.id,
       userName: req.user.name,
+      userEmail: req.user.email,
       profilePic: req.user.profilePicture.url,
     })
   }
   await appreciation.save();
-  
+
   res.status(201).json({
     success: true,
     message: `${req.body.isReply ? 'Reply' : 'Comment'} added successfully`,
@@ -332,7 +335,7 @@ exports.addCommentToAppreciation = catchAsyncErrors(async (req, res, next) => {
 exports.addMyReactionToAppreciation = catchAsyncErrors(async (req, res, next) => {
   const appreciation = await Appreciation.findById(req.body.appreciationId);
   // find if comment of user exist
-  console.log(appreciation)
+  // console.log(appreciation)
   const indexOfcomment = appreciation.comments.conversation.findIndex((element) => { return element._id.toString() === req.body.reaction.onConversationId});
   if(indexOfcomment === -1) 
     return next(new ErrorHandler("Comment not found", 400));
@@ -393,6 +396,7 @@ exports.addMyReactionToAppreciation = catchAsyncErrors(async (req, res, next) =>
   }
 
   await appreciation.save();
+  await sendGeneralNotifiation(appreciation.user.email, appreciation.user.name, 'People are reacting to the conversation on your post')
 
   res.status(201).json({
     success: true,
