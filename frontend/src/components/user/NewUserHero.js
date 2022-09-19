@@ -118,6 +118,7 @@ const NewUserHero = () => {
                           full name
                         </Form.Label>
                         <Form.Control
+                          required
                           type="name"
                           className="sc-disablefocus rounded-pill border-dark"
                           value={name}
@@ -131,6 +132,7 @@ const NewUserHero = () => {
                           email address
                         </Form.Label>
                         <Form.Control
+                          required
                           type="email"
                           className="sc-disablefocus rounded-pill border-dark"
                           value={email}
@@ -145,6 +147,7 @@ const NewUserHero = () => {
                           description
                         </Form.Label>
                         <Form.Control
+                          required
                           as="textarea"
                           rows={3}
                           type="text"
@@ -159,6 +162,7 @@ const NewUserHero = () => {
                       <Form.Group className="mb-3" as={Col}>
                         <Form.Label htmlFor="gender_option">gender</Form.Label>
                         <Form.Select
+                          required
                           className="sc-disablefocus rounded-pill border-dark"
                           value={gender}
                           onChange={(e) => setGender(e.target.value)}
@@ -174,6 +178,7 @@ const NewUserHero = () => {
                       <Form.Group className="mb-3" as={Col}>
                         <Form.Label htmlFor="gender_option">country</Form.Label>
                         <Form.Select
+                          required
                           className="sc-disablefocus rounded-pill border-dark"
                           value={country}
                           onChange={(e) => setCountry(e.target.value)}
@@ -256,6 +261,7 @@ const NewUserHero = () => {
                           </Col>
                           <Col>
                             <Form.Control
+                              required
                               type="file"
                               className="sc-disablefocus rounded-pill border-dark"
                               accept="images/*"
