@@ -1,5 +1,6 @@
 const Appreciation = require("../models/appreciation");
 const Hero = require("../models/hero");
+const User = require("../models/user");
 const mongoose = require("mongoose");
 const toId = mongoose.Types.ObjectId;
 const { ObjectId } = require("mongodb");
@@ -9,12 +10,12 @@ const catchAsyncErrors = require("../middlewares/catchAsyncErrors");
 const APIFeatures = require("../utils/apiFeatures");
 const cloudinary = require("cloudinary");
 const { sendGeneralNotifiation } = require("../microservices/email.service");
+const { sendAppNotification } = require("../microservices/notification.service");
 
 //create new appreciation => /api/v1/appreciation/new
 exports.newAppreciation = catchAsyncErrors(async (req, res, next) => {
   //create the appreciation
   const hero = await Hero.findOne({_id:req.body.hero});
-  console.log(hero)
   req.body.user = {
     id: req.user.id,
     name: req.user.name,
@@ -208,7 +209,6 @@ exports.myAppreciations = catchAsyncErrors(async (req, res, next) => {
   const appreciations = await Appreciation.find({
     "user.id": req.user.id
   });
-  console.log(appreciations)
   let heroesIDs = [];
 
   for (let i = 0; i < appreciations.length; i++) {
@@ -280,7 +280,7 @@ exports.deleteMyAppreciation = catchAsyncErrors(async (req, res, next) => {
 
 exports.addCommentToAppreciation = catchAsyncErrors(async (req, res, next) => {
   const appreciation = await Appreciation.findById(req.body.appreciationId);
-  
+  const user = await User.findById(appreciation.user.id);
   // check if the comment is a reply to the user's comment
   if(req.body.isReply) {
     // find if comment of user exist
@@ -295,6 +295,7 @@ exports.addCommentToAppreciation = catchAsyncErrors(async (req, res, next) => {
       status: { likesCount: [], dislikesCount: [] },
       postedDate: req.body.comment.onDate,
     })
+    await sendAppNotification([user.fcmToken], `Checkout ${req.user.name} reply on your appreciation`)
     await sendGeneralNotifiation(appreciation.user.email, appreciation.user.name, `${req.user.name} replied on your appreciation.`);
   }
   else { 
@@ -306,6 +307,7 @@ exports.addCommentToAppreciation = catchAsyncErrors(async (req, res, next) => {
       postedDate: req.body.comment.onDate,
       replies: [],
     })
+    await sendAppNotification([user.fcmToken], `Checkout ${req.user.name} comment on your appreciation`)
     await sendGeneralNotifiation(appreciation.user.email, appreciation.user.name, `${req.user.name} added a comment on your appreciation.`);
   }
   // check if the sender is new user in the conversation of that appreciation
@@ -335,11 +337,11 @@ exports.addCommentToAppreciation = catchAsyncErrors(async (req, res, next) => {
 exports.addMyReactionToAppreciation = catchAsyncErrors(async (req, res, next) => {
   const appreciation = await Appreciation.findById(req.body.appreciationId);
   // find if comment of user exist
-  // console.log(appreciation)
   const indexOfcomment = appreciation.comments.conversation.findIndex((element) => { return element._id.toString() === req.body.reaction.onConversationId});
   if(indexOfcomment === -1) 
     return next(new ErrorHandler("Comment not found", 400));
-  // check if the reaction is on a comment or on its reply
+    // check if the reaction is on a comment or on its reply
+
   if(req.body.isReply) {
     const replies = appreciation.comments.conversation[indexOfcomment].replies;
     const indexOfReply = replies.findIndex((ele) => ele._id.toString() === req.body.reaction.onReplyId)
@@ -354,6 +356,8 @@ exports.addMyReactionToAppreciation = catchAsyncErrors(async (req, res, next) =>
       }
       // else add in likes and remove from dislike if exist
       else {
+        const user = await User.findById(appreciation.comments.conversation[indexOfcomment].replies[indexOfReply].userId);
+        await sendAppNotification([user.fcmToken], `${user.name} liked your reply`)
         appreciation.comments.conversation[indexOfcomment].replies[indexOfReply].status.likesCount.push(req.user.id);
         appreciation.comments.conversation[indexOfcomment].replies[indexOfReply].status.dislikesCount = [...appreciation.comments.conversation[indexOfcomment].replies[indexOfReply].status.dislikesCount.filter((ele) => ele.toString() !==req.user.id)]  
       }
@@ -379,6 +383,9 @@ exports.addMyReactionToAppreciation = catchAsyncErrors(async (req, res, next) =>
       }
       // else add in likes and remove from dislike if exist
       else{
+        const user = await User.findById(appreciation.comments.conversation[indexOfcomment].userId);
+        await sendAppNotification([user.fcmToken], `${user.name} liked your comment`)
+        
         appreciation.comments.conversation[indexOfcomment].status.likesCount.push(req.user.id);    
         appreciation.comments.conversation[indexOfcomment].status.dislikesCount = [...appreciation.comments.conversation[indexOfcomment].status.dislikesCount.filter((ele) => ele.toString()!==req.user.id)];
       }
