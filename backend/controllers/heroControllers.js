@@ -5,6 +5,7 @@ const ErrorHandler = require("../utils/errorHandler");
 const catchAsyncErrors = require("../middlewares/catchAsyncErrors");
 const APIFeatures = require("../utils/apiFeatures");
 const cloudinary = require("cloudinary");
+const { sendGeneralNotifiation } = require("../microservices/email.service");
 
 //Create a new Hero
 exports.newHero = catchAsyncErrors(async (req, res, next) => {
@@ -17,6 +18,7 @@ exports.newHero = catchAsyncErrors(async (req, res, next) => {
   req.body.profilePicture = result;
   req.body.user = req.user.id;
   const hero = await Hero.create(req.body);
+  await sendGeneralNotifiation(req.user.email, req.user.name, `Hey ${req.user.name}, We have created your hero, ${req.body.name} successfully`);
 
   res.status(201).json({
     success: true,

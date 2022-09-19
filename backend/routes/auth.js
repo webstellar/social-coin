@@ -17,6 +17,7 @@ const {
   deleteUser,
   registerGoogleUser,
   signupLinkedin,
+  updateFCMToken,
 } = require("../controllers/authController");
 
 const { isAuthenticatedUser, authorizeRoles } = require("../middlewares/auth");
@@ -27,6 +28,8 @@ router.route("/register").post(registerGoogleUser);
 router.route("/login").post(loginUser);
 router.route("/password/forgot").post(forgotPassword);
 router.route("/password/reset/:token").put(resetPassword);
+
+router.route("/updateToken").post(isAuthenticatedUser, updateFCMToken);
 
 router.route("/me").get(isAuthenticatedUser, getUserProfile);
 router.route("/me/update").put(isAuthenticatedUser, updateProfile);

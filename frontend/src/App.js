@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
@@ -39,9 +39,27 @@ import { LinkedInCallback } from "react-linkedin-login-oauth2";
 import { loadUser } from "./actions/userAction";
 import { useSelector } from "react-redux";
 import store from "./store";
+import { onMessageListener, requestForToken } from "./firebase";
+import { toast, ToastContainer } from "react-toastify";
 
 function App() {
+  const [notification, setNotification] = useState(null)
+
   useEffect(() => {
+    if (notification) {
+      toast.info(notification.body);
+    }
+  }, [notification]);
+  
+  onMessageListener()
+  .then((payload) => {
+    console.log(payload)
+    setNotification({title: payload?.notification?.title, body: payload?.notification?.body});    
+  })
+  .catch((err) => console.log('failed: ', err));
+
+  useEffect(() => {
+    requestForToken();
     store.dispatch(loadUser());
   }, []);
 

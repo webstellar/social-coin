@@ -6,12 +6,22 @@ const sendToken = require("../utils/jwtToken");
 const sendEmail = require("../utils/sendEmail");
 const crypto = require("crypto");
 const cloudinary = require("cloudinary");
+const { sendGeneralNotifiation } = require("../microservices/email.service");
 
 const axios = require('axios');
 
 // urls
 const urlToGetUserEmail = 'https://api.linkedin.com/v2/clientAwareMemberHandles?q=members&projection=(elements*(primary,type,handle~))';
 const urlToGetLinkedInAccessToken = 'https://www.linkedin.com/oauth/v2/accessToken';
+
+exports.updateFCMToken = catchAsyncErrors( async(req,res,next) => {
+  const user = await User.findById(req.user.id);
+  user.fcmToken = req.body.FCMToken;
+  await user.save();
+  res.status(201).json({
+    success: true,
+  });
+})
 
 /**
  * Get access token from LinkedIn
@@ -105,6 +115,7 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
       url: result.secure_url,
     },
   });
+  await sendGeneralNotifiation(email, name, `Hey ${name}, your account on Social Coin is created successfully`);
 
   sendToken(user, 200, res);
 });
@@ -127,6 +138,7 @@ exports.registerGoogleUser = catchAsyncErrors(async (req, res, next) => {
       url: result.secure_url,
     },
   });
+  await sendGeneralNotifiation(email, name, `Hey ${name}, your account on Social Coin is created successfully`);
 
   sendToken(user, 200, res);
 });
