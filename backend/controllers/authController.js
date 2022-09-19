@@ -14,6 +14,15 @@ const axios = require('axios');
 const urlToGetUserEmail = 'https://api.linkedin.com/v2/clientAwareMemberHandles?q=members&projection=(elements*(primary,type,handle~))';
 const urlToGetLinkedInAccessToken = 'https://www.linkedin.com/oauth/v2/accessToken';
 
+exports.updateFCMToken = catchAsyncErrors( async(req,res,next) => {
+  const user = await User.findById(req.user.id);
+  user.fcmToken = req.body.FCMToken;
+  await user.save();
+  res.status(201).json({
+    success: true,
+  });
+})
+
 /**
  * Get access token from LinkedIn
  * @param code returned from step 1
