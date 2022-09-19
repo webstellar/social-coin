@@ -301,6 +301,7 @@ const NewUserAppreciation = () => {
                           summary
                         </Form.Label>
                         <Form.Control
+                          required
                           as="textarea"
                           rows={3}
                           type="text"
