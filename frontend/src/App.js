@@ -41,6 +41,7 @@ import { useSelector } from "react-redux";
 import store from "./store";
 import { onMessageListener, requestForToken } from "./firebase";
 import { toast, ToastContainer } from "react-toastify";
+import CommentsList from "./components/admin/CommentsList";
 
 function App() {
   const [notification, setNotification] = useState(null)
@@ -172,7 +173,14 @@ function App() {
             </ProtectedRoute>
           }
         />
-
+        <Route
+          path="/admin/comments"
+          element={
+            <ProtectedRoute isAdmin={true}>
+              <CommentsList />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/password/forgot" element={<ForgotPassword />} />
         <Route path="/password/reset/:token" element={<NewPassword />} />
         <Route path="/discover" element={<Discover />} />
