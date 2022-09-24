@@ -53,9 +53,6 @@ const AdminSideBar = () => {
           <NavDropdown.Item as={Link} to="/admin/comments">
             All Comments
           </NavDropdown.Item>
-          <NavDropdown.Item as={Link} to="/admin/comment">
-            Add Comment
-          </NavDropdown.Item>
         </NavDropdown>
       </Nav>
     </Fragment>
