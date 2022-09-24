@@ -135,6 +135,29 @@ export const deleteAppreciation = (id) => async (dispatch) => {
   }
 };
 
+// Delete appreciation (Admin)
+export const deleteComment = (commentId, appId) => async (dispatch) => {
+  try {
+    dispatch({ type: DELETE_APPRECIATION_REQUEST });
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    const { data } = await axios.post(`/api/v1/admin/delete/comment/${commentId}`, {appreciationId: appId}, config);
+
+    dispatch({
+      type: DELETE_APPRECIATION_SUCCESS,
+      payload: data.success,
+    });
+  } catch (error) {
+    dispatch({
+      type: DELETE_APPRECIATION_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
 // Delete appreciation (User)
 export const deleteMyAppreciation = (id) => async (dispatch) => {
   try {
