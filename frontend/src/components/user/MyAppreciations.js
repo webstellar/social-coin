@@ -93,7 +93,6 @@ const MyAppreciations = ({ user }) => {
 
       rows: [],
     };
-console.log(user)
     appreciations.forEach((appreciation, index) => {
       data.rows.push({
         sno: <p>{index+1}</p>,
