@@ -25,7 +25,7 @@ const MyAppreciations = ({ user }) => {
   );
   const { error: deleteError, isDeleted } = useSelector(
     (state) => state.appreciation
-  );
+  );  
 
   useEffect(() => {
     dispatch(myAppreciations());
@@ -93,13 +93,13 @@ const MyAppreciations = ({ user }) => {
 
       rows: [],
     };
-
+console.log(user)
     appreciations.forEach((appreciation, index) => {
       data.rows.push({
         sno: <p>{index+1}</p>,
         profile: (
           <img
-          src={"https://res.cloudinary.com/dja7mdaul/image/upload/v1660414223/social-coin/user_avatar/gciffgyqjmrotaq0qjn7.jpg"}
+          src={user.profilePicture.url}
           alt='hero image'
           style={{ width: '48px', height: '48px' }}
           className='rounded-circle'

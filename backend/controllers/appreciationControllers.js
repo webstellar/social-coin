@@ -24,7 +24,8 @@ exports.newAppreciation = catchAsyncErrors(async (req, res, next) => {
   };
   req.body.hero = {
     id:  hero._id,
-    name: hero.name
+    name: hero.name,
+    profilePicture: hero.profilePicture.url
   };
   if(req.body.image){
     image = await cloudinary.v2.uploader.upload(req.body.image, {
@@ -278,6 +279,22 @@ exports.deleteMyAppreciation = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
+exports.deleteComment = catchAsyncErrors( async (req, res, next) => {
+  try {
+    console.log(req.body, req.params.id)
+    const appreciation = await Appreciation.findById(req.body.appreciationId);
+    appreciation.comments.conversation = [...appreciation.comments.conversation.filter((ele) => ele._id.toString() !== req.params.id)]
+    await appreciation.save();
+  } catch (e) {
+    console.log(e)
+    return next(new ErrorHandler("Comment deletion failed", 400));
+  }
+
+  res.status(200).json({
+    success: true,
+    message: "Comment has been deleted",
+  });
+})
 exports.addCommentToAppreciation = catchAsyncErrors(async (req, res, next) => {
   const appreciation = await Appreciation.findById(req.body.appreciationId);
   const user = await User.findById(appreciation.user.id);

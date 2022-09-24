@@ -18,6 +18,7 @@ const appreciationSchema = new mongoose.Schema(
       type: {
         id: mongoose.Types.ObjectId,
         name: String,
+        profilePicture: String,
       },
       required: true,
     },

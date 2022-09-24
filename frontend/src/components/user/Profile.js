@@ -50,7 +50,7 @@ const Profile = () => {
                 title="Appreciations"
                 className="sc-tab"
               >
-                <MyAppreciations />
+                <MyAppreciations user={user} />
               </Tab>
               <Tab eventKey="my-profile" title="My Profile" className="sc-tab">
                 <ProfileTab user={user} />
