@@ -39,6 +39,7 @@ const NewUserAppreciation = () => {
   const [imagePreview, setImagePreview] = useState(
     "https://res.cloudinary.com/dja7mdaul/image/upload/v1655345210/social-coin/user_avatar/defaultProfile_ouwetk.jpg"
   );
+  const [validated, setValidated] = useState(false);
 
 
   const { loading, error, success, appreciation } = useSelector(
@@ -196,16 +197,24 @@ const NewUserAppreciation = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    const formdata = {
-      hero : data || hero,
-      summary: summary,
-      story: story,
-      image: image==='' ? null : image,
-      video: video,
-      tags: tags
+    const form = e.currentTarget;
+    if (form.checkValidity() === false) {
+      e.stopPropagation();
     }
-    console.log(formdata)
-    dispatch(newAppreciation(formdata));
+    else {
+      const formdata = {
+        hero : data || hero,
+        summary: summary,
+        story: story,
+        image: image==='' ? null : image,
+        video: video,
+        tags: tags
+      }
+      console.log(formdata)
+      dispatch(newAppreciation(formdata));
+    }
+    setValidated(true)
+
   };
 
   const tinymce = "0z5qmo7cx8rjieka6xxb9nz2y1b8k8rdyluiq9zv9r0t6du2";
@@ -275,6 +284,8 @@ const NewUserAppreciation = () => {
 
                   <div className="mt-5 sc-logincontrol">
                     <Form
+                      noValidate 
+                      validated={validated}
                       onSubmit={submitHandler}
                       encType="multipart/form-data"
                     >
@@ -312,6 +323,9 @@ const NewUserAppreciation = () => {
                             setSummary(e.target.value);
                           }}
                         />
+                        <Form.Control.Feedback type="invalid">
+                          field cannot be empty
+                        </Form.Control.Feedback>
                       </Form.Group>
 
                       <Form.Group className="mb-3">

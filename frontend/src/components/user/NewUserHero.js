@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { newHero, clearErrors } from "../../actions/heroActions";
 import { NEW_HERO_RESET } from "../../constants/heroConstant";
 import { toast, ToastContainer } from "react-toastify";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const NewUserHero = () => {
   const dispatch = useDispatch();
@@ -28,6 +29,7 @@ const NewUserHero = () => {
   const [profilePicturePreview, setProfilePicturePreview] = useState(
     "https://res.cloudinary.com/dja7mdaul/image/upload/v1655345210/social-coin/user_avatar/defaultProfile_ouwetk.jpg"
   );
+  const [validated, setValidated] = useState(false);
 
   const genders = ["Male", "Female", "Others"];
   const countries = data;
@@ -51,20 +53,26 @@ const NewUserHero = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
+    const form = e.currentTarget;
+    if (form.checkValidity() === false) {
+      e.stopPropagation();
+    }
+    else {
+      const formData = new FormData();
+      formData.set("name", name);
+      formData.set("description", description);
+      formData.set("gender", gender);
+      formData.set("country", country);
+      formData.set("email", email);
+      formData.set("linkedinUrl", linkedinUrl);
+      formData.set("twitterUrl", twitterUrl);
+      formData.set("instagramUrl", instagramUrl);
+      formData.set("facebookUrl", facebookUrl);
+      formData.set("profilePicture", profilePicture);
 
-    const formData = new FormData();
-    formData.set("name", name);
-    formData.set("description", description);
-    formData.set("gender", gender);
-    formData.set("country", country);
-    formData.set("email", email);
-    formData.set("linkedinUrl", linkedinUrl);
-    formData.set("twitterUrl", twitterUrl);
-    formData.set("instagramUrl", instagramUrl);
-    formData.set("facebookUrl", facebookUrl);
-    formData.set("profilePicture", profilePicture);
-
-    dispatch(newHero(formData));
+      dispatch(newHero(formData));
+    }
+    setValidated(true)
   };
 
   const onChange = (e) => {
@@ -110,10 +118,12 @@ const NewUserHero = () => {
                   <h2 className="pw-bolder text-center">name your hero</h2>
                   <div className="mt-5 sc-logincontrol">
                     <Form
+                      noValidate 
+                      validated={validated}
                       onSubmit={submitHandler}
                       encType="multipart/form-data"
                     >
-                      <Form.Group className="mb-3">
+                      <Form.Group className="mb-3 px-0">
                         <Form.Label htmlFor="fullname_field">
                           full name
                         </Form.Label>
@@ -126,8 +136,11 @@ const NewUserHero = () => {
                             setName(e.target.value);
                           }}
                         />
+                        <Form.Control.Feedback type="invalid">
+                          field cannot be empty
+                        </Form.Control.Feedback>
                       </Form.Group>
-                      <Form.Group className="mb-3">
+                      <Form.Group className="mb-3 px-0">
                         <Form.Label htmlFor="email_field">
                           email address
                         </Form.Label>
@@ -140,9 +153,12 @@ const NewUserHero = () => {
                             setEmail(e.target.value);
                           }}
                         />
+                        <Form.Control.Feedback type="invalid">
+                          field cannot be empty
+                        </Form.Control.Feedback>
                       </Form.Group>
 
-                      <Form.Group className="mb-3">
+                      <Form.Group className="mb-3 px-0">
                         <Form.Label htmlFor="description_field">
                           description
                         </Form.Label>
@@ -157,9 +173,13 @@ const NewUserHero = () => {
                             setDescription(e.target.value);
                           }}
                         />
+                        <Form.Control.Feedback type="invalid">
+                          field cannot be empty
+                        </Form.Control.Feedback>
+
                       </Form.Group>
 
-                      <Form.Group className="mb-3" as={Col}>
+                      <Form.Group className="mb-3 px-0" as={Col}>
                         <Form.Label htmlFor="gender_option">gender</Form.Label>
                         <Form.Select
                           required
@@ -173,9 +193,12 @@ const NewUserHero = () => {
                             </option>
                           ))}
                         </Form.Select>
+                        <Form.Control.Feedback type="invalid">
+                          field cannot be empty
+                        </Form.Control.Feedback>
                       </Form.Group>
 
-                      <Form.Group className="mb-3" as={Col}>
+                      <Form.Group className="mb-3 px-0" as={Col}>
                         <Form.Label htmlFor="gender_option">country</Form.Label>
                         <Form.Select
                           required
@@ -189,9 +212,12 @@ const NewUserHero = () => {
                             </option>
                           ))}
                         </Form.Select>
+                        <Form.Control.Feedback type="invalid">
+                          field cannot be empty
+                        </Form.Control.Feedback>
                       </Form.Group>
 
-                      <Form.Group className="mb-3">
+                      <Form.Group className="mb-3 px-0">
                         <Form.Label htmlFor="linkedinUrl_field">
                           linkedin Url
                         </Form.Label>
@@ -204,7 +230,7 @@ const NewUserHero = () => {
                           }}
                         />
                       </Form.Group>
-                      <Form.Group className="mb-3">
+                      <Form.Group className="mb-3 px-0">
                         <Form.Label htmlFor="instagramUrl_field">
                           instagram Url
                         </Form.Label>
@@ -217,7 +243,7 @@ const NewUserHero = () => {
                           }}
                         />
                       </Form.Group>
-                      <Form.Group className="mb-3">
+                      <Form.Group className="mb-3 px-0">
                         <Form.Label htmlFor="twitterUrl_field">
                           twitter Url
                         </Form.Label>
@@ -230,7 +256,7 @@ const NewUserHero = () => {
                           }}
                         />
                       </Form.Group>
-                      <Form.Group className="mb-3" as={Col}>
+                      <Form.Group className="mb-3 px-0" as={Col}>
                         <Form.Label htmlFor="facbeookUrl_field">
                           facebook Url
                         </Form.Label>
@@ -244,7 +270,7 @@ const NewUserHero = () => {
                         />
                       </Form.Group>
 
-                      <Form.Group className="mb-3">
+                      <Form.Group className="mb-3 px-0">
                         <Form.Label htmlFor="profilePicture_field">
                           profile picture
                         </Form.Label>
@@ -268,6 +294,9 @@ const NewUserHero = () => {
                               name="profilePicture"
                               onChange={onChange}
                             />
+                            <Form.Control.Feedback type="invalid">
+                              field cannot be empty
+                            </Form.Control.Feedback>  
                           </Col>
                         </Row>
                       </Form.Group>
