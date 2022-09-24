@@ -317,15 +317,12 @@ exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
 
 // Logout user   =>   /api/v1/logout
 exports.logout = catchAsyncErrors(async (req, res, next) => {
-  res.cookie("token", null, {
-    expires: new Date(Date.now()),
-    httpOnly: true,
-  });
-
+  res.clearCookie('token');
+  res.clearCookie('FCMToken');
   res.status(200).json({
     success: true,
     message: "Logged out",
-  });
+  })
 });
 
 // Admin Routes
