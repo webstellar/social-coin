@@ -31,9 +31,18 @@ const userSchema = new mongoose.Schema({
       type: String,
     },
   },
-  linkedinId: {
-    type: String,
-    default: null
+  socialHandles: {
+    type : {
+      linkedinId: {
+        type: String,
+        default: null
+      },
+      googleId: {
+        type: String,
+        default: null
+      }
+    },
+    default: {}
   },
   role: {
     type: String,
