@@ -45,6 +45,8 @@ import CommentsList from "./components/admin/CommentsList";
 
 function App() {
   const [notification, setNotification] = useState(null)
+  
+  const { user, isAuthenticated, loading } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (notification) {
@@ -60,13 +62,14 @@ function App() {
   .catch((err) => console.log('failed: ', err));
 
   useEffect(() => {
-    requestForToken();
     store.dispatch(loadUser());
   }, []);
 
+  useEffect(() => {
+    requestForToken();
+  },[user])
   //const location = useLocation();
 
-  const { user, isAuthenticated, loading } = useSelector((state) => state.auth);
 
   return (
     <BrowserRouter>
