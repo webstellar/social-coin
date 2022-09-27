@@ -87,8 +87,8 @@ const sendEmail = async (subject, template, to, data) => {
     await sendEmail(subject, template, toEmail, data);
   };
 
-  const sendGeneralNotifiation = async (to, name, message) => {
-    const subject = "Social Coin - We have an update for you";
+  const sendGeneralNotifiation = async (to, name, message, emailSubject="We have an update for you") => {
+    const subject = `Social Coin - ${emailSubject}`;
     const template = "generalNotifications";
     const data = {
       name : `${name}`,
