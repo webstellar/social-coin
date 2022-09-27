@@ -39,7 +39,7 @@ import {
 } from "../constants/userConstant";
 
 // Login
-export const login = (email, password) => async (dispatch) => {
+export const login = (via, authBody) => async (dispatch) => {
   try {
     dispatch({ type: LOGIN_REQUEST });
 
@@ -48,10 +48,14 @@ export const login = (email, password) => async (dispatch) => {
         "Content-Type": "application/json",
       },
     };
+    let authVia = "login";
+
+    if( via === "google") { authVia = "authGoogle" }
+    else if ( via === "linkedin" ) { authVia = `authLinkedin` }
 
     const { data } = await axios.post(
-      "/api/v1/login",
-      { email, password },
+      `/api/v1/${authVia}`,
+      authBody,
       config
     );
 
