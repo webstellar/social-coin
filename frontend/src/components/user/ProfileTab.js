@@ -11,6 +11,7 @@ import { getHeroes } from "../../actions/heroActions";
 
 import goToLink from "../../images/goToLink.svg"
 import { toast } from "react-toastify";
+import { BsPlus, BsFillPersonFill } from "react-icons/bs";
 
 const ProfileTab = ({ user }) => {
   const dispatch = useDispatch();
@@ -29,12 +30,17 @@ const ProfileTab = ({ user }) => {
     <Fragment>
       <Container>
         <Row md={4} className="mb-5" style={{padding: "56px 45px 56px 0px", background: "rgba(217, 217, 217, 0.3)"}}>
-            <div className="profile-img-container">
-                <img 
-                  className="profile-img"
-                  alt={user && user.name}
-                  src={user.profilePicture && user.profilePicture.url}
-                />
+            <div className="profile-img-container">  
+              {
+                user.profilePicture && user.profilePicture.url ?
+                  <img 
+                    className="profile-img"
+                    alt={user && user.name}
+                    src={user.profilePicture.url}
+                  />
+                :
+                  <BsFillPersonFill className="profile-img" />
+              }
             </div>
             <div className="profile-info">
               <div className="profile-left">
