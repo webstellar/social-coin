@@ -251,7 +251,7 @@ export const resetPassword = (token, passwords) => async (dispatch) => {
 // Logout user
 export const logout = () => async (dispatch) => {
   try {
-    await axios.get("/api/v1/logout");
+    await axios.post("/api/v1/logout", {}, { credentials: 'same-origin' });
 
     dispatch({
       type: LOGOUT_SUCCESS,

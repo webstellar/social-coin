@@ -35,7 +35,7 @@ router.route("/updateToken").post(isAuthenticatedUser, updateFCMToken);
 router.route("/me").get(isAuthenticatedUser, getUserProfile);
 router.route("/me/update").put(isAuthenticatedUser, updateProfile);
 router.route("/password/update").put(isAuthenticatedUser, updatePassword);
-router.route("/logout").get(isAuthenticatedUser, logout);
+router.route("/logout").post(isAuthenticatedUser, logout);
 
 router
   .route("/admin/users")

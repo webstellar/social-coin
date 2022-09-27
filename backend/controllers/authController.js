@@ -344,6 +344,7 @@ exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
 exports.logout = catchAsyncErrors(async (req, res, next) => {
   res.clearCookie('token');
   res.clearCookie('FCMToken');
+  console.log(res)
   res.status(200).json({
     success: true,
     message: "Logged out",
