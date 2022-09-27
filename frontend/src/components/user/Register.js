@@ -12,6 +12,7 @@ import {
   register,
   clearErrors,
   googleRegister,
+  login,
 } from "../../actions/userAction";
 import axios from "axios";
 
@@ -21,7 +22,7 @@ import { useScript } from "../hooks/useScript";
 import { useLinkedIn } from "react-linkedin-login-oauth2";
 // You can use provided image shipped by this package or using your own
 import linkedin from "react-linkedin-login-oauth2/assets/linkedin.png";
-import { LinkedInApi, NodeServer } from "../config/linkedinConfig";
+import { LinkedInApi } from "../config/linkedinConfig";
 import { LOGIN_SUCCESS } from "../../constants/userConstant";
 
 const Register = () => {
@@ -68,14 +69,15 @@ const Register = () => {
   const onGoogleSignIn = (user) => {
     let userCred = user.credential;
     let payload = jwt_decode(userCred);
+    console.log(payload)
     let userData = {
       name: payload.name,
       email: payload.email,
       profilePicture: payload.picture,
-      password: payload.sub,
+      googleId: payload.sub,
     };
 
-    dispatch(googleRegister(userData));
+    dispatch(login( "google", userData));
   };
 
   useScript("https://accounts.google.com/gsi/client", () => {
@@ -159,23 +161,13 @@ const Register = () => {
     window.open(oauthUrl,"_self")
   };
 
-  const getUserCredentials = async (code) => {
-    const res = await axios.get(`${NodeServer.baseURL}${NodeServer.registerPath}?code=${code}`)
-    console.log(res)
-    return res;
-  };
-  
   const signupLinkedin = async () => {
     const url = window.location.href;
     if(url.includes("code=") && url.includes("state=")){
       const code = url.split("code=")[1].split("&")[0]
-      setAuthCode(code)
-      const res = await getUserCredentials(code); 
-      dispatch({
-        type: LOGIN_SUCCESS,
-        payload: res.data.user,
-      });
-
+      dispatch(login("linkedin", { code }));
+      toast.success("Logged in successfully.");
+      navigate("/me");
     }; 
   }
 
@@ -184,7 +176,6 @@ const Register = () => {
     const url = window.location.href;
     if(url.includes("code=") && url.includes("state=")){
       const code = url.split("code=")[1].split("&")[0]
-      console.log(code);
       if(authCode!==code && linkedinUser===null)
         signupLinkedin();
     }    

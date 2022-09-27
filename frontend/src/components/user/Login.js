@@ -12,7 +12,7 @@ import { login, clearErrors } from "../../actions/userAction";
 import { ToastContainer, toast } from "react-toastify";
 import { useScript } from "../hooks/useScript";
 import jwt_decode from "jwt-decode";
-import { LinkedInApi, NodeServer } from "../config/linkedinConfig";
+import { LinkedInApi } from "../config/linkedinConfig";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -32,11 +32,14 @@ const Login = () => {
     let userCred = user.credential;
     let payload = jwt_decode(userCred);
     let userData = {
+      name: payload.name,
       email: payload.email,
-      password: payload.sub,
+      profilePicture: payload.picture,
+      googleId: payload.sub,
     };
+    dispatch(login("google", userData));
+    toast.success("Logged in successfully.");
 
-    dispatch(login(userData.email, userData.password));
   };
 
   //Google SignIn
@@ -75,7 +78,7 @@ const Login = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(login(email, password));
+    dispatch(login("socialCoin", {email, password}));
     toast.success("Logged in successfully.");
   };
 
