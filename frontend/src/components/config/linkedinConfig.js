@@ -5,8 +5,3 @@ export const LinkedInApi = {
     scope: 'r_liteprofile%20r_emailaddress',
     state: '123456'
 };
-
-export const NodeServer = {
-    baseURL: 'http://localhost:3000/api/v1',
-    registerPath: '/linkedInRegister',
-};

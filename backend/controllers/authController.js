@@ -64,8 +64,8 @@ async function getUserFromLinkedin(code) {
     return { error: false, response: userProfile };
   }
 
-exports.signupLinkedin = catchAsyncErrors( async(req,res,next) => {
-  const code = req.query.code;
+exports.authenticateViaLinkedIn = catchAsyncErrors( async(req,res,next) => {
+  const code = req.body.code;
   const response = await getUserFromLinkedin(code);
   if( response.error ){
     return next(new ErrorHandler("Unable to fetch profile data from linkedin"), 400);
@@ -73,17 +73,17 @@ exports.signupLinkedin = catchAsyncErrors( async(req,res,next) => {
   else{
     const userProfile = response.response;
     try {
-      const user = await User.findOne({ linkedinId: userProfile.id });
+      const user = await User.findOne({ email: userProfile.email});
       if(user){
-        console.log("1st")
+        user.socialHandles['linkedinId'] = userProfile.id;
+        await user.save();
         sendToken(user, 200, res);
       }
       else{
-        console.log("2nd")
         const newUser = await User.create({
           name: `${userProfile.firstName} ${userProfile.lastName}`,
           email: userProfile.email,
-          linkedinId: userProfile.id
+          socialHandles: { linkedinId: userProfile.id }
         });
         sendToken(newUser, 201, res);        
       }
@@ -94,6 +94,46 @@ exports.signupLinkedin = catchAsyncErrors( async(req,res,next) => {
     }
   }
 })
+
+exports.authenticateViaGoogle = catchAsyncErrors(async (req, res, next) => {
+  const user = await User.findOne({ "email": req.body.email});
+  if(user){
+    if(!user.profilePicture.url) {
+      const result = await cloudinary.v2.uploader.upload(req.body.profilePicture, {
+        folder: "social-coin/user_avatar",
+        width: 150,
+        crop: "scale",
+      });
+      user.profilePicture = {
+        public_id: result.public_id,
+        url: result.secure_url,
+      };
+    }
+    user.socialHandles['googleId'] = req.body.googleId;
+    await user.save();
+    sendToken(user, 200, res);
+  }
+  else{
+    const result = await cloudinary.v2.uploader.upload(req.body.profilePicture, {
+      folder: "social-coin/user_avatar",
+      width: 150,
+      crop: "scale",
+    });
+    const { name, email, googleId } = req.body;
+    const newUser = await User.create({
+      name,
+      email,
+      profilePicture: {
+        public_id: result.public_id,
+        url: result.secure_url,
+      },
+      socialHandles: { googleId: googleId }
+    });
+    await sendGeneralNotifiation(email, name, `Hey ${name}, your account on Social Coin is created successfully`);
+  
+    sendToken(newUser, 201, res);        
+  }
+});
 
 
 //Register  user => /api/v1/register
@@ -114,29 +154,7 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
       public_id: result.public_id,
       url: result.secure_url,
     },
-  });
-  await sendGeneralNotifiation(email, name, `Hey ${name}, your account on Social Coin is created successfully`);
-
-  sendToken(user, 200, res);
-});
-
-exports.registerGoogleUser = catchAsyncErrors(async (req, res, next) => {
-  const result = await cloudinary.v2.uploader.upload(req.body.profilePicture, {
-    folder: "social-coin/user_avatar",
-    width: 150,
-    crop: "scale",
-  });
-
-  const { name, email, password } = req.body;
-
-  const user = await User.create({
-    name,
-    email,
-    password,
-    profilePicture: {
-      public_id: result.public_id,
-      url: result.secure_url,
-    },
+    
   });
   await sendGeneralNotifiation(email, name, `Hey ${name}, your account on Social Coin is created successfully`);
 
@@ -192,11 +210,18 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
   const message = `Your password reset token is as follow:\n\n${resetUrl}\n\nIf you have not requested this email, then ignore it.`;
 
   try {
-    await sendEmail({
-      email: user.email,
-      subject: "Social Coin Password Recovery",
+    // await sendEmail({
+    //   email: user.email,
+    //   subject: "Social Coin Password Recovery",
+    //   message,
+    // });
+    await sendGeneralNotifiation(
+      user.email, 
+      user.name, 
       message,
-    });
+      "Password Recovery"
+    );
+
 
     res.status(200).json({
       success: true,

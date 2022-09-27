@@ -6,6 +6,7 @@ import { BsBell, BsChevronDown, BsArrowUpRight } from "react-icons/bs";
 import { useDispatch } from "react-redux";
 import { logout } from "../../actions/userAction";
 import { toast } from "react-toastify";
+import { BsPlus, BsFillPersonFill } from "react-icons/bs";
 
 const LoggedIn = ({ user }) => {
   //TODO: set State for Notification
@@ -59,26 +60,48 @@ const LoggedIn = ({ user }) => {
         className="sc-menudropdown sc-disablefocus"
       >
         <Dropdown.Toggle>
-          <img
-            src={user.profilePicture && user.profilePicture.url}
-            alt={user && user.name}
-            width="30"
-            height="30"
-            className="rounded-circle"
-          />
+          {
+            user.profilePicture && user.profilePicture.url ?
+              <img
+                src={user.profilePicture.url}
+                alt={user && user.name}
+                width="30"
+                height="30"
+                className="rounded-circle"
+              />
+            :
+              <BsFillPersonFill
+                style={{
+                  height:"30px",
+                  width:"30px",
+                  color: "black"
+                }}
+              />
+          }
           <BsChevronDown className="text-dark fw-bolder" />
         </Dropdown.Toggle>
 
         <Dropdown.Menu className="justify-content-start">
           <Row className="mb-3">
             <Col sm={2}>
-              <img
-                src={user.profilePicture && user.profilePicture.url}
-                alt={user && user.name}
-                width="30"
-                height="30"
-                className="rounded-circle"
-              />
+              {
+                user.profilePicture && user.profilePicture.url ?
+                  <img
+                    src={user.profilePicture.url}
+                    alt={user && user.name}
+                    width="30"
+                    height="30"
+                    className="rounded-circle"
+                  />
+                :
+                  <BsFillPersonFill
+                    style={{
+                      height:"30px",
+                      width:"30px",
+                      color: "black"
+                    }}
+                  />
+              }
             </Col>
             <Col sm={10}>
               <span className="fw-bold d-flex" style={{ fontSize: "14px" }}>
