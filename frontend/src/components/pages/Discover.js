@@ -1,7 +1,6 @@
 import React, { Fragment, useState, useEffect } from "react";
 import MetaData from "../layout/MetaData";
 import Hero from "../heroes/hero/Hero";
-import CarouselSlide from "../layout/CarouselSlide";
 import DiscoverSearchBar from "../layout/DiscoverSearchBar";
 import Loader from "../layout/Loader";
 import ErrorBoundary from "../../ErrorBoundary";
@@ -13,7 +12,6 @@ import {
   ListGroup,
   Navbar,
   Carousel,
-  Badge,
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";

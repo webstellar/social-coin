@@ -4,6 +4,7 @@ import { Container, Row } from "react-bootstrap";
 import Hero from "../heroes/hero/Hero";
 import Loader from "../layout/Loader";
 import ErrorBoundary from "../../ErrorBoundary";
+import { Link } from "react-router-dom";
 
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -71,7 +72,12 @@ const Home = () => {
                       type="button"
                       className="rounded-pill btn btn-dark btn-lg px-4 me-md-2"
                     >
-                      Appreciate your hero
+                      <Link
+                        to="/hero/new"
+                        className="text-light text-decoration-none"
+                      >
+                        Appreciate your hero
+                      </Link>
                     </button>
                   </div>
                 </div>

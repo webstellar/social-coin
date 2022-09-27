@@ -42,11 +42,9 @@ const NewUserAppreciation = () => {
   );
   const [validated, setValidated] = useState(false);
 
-
   const { loading, error, success, appreciation } = useSelector(
     (state) => state.newAppreciation
   );
-
 
   useEffect(() => {
     window.history.replaceState({}, document.title);
@@ -66,14 +64,14 @@ const NewUserAppreciation = () => {
   }, [dispatch, error, success, appreciation, navigate]);
 
   useEffect(() => {
-    if(hero === "" && heroes && heroes.length > 0) {
-      setHero(heroes[0]._id)
-    } 
-  }, [heroes])
+    if (hero === "" && heroes && heroes.length > 0) {
+      setHero(heroes[0]._id);
+    }
+  }, [heroes]);
 
   //tinymce editor
   const storyChange = (story, editor) => {
-    if(editor.getContent({ format: "text" }).length < 2000){
+    if (editor.getContent({ format: "text" }).length < 2000) {
       setStory(story);
     }
   };
@@ -83,8 +81,8 @@ const NewUserAppreciation = () => {
     if (e.target.name === "image") {
       const reader = new FileReader();
       const file = e.target.files[0];
-      if(file > 8e+6){
-        alert("Max Limit is: 8mb")
+      if (file > 8e6) {
+        alert("Max Limit is: 8mb");
         return;
       }
       reader.onload = () => {
@@ -101,19 +99,21 @@ const NewUserAppreciation = () => {
   //video
   const onUpload = async (e) => {
     var file = e.target.files[0];
-    if(file.size>2.5e+7){
-      alert("Max Limit is: 25mb")
+    if (file.size > 2.5e7) {
+      alert("Max Limit is: 25mb");
       return;
     }
     var POST_URL =
-      "https://api.cloudinary.com/v1_1/" + process.env.REACT_APP_YOUR_CLOUD_NAME + "/auto/upload";
+      "https://api.cloudinary.com/v1_1/" +
+      process.env.REACT_APP_YOUR_CLOUD_NAME +
+      "/auto/upload";
 
     var XUniqueUploadId = +new Date();
-    
+
     setUploading(true);
     await processFile();
     async function processFile(e) {
-      console.log("inside")
+      console.log("inside");
       var size = file.size;
       var sliceSize = 20000000;
       var start = 0;
@@ -144,7 +144,10 @@ const NewUserAppreciation = () => {
 
       formdata.append("file", piece);
       formdata.append("cloud_name", process.env.REACT_APP_YOUR_CLOUD_NAME);
-      formdata.append("upload_preset", process.env.REACT_APP_YOUR_UNSIGNED_UPLOAD_PRESET);
+      formdata.append(
+        "upload_preset",
+        process.env.REACT_APP_YOUR_UNSIGNED_UPLOAD_PRESET
+      );
       formdata.append("folder", "social-coin/appreciations/videos");
 
       var xhr = new XMLHttpRequest();
@@ -158,11 +161,9 @@ const NewUserAppreciation = () => {
       xhr.onload = function () {
         // do something to response
         const result = JSON.parse(this.responseText);
-        console.log(this.responseText)
-        console.log({"public_id": result.public_id,
-          "url": result.url})
-        setVideo({public_id: result.public_id,
-          url: result.url})
+        console.log(this.responseText);
+        console.log({ public_id: result.public_id, url: result.url });
+        setVideo({ public_id: result.public_id, url: result.url });
         setUploading(false);
       };
 
@@ -182,7 +183,6 @@ const NewUserAppreciation = () => {
     }
 
     function noop() {}
-
   };
 
   //remove tags
@@ -208,21 +208,19 @@ const NewUserAppreciation = () => {
     const form = e.currentTarget;
     if (form.checkValidity() === false) {
       e.stopPropagation();
-    }
-    else {
+    } else {
       const formdata = {
-        hero : data || hero,
+        hero: data || hero,
         summary: summary,
         story: story,
-        image: image==='' ? null : image,
+        image: image === "" ? null : image,
         video: video,
-        tags: tags
-      }
-      console.log(formdata)
+        tags: tags,
+      };
+      console.log(formdata);
       dispatch(newAppreciation(formdata));
     }
-    setValidated(true)
-
+    setValidated(true);
   };
 
   const tinymce = "0z5qmo7cx8rjieka6xxb9nz2y1b8k8rdyluiq9zv9r0t6du2";
@@ -292,7 +290,7 @@ const NewUserAppreciation = () => {
 
                   <div className="mt-5 sc-logincontrol">
                     <Form
-                      noValidate 
+                      noValidate
                       validated={validated}
                       onSubmit={submitHandler}
                       encType="multipart/form-data"
@@ -303,7 +301,10 @@ const NewUserAppreciation = () => {
                           <Form.Select
                             className="sc-disablefocus rounded-pill border-dark"
                             value={hero._id}
-                            onChange={(e) => {console.log(e); setHero(e.target.value);}}
+                            onChange={(e) => {
+                              console.log(e);
+                              setHero(e.target.value);
+                            }}
                           >
                             {heroes &&
                               heroes.map((hero) => (
@@ -323,7 +324,7 @@ const NewUserAppreciation = () => {
                           required
                           as="textarea"
                           rows={3}
-                          maxLength={70}
+                          maxLength={150}
                           type="text"
                           className="sc-disablefocus rounded border-dark"
                           value={summary}
@@ -423,7 +424,7 @@ const NewUserAppreciation = () => {
                           className="rounded-pill btn-dark btn-outline-light border-dark"
                           disabled={loading || uploading ? true : false}
                         >
-                          { loading || uploading ? 'uploading...' : 'appreciate'}
+                          {loading || uploading ? "uploading..." : "appreciate"}
                         </Button>
                       </div>
                     </Form>

@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { newHero, clearErrors } from "../../actions/heroActions";
 import { NEW_HERO_RESET } from "../../constants/heroConstant";
 import { toast, ToastContainer } from "react-toastify";
-import 'bootstrap/dist/css/bootstrap.min.css';
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const NewUserHero = () => {
   const dispatch = useDispatch();
@@ -56,8 +56,7 @@ const NewUserHero = () => {
     const form = e.currentTarget;
     if (form.checkValidity() === false) {
       e.stopPropagation();
-    }
-    else {
+    } else {
       const formData = new FormData();
       formData.set("name", name);
       formData.set("description", description);
@@ -72,7 +71,7 @@ const NewUserHero = () => {
 
       dispatch(newHero(formData));
     }
-    setValidated(true)
+    setValidated(true);
   };
 
   const onChange = (e) => {
@@ -118,7 +117,7 @@ const NewUserHero = () => {
                   <h2 className="pw-bolder text-center">name your hero</h2>
                   <div className="mt-5 sc-logincontrol">
                     <Form
-                      noValidate 
+                      noValidate
                       validated={validated}
                       onSubmit={submitHandler}
                       encType="multipart/form-data"
@@ -164,7 +163,7 @@ const NewUserHero = () => {
                         </Form.Label>
                         <Form.Control
                           required
-                          maxLength={70}
+                          maxLength={150}
                           as="textarea"
                           rows={3}
                           type="text"
@@ -177,7 +176,6 @@ const NewUserHero = () => {
                         <Form.Control.Feedback type="invalid">
                           field cannot be empty
                         </Form.Control.Feedback>
-
                       </Form.Group>
 
                       <Form.Group className="mb-3 px-0" as={Col}>
@@ -297,7 +295,7 @@ const NewUserHero = () => {
                             />
                             <Form.Control.Feedback type="invalid">
                               field cannot be empty
-                            </Form.Control.Feedback>  
+                            </Form.Control.Feedback>
                           </Col>
                         </Row>
                       </Form.Group>
