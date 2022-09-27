@@ -372,7 +372,7 @@ const AppreciationDetails = () => {
                   </div>
                   <br/><hr/>
                   <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                    <p style={{margin: 0}}>{`The Conversation (${5})`}</p>                
+                    <p style={{margin: 0}}>{`The Conversation (${(appreciation.comments && appreciation.comments.length) || 0})`}</p>                
                     <div>
                       <label style={{ color: "rgba(108, 100, 100, 1)" }} htmlFor="sort-options">Sort By</label>&nbsp;
                       <select style={{border: 'none'}} name="sort-options" id="sort-options">

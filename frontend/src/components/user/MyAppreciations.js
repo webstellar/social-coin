@@ -123,7 +123,7 @@ const MyAppreciations = ({ user }) => {
               >
                 <BsPencil />
               </Link>
-              <button onClick={() => deleteAppreciationHandler(appreciation?._id)} className="rounded-pill btn btn-danger py-1 px-2 ml-2">
+              <button onClick={() => deleteAppreciationHandler(appreciation?._id)} className="rounded-pill btn btn-danger px-0 ml-2">
                 <BsTrash />
               </button>
             </div>

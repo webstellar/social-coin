@@ -4,9 +4,10 @@ import { Link } from "react-router-dom";
 import Banner from "../../../images/banner-test.jpg";
 import dayjs from "dayjs";
 
+
 const Appreciation = ({ appreciation }) => {
+  const parser = new DOMParser();
   const apprDate = dayjs(appreciation?.createdAt).format("MMM D, YYYY");
-  const apprStory = appreciation?.story.replace(/(<([^>]+)>)/gi, "");
   return (
     <Fragment>
       <Row
@@ -16,10 +17,12 @@ const Appreciation = ({ appreciation }) => {
       >
         <p>{apprDate}</p>
         <div className="mb-3">
-          <div className="d-flex position-relative align-content-around">
+          <div className="d-flex position-relative justify-content-between">
             <div className="me-lg-5">
               <h5 className="mt-0 fw-bold">{appreciation?.summary}</h5>
-              <p>{apprStory.substring(0, 300)}</p>
+              <p style={{lineBreak: "anywhere"}}>
+                {parser.parseFromString(appreciation.story, 'text/html').body.innerText}
+              </p>
             </div>
             <div className="justify-content-end">
               {appreciation?.image ? (
@@ -39,7 +42,7 @@ const Appreciation = ({ appreciation }) => {
                   alt={`${appreciation?.name}'s appreciator `}
                 />
               )}
-              <p className="text-end">
+              <p className="text-center">
                 {appreciation.user?.name
                   ? appreciation.user.name
                   : "Social-Coin User"}
