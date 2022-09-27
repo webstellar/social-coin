@@ -164,6 +164,7 @@ const NewUserHero = () => {
                         </Form.Label>
                         <Form.Control
                           required
+                          maxLength={70}
                           as="textarea"
                           rows={3}
                           type="text"
