@@ -26,6 +26,7 @@ const NewUserAppreciation = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
+  const { heroes } = useSelector((state) => state.heroes);
 
   const data = location.state?.data._id;
 
@@ -46,7 +47,6 @@ const NewUserAppreciation = () => {
     (state) => state.newAppreciation
   );
 
-  const { heroes } = useSelector((state) => state.heroes);
 
   useEffect(() => {
     window.history.replaceState({}, document.title);
@@ -65,9 +65,17 @@ const NewUserAppreciation = () => {
     }
   }, [dispatch, error, success, appreciation, navigate]);
 
+  useEffect(() => {
+    if(hero === "" && heroes && heroes.length > 0) {
+      setHero(heroes[0]._id)
+    } 
+  }, [heroes])
+
   //tinymce editor
-  const storyChange = (story) => {
-    setStory(story);
+  const storyChange = (story, editor) => {
+    if(editor.getContent({ format: "text" }).length < 2000){
+      setStory(story);
+    }
   };
 
   //images
@@ -295,7 +303,7 @@ const NewUserAppreciation = () => {
                           <Form.Select
                             className="sc-disablefocus rounded-pill border-dark"
                             value={hero._id}
-                            onChange={(e) => setHero(e.target.value)}
+                            onChange={(e) => {console.log(e); setHero(e.target.value);}}
                           >
                             {heroes &&
                               heroes.map((hero) => (
@@ -315,6 +323,7 @@ const NewUserAppreciation = () => {
                           required
                           as="textarea"
                           rows={3}
+                          maxLength={70}
                           type="text"
                           className="sc-disablefocus rounded border-dark"
                           value={summary}
