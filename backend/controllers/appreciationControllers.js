@@ -27,10 +27,13 @@ exports.newAppreciation = catchAsyncErrors(async (req, res, next) => {
     name: hero.name,
     profilePicture: hero.profilePicture.url
   };
+  let image = null;
+
   if(req.body.image){
-    image = await cloudinary.v2.uploader.upload(req.body.image, {
+    const { public_id, url }  = await cloudinary.v2.uploader.upload(req.body.image, {
       folder: "social-coin/appreciations/images",
     });
+    image = { public_id, url };
   }
   // if(req.body.video){
   //   video = await cloudinary.v2.uploader.upload_large(req.body.video, {
@@ -40,7 +43,7 @@ exports.newAppreciation = catchAsyncErrors(async (req, res, next) => {
   //   });
   // }
 
-  const appreciation = await Appreciation.create(req.body);
+  const appreciation = await Appreciation.create({...req.body, image});
   //connect appreciation to  hero
   appreciation.id = await appreciation._id;
 
