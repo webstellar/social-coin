@@ -268,6 +268,7 @@ h6 span {
 div.nsm7Bb-HzV7m-LgbsSe {
   border: solid 1px #000 !important;
   max-width: fit-content !important;
+  max-width: -moz-fit-content !important;
 }
 
 .carousel-dark,
@@ -380,7 +381,7 @@ div.nsm7Bb-HzV7m-LgbsSe {
 .profile-card {
   display: flex;
   flex-direction: row;
-  margin:15% auto;
+  margin: 15% auto;
   margin-top: 0;
   width: 1272px;
   height: 332px;
@@ -388,29 +389,29 @@ div.nsm7Bb-HzV7m-LgbsSe {
   align-items: center;
 }
 
-.profile-img-container{
+.profile-img-container {
   margin: 0 5%;
 }
 
-.profile-img{
+.profile-img {
   width: 213px;
   height: 213px;
   border-radius: 100%;
 }
 
-.profile-info{
+.profile-info {
   display: flex;
   gap: 2em;
   font-size: 1.2em;
   white-space: nowrap;
-  margin-top: 3.5% !important
+  margin-top: 3.5% !important;
 }
 
-.profile-right{
+.profile-right {
   font-weight: 300;
 }
 
-.update-link img{
+.update-link img {
   width: 1rem;
 }
 
@@ -421,7 +422,7 @@ th {
 
 td > p {
   max-width: 15vw;
-  margin-top: 8px !important;  
+  margin-top: 8px !important;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
