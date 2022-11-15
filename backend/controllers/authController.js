@@ -8,117 +8,138 @@ const crypto = require("crypto");
 const cloudinary = require("cloudinary");
 const { sendGeneralNotifiation } = require("../microservices/email.service");
 
-const axios = require('axios');
+const axios = require("axios");
 
 // urls
-const urlToGetUserEmail = 'https://api.linkedin.com/v2/clientAwareMemberHandles?q=members&projection=(elements*(primary,type,handle~))';
-const urlToGetLinkedInAccessToken = 'https://www.linkedin.com/oauth/v2/accessToken';
+const urlToGetUserEmail =
+  "https://api.linkedin.com/v2/clientAwareMemberHandles?q=members&projection=(elements*(primary,type,handle~))";
+const urlToGetLinkedInAccessToken =
+  "https://www.linkedin.com/oauth/v2/accessToken";
 
-exports.updateFCMToken = catchAsyncErrors( async(req,res,next) => {
+exports.updateFCMToken = catchAsyncErrors(async (req, res, next) => {
   const user = await User.findById(req.user.id);
   user.fcmToken = req.body.FCMToken;
   await user.save();
   res.status(201).json({
     success: true,
   });
-})
+});
 
 /**
  * Get access token from LinkedIn
  * @param code returned from step 1
- * @returns accessToken if successful or null if request fails 
+ * @returns accessToken if successful or null if request fails
  */
 async function getUserFromLinkedin(code) {
-    let accessToken = null;
-    const parameters = {
-      "grant_type": "authorization_code",
-      "code": code,
-      "state":123456,
-      "redirect_uri": process.env.REDIRECT_URI,
-      "client_id": process.env.CLIENT_ID,
-      "client_secret": process.env.CLIENT_SECRET,
+  let accessToken = null;
+  const parameters = {
+    grant_type: "authorization_code",
+    code: code,
+    state: 123456,
+    redirect_uri: process.env.REDIRECT_URI,
+    client_id: process.env.CLIENT_ID,
+    client_secret: process.env.CLIENT_SECRET,
+  };
+  const access_config = {
+    headers: { "Content-Type": "x-www-form-urlencoded" },
+    params: parameters,
+  };
+  let userProfile = {};
+  try {
+    const res_token = await axios.post(
+      urlToGetLinkedInAccessToken,
+      {},
+      access_config
+    );
+    accessToken = res_token.data["access_token"];
+    const res_profile = await axios.get(
+      `https://api.linkedin.com/v2/me?oauth2_access_token=${accessToken}`
+    );
+    userProfile.firstName = res_profile.data["localizedFirstName"];
+    userProfile.lastName = res_profile.data["localizedLastName"];
+    userProfile.id = res_profile.data["id"];
+    const email_config = {
+      headers: {
+        oauth2_access_token: `Bearer ${accessToken}`,
+      },
     };
-    const access_config = {
-      headers: { "Content-Type": 'x-www-form-urlencoded' },
-      params: parameters,
-    };
-    let userProfile = {}
-    try {
-      const res_token = await axios.post(urlToGetLinkedInAccessToken,{},access_config);
-      accessToken = res_token.data["access_token"];
-      const res_profile = await axios.get(`https://api.linkedin.com/v2/me?oauth2_access_token=${accessToken}`);
-      userProfile.firstName = res_profile.data["localizedFirstName"];
-      userProfile.lastName = res_profile.data["localizedLastName"];
-      userProfile.id = res_profile.data["id"]
-      const email_config = {
-        headers: {
-          "oauth2_access_token": `Bearer ${accessToken}`
-        }
-      };
-      const res_email = await axios.get(`${urlToGetUserEmail}&oauth2_access_token=${accessToken}`,{},email_config)
-      userProfile.email = res_email.data.elements[0]['handle~'].emailAddress;
-    }
-    catch(err){
-        return {error: true, response: "failed to fetch linkedin profile"};
-    }
-    return { error: false, response: userProfile };
+    const res_email = await axios.get(
+      `${urlToGetUserEmail}&oauth2_access_token=${accessToken}`,
+      {},
+      email_config
+    );
+    userProfile.email = res_email.data.elements[0]["handle~"].emailAddress;
+  } catch (err) {
+    return { error: true, response: "failed to fetch linkedin profile" };
   }
+  return { error: false, response: userProfile };
+}
 
-exports.authenticateViaLinkedIn = catchAsyncErrors( async(req,res,next) => {
+exports.authenticateViaLinkedIn = catchAsyncErrors(async (req, res, next) => {
   const code = req.body.code;
   const response = await getUserFromLinkedin(code);
-  if( response.error ){
-    return next(new ErrorHandler("Unable to fetch profile data from linkedin"), 400);
-  }
-  else{
+  if (response.error) {
+    return next(
+      new ErrorHandler("Unable to fetch profile data from linkedin"),
+      400
+    );
+  } else {
     const userProfile = response.response;
     try {
-      const user = await User.findOne({ email: userProfile.email});
-      if(user){
-        user.socialHandles['linkedinId'] = userProfile.id;
+      const user = await User.findOne({ email: userProfile.email });
+      if (user) {
+        user.socialHandles["linkedinId"] = userProfile.id;
         await user.save();
         sendToken(user, 200, res);
-      }
-      else{
+      } else {
         const newUser = await User.create({
           name: `${userProfile.firstName} ${userProfile.lastName}`,
           email: userProfile.email,
-          socialHandles: { linkedinId: userProfile.id }
+          socialHandles: { linkedinId: userProfile.id },
         });
-        sendToken(newUser, 201, res);        
+        sendToken(newUser, 201, res);
       }
-
     } catch (error) {
       console.log(error);
-      return next(new ErrorHandler("Sorry!!, Maybe you already have an account with this email"), 400);
+      return next(
+        new ErrorHandler(
+          "Sorry!!, Maybe you already have an account with this email"
+        ),
+        400
+      );
     }
   }
-})
+});
 
 exports.authenticateViaGoogle = catchAsyncErrors(async (req, res, next) => {
-  const user = await User.findOne({ "email": req.body.email});
-  if(user){
-    if(!user.profilePicture.url) {
-      const result = await cloudinary.v2.uploader.upload(req.body.profilePicture, {
-        folder: "social-coin/user_avatar",
-        width: 150,
-        crop: "scale",
-      });
+  const user = await User.findOne({ email: req.body.email });
+  if (user) {
+    if (!user.profilePicture.url) {
+      const result = await cloudinary.v2.uploader.upload(
+        req.body.profilePicture,
+        {
+          folder: "social-coin/user_avatar",
+          width: 150,
+          crop: "scale",
+        }
+      );
       user.profilePicture = {
         public_id: result.public_id,
         url: result.secure_url,
       };
     }
-    user.socialHandles['googleId'] = req.body.googleId;
+    user.socialHandles["googleId"] = req.body.googleId;
     await user.save();
     sendToken(user, 200, res);
-  }
-  else{
-    const result = await cloudinary.v2.uploader.upload(req.body.profilePicture, {
-      folder: "social-coin/user_avatar",
-      width: 150,
-      crop: "scale",
-    });
+  } else {
+    const result = await cloudinary.v2.uploader.upload(
+      req.body.profilePicture,
+      {
+        folder: "social-coin/user_avatar",
+        width: 150,
+        crop: "scale",
+      }
+    );
     const { name, email, googleId } = req.body;
     const newUser = await User.create({
       name,
@@ -127,36 +148,48 @@ exports.authenticateViaGoogle = catchAsyncErrors(async (req, res, next) => {
         public_id: result.public_id,
         url: result.secure_url,
       },
-      socialHandles: { googleId: googleId }
+      socialHandles: { googleId: googleId },
     });
-    await sendGeneralNotifiation(email, name, `Hey ${name}, your account on Social Coin is created successfully`);
-  
-    sendToken(newUser, 201, res);        
+    await sendGeneralNotifiation(
+      email,
+      name,
+      `Hey ${name}, your account on Social Coin is created successfully`
+    );
+
+    sendToken(newUser, 201, res);
   }
 });
 
-
 //Register  user => /api/v1/register
 exports.registerUser = catchAsyncErrors(async (req, res, next) => {
+  /*
   const result = await cloudinary.v2.uploader.upload(req.body.profilePicture, {
     folder: "social-coin/user_avatar",
     width: 150,
     crop: "scale",
   });
+  */
+
+  /*
+      profilePicture: {
+      public_id: result.public_id,
+      url: result.secure_url,
+    },
+
+    */
 
   const { name, email, password } = req.body;
-
+  console.log(req.body);
   const user = await User.create({
     name,
     email,
     password,
-    profilePicture: {
-      public_id: result.public_id,
-      url: result.secure_url,
-    },
-    
   });
-  await sendGeneralNotifiation(email, name, `Hey ${name}, your account on Social Coin is created successfully`);
+  await sendGeneralNotifiation(
+    email,
+    name,
+    `Hey ${name}, your account on Social Coin is created successfully`
+  );
 
   sendToken(user, 200, res);
 });
@@ -174,14 +207,17 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
   const user = await User.findOne({ email }).select("+password");
 
   if (!user) {
-    return next(new ErrorHandler("Invalid email or password"), 401);
+    return next(
+      new ErrorHandler("account doesn't exist, please register"),
+      401
+    );
   }
 
   //Checks if password is correct or not
   const isPasswordMatched = await user.comparePassword(password);
 
   if (!isPasswordMatched) {
-    return next(new ErrorHandler("Invalid email or password"), 401);
+    return next(new ErrorHandler("Password doesn't match"), 401);
   }
 
   sendToken(user, 200, res);
@@ -216,12 +252,11 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
     //   message,
     // });
     await sendGeneralNotifiation(
-      user.email, 
-      user.name, 
+      user.email,
+      user.name,
       message,
       "Password Recovery"
     );
-
 
     res.status(200).json({
       success: true,
@@ -342,13 +377,13 @@ exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
 
 // Logout user   =>   /api/v1/logout
 exports.logout = catchAsyncErrors(async (req, res, next) => {
-  res.clearCookie('token');
-  res.clearCookie('FCMToken');
-  console.log(res)
+  res.clearCookie("token");
+  res.clearCookie("FCMToken");
+  console.log(res);
   res.status(200).json({
     success: true,
     message: "Logged out",
-  })
+  });
 });
 
 // Admin Routes

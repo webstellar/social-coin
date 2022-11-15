@@ -11,19 +11,11 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   register,
   clearErrors,
-  googleRegister,
   login,
 } from "../../actions/userAction";
-import axios from "axios";
-
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import { useScript } from "../hooks/useScript";
-
-import { useLinkedIn } from "react-linkedin-login-oauth2";
-// You can use provided image shipped by this package or using your own
-import linkedin from "react-linkedin-login-oauth2/assets/linkedin.png";
 import { LinkedInApi } from "../config/linkedinConfig";
-import { LOGIN_SUCCESS } from "../../constants/userConstant";
 
 const Register = () => {
   const confirmPassword = useRef();
@@ -331,17 +323,6 @@ const Register = () => {
                   </div>
                 </Col>
               </Row>
-              <ToastContainer
-                position="bottom-left"
-                autoClose={5000}
-                hideProgressBar={true}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-              />
             </Container>
           </ErrorBoundary>
         </Fragment>
