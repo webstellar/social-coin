@@ -167,23 +167,21 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
     folder: "social-coin/user_avatar",
     width: 150,
     crop: "scale",
-  });
-  */
-
-  /*
-      profilePicture: {
+  } 
+  
+  profilePicture: {
       public_id: result.public_id,
       url: result.secure_url,
     },
-
-    */
+  */
 
   const { name, email, password } = req.body;
+
   console.log(req.body);
   const user = await User.create({
-    name,
-    email,
-    password,
+    name: name,
+    email: email,
+    password: password,
   });
   await sendGeneralNotifiation(
     email,
