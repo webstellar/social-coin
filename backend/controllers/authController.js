@@ -140,6 +140,7 @@ exports.authenticateViaGoogle = catchAsyncErrors(async (req, res, next) => {
         crop: "scale",
       }
     );
+    
     const { name, email, googleId } = req.body;
     const newUser = await User.create({
       name,
