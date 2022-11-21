@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const path = require("path");
+const cors = require("cors");
 
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
@@ -22,6 +23,7 @@ app.use(
     parameterLimit: 50000,
   })
 ); //cloudinary
+app.use(cors());
 app.use(cookieParser());
 app.use(fileUpload());
 

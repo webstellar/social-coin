@@ -7,12 +7,12 @@ const appreciationSchema = new mongoose.Schema(
       type: String,
       required: [true, "Please provide a summary of your appreciation"],
       trim: true,
-      maxLength: [200, "Please sumary cannot exceed 65 characters"],
+      maxLength: [200, "Please summary cannot exceed 65 characters"],
     },
     story: {
       type: String,
       required: [true, "Please write your appreciation"],
-      maxLength: [3000, "Please summary cannot exceed 3000 characters"],
+      maxLength: [3000, "Please story cannot exceed 3000 characters"],
     },
     hero: {
       type: {
@@ -27,13 +27,13 @@ const appreciationSchema = new mongoose.Schema(
         id: mongoose.Schema.ObjectId,
         name: String,
         email: String,
-        profilePicture: { 
+        profilePicture: {
           public_id: {
             type: String,
           },
           url: {
             type: String,
-          }
+          },
         },
       },
       ref: "User",
@@ -48,12 +48,8 @@ const appreciationSchema = new mongoose.Schema(
       },
     },
     video: {
-      public_id: {
-        type: String,
-      },
-      url: {
-        type: String,
-      },
+      type: String,
+      maxLength: [200, "Please video link cannot exceed 65 characters"],
     },
     tags: [
       {
@@ -62,26 +58,38 @@ const appreciationSchema = new mongoose.Schema(
     ],
     comments: {
       type: {
-        participants: [{
-          userId: mongoose.Types.ObjectId,
-          userName: String,
-          profilePic: String,
-          userEmail: String
-        }],
-        conversation: [{
-          userId: mongoose.Types.ObjectId,
-          comment: String,
-          status: { likesCount: [{ type: mongoose.Types.ObjectId }], dislikesCount: [{ type: mongoose.Types.ObjectId }] },
-          postedDate: Date,
-          replies: [{
+        participants: [
+          {
             userId: mongoose.Types.ObjectId,
-            reply: String,
-            status: { likesCount: [{ type: mongoose.Types.ObjectId }], dislikesCount: [{ type: mongoose.Types.ObjectId }] },
+            userName: String,
+            profilePic: String,
+            userEmail: String,
+          },
+        ],
+        conversation: [
+          {
+            userId: mongoose.Types.ObjectId,
+            comment: String,
+            status: {
+              likesCount: [{ type: mongoose.Types.ObjectId }],
+              dislikesCount: [{ type: mongoose.Types.ObjectId }],
+            },
             postedDate: Date,
-          }],
-        }]
+            replies: [
+              {
+                userId: mongoose.Types.ObjectId,
+                reply: String,
+                status: {
+                  likesCount: [{ type: mongoose.Types.ObjectId }],
+                  dislikesCount: [{ type: mongoose.Types.ObjectId }],
+                },
+                postedDate: Date,
+              },
+            ],
+          },
+        ],
       },
-      default: { participants: [], conversation: [] }
+      default: { participants: [], conversation: [] },
     },
     likeCount: {
       type: Number,
