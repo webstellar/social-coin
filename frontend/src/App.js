@@ -40,26 +40,29 @@ import { loadUser } from "./actions/userAction";
 import { useSelector } from "react-redux";
 import store from "./store";
 import { onMessageListener, requestForToken } from "./firebase";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import CommentsList from "./components/admin/CommentsList";
 
 function App() {
-  const [notification, setNotification] = useState(null)
-  
-  const { user, isAuthenticated, loading } = useSelector((state) => state.auth);
+  const [notification, setNotification] = useState(null);
+
+  const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (notification) {
       toast.info(notification.body);
     }
   }, [notification]);
-  
+
   onMessageListener()
-  .then((payload) => {
-    console.log(payload)
-    setNotification({title: payload?.notification?.title, body: payload?.notification?.body});    
-  })
-  .catch((err) => console.log('failed: ', err));
+    .then((payload) => {
+      console.log(payload);
+      setNotification({
+        title: payload?.notification?.title,
+        body: payload?.notification?.body,
+      });
+    })
+    .catch((err) => console.log("failed: ", err));
 
   useEffect(() => {
     store.dispatch(loadUser());
@@ -67,9 +70,9 @@ function App() {
 
   useEffect(() => {
     requestForToken();
-  },[user])
+  }, [user]);
+  
   //const location = useLocation();
-
 
   return (
     <BrowserRouter>
