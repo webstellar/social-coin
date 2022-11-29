@@ -140,7 +140,7 @@ exports.authenticateViaGoogle = catchAsyncErrors(async (req, res, next) => {
         crop: "scale",
       }
     );
-    
+
     const { name, email, googleId } = req.body;
     const newUser = await User.create({
       name,
@@ -207,7 +207,7 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
 
   if (!user) {
     return next(
-      new ErrorHandler("account doesn't exist, please register"),
+      new ErrorHandler("This account doesn't exist, please register"),
       401
     );
   }
