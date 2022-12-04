@@ -156,7 +156,6 @@ exports.authenticateViaGoogle = catchAsyncErrors(async (req, res, next) => {
       name,
       `Hey ${name}, your account on Social Coin is created successfully`
     );
-
     sendToken(newUser, 201, res);
   }
 });

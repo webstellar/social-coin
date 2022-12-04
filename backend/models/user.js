@@ -32,17 +32,17 @@ const userSchema = new mongoose.Schema({
     },
   },
   socialHandles: {
-    type : {
+    type: {
       linkedinId: {
         type: String,
-        default: null
+        default: null,
       },
       googleId: {
         type: String,
-        default: null
-      }
+        default: null,
+      },
     },
-    default: {}
+    default: {},
   },
   role: {
     type: String,
@@ -50,7 +50,7 @@ const userSchema = new mongoose.Schema({
   },
   fcmToken: {
     type: String,
-    default: null
+    default: null,
   },
   createdAt: {
     type: Date,
