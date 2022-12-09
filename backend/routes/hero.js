@@ -12,6 +12,7 @@ const {
   getAdminHeroes,
   myHeroes,
   updateMyHero,
+  getHeroesBySearch,
 } = require("../controllers/heroControllers");
 const { isAuthenticatedUser, authorizeRoles } = require("../middlewares/auth");
 
@@ -38,5 +39,7 @@ router
   .route("/admin/hero/:id")
   .put(isAuthenticatedUser, authorizeRoles("admin"), updateHero)
   .delete(isAuthenticatedUser, authorizeRoles("admin"), deleteHero);
+
+router.route("/search/hero").get(getHeroesBySearch);
 
 module.exports = router;

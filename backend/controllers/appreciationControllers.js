@@ -121,9 +121,7 @@ exports.getAppreciations = catchAsyncErrors(async (req, res, next) => {
   const apiFeatures = new APIFeatures(
     Appreciation.find().populate("hero").populate("user"),
     req.query
-  )
-    .search()
-    .filter();
+  ).search();
 
   const appreciations = await apiFeatures.query;
 

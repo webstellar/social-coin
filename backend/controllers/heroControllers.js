@@ -18,7 +18,11 @@ exports.newHero = catchAsyncErrors(async (req, res, next) => {
   req.body.profilePicture = result;
   req.body.user = req.user.id;
   const hero = await Hero.create(req.body);
-  await sendGeneralNotifiation(req.user.email, req.user.name, `Hey ${req.user.name}, We have created your hero, ${req.body.name} successfully`);
+  await sendGeneralNotifiation(
+    req.user.email,
+    req.user.name,
+    `Hey ${req.user.name}, We have created your hero, ${req.body.name} successfully`
+  );
 
   res.status(201).json({
     success: true,
@@ -177,4 +181,18 @@ exports.deleteHero = catchAsyncErrors(async (req, res, next) => {
     success: true,
     message: "Hero successfully deleted",
   });
+});
+
+//Search /api/v1/search
+exports.getHeroesBySearch = catchAsyncErrors(async (req, res) => {
+  const { searchQuery } = req.query;
+  try {
+    const title = new RegExp(searchQuery, "i");
+    const heroes = await Hero.find({ title });
+    res.json(heroes);
+  } catch (error) {
+    res.status(404).json({
+      message: "Heroes doesn't exist",
+    });
+  }
 });
