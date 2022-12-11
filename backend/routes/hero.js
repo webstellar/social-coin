@@ -29,7 +29,7 @@ router.route("/hero/new").post(isAuthenticatedUser, newHero);
 router.route("/me/heroes").get(isAuthenticatedUser, myHeroes);
 router
   .route("/me/hero/:id")
-  .put(isAuthenticatedUser, updateMyHero)
+  .patch(isAuthenticatedUser, updateMyHero)
   .delete(isAuthenticatedUser, deleteHero);
 
 // Admin
@@ -37,9 +37,9 @@ router.route("/hero/new").post(isAuthenticatedUser, newHero);
 router.route("/admin/heroes").get(isAuthenticatedUser, getAdminHeroes);
 router
   .route("/admin/hero/:id")
-  .put(isAuthenticatedUser, authorizeRoles("admin"), updateHero)
+  .patch(isAuthenticatedUser, authorizeRoles("admin"), updateHero)
   .delete(isAuthenticatedUser, authorizeRoles("admin"), deleteHero);
 
-router.route("/search/hero").get(getHeroesBySearch);
+router.route("/heroes/search").get(getHeroesBySearch);
 
 module.exports = router;

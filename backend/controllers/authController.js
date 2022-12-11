@@ -324,8 +324,7 @@ exports.updatePassword = catchAsyncErrors(async (req, res, next) => {
   // Check previous user password
   const isMatched = await user.comparePassword(req.body.oldPassword);
   if (!isMatched) {
-    return next(
-      new ErrorHandler("Old password is incorrect", 400));
+    return next(new ErrorHandler("Old password is incorrect", 400));
   }
 
   user.password = req.body.password;
@@ -387,7 +386,7 @@ exports.logout = catchAsyncErrors(async (req, res, next) => {
 
 // Admin Routes
 
-// Get all users   =>   /api/v1/admin/users
+// Get all users   =>   /api/v1/users
 exports.allUsers = catchAsyncErrors(async (req, res, next) => {
   const users = await User.find();
 

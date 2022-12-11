@@ -14,7 +14,7 @@ const {
   deleteMyAppreciation,
   addCommentToAppreciation,
   addMyReactionToAppreciation,
-  deleteComment
+  deleteComment,
 } = require("../controllers/appreciationControllers");
 const { isAuthenticatedUser, authorizeRoles } = require("../middlewares/auth");
 
@@ -26,10 +26,14 @@ router.route("/appreciation/new").post(isAuthenticatedUser, newAppreciation);
 router.route("/me/appreciations").get(isAuthenticatedUser, myAppreciations);
 router
   .route("/me/appreciation/:id")
-  .put(isAuthenticatedUser, updateMyAppreciation)
+  .patch(isAuthenticatedUser, updateMyAppreciation)
   .delete(isAuthenticatedUser, deleteMyAppreciation);
-router.route("/me/appreciations/comment").post(isAuthenticatedUser, addCommentToAppreciation);
-router.route("/me/appreciations/reaction").post(isAuthenticatedUser, addMyReactionToAppreciation)
+router
+  .route("/me/appreciations/comment")
+  .post(isAuthenticatedUser, addCommentToAppreciation);
+router
+  .route("/me/appreciations/reaction")
+  .post(isAuthenticatedUser, addMyReactionToAppreciation);
 //Admin
 router.route("/appreciation/new").post(isAuthenticatedUser, newAppreciation);
 router
@@ -37,7 +41,7 @@ router
   .get(isAuthenticatedUser, getAdminAppreciations);
 router
   .route("/admin/appreciation/:id")
-  .put(isAuthenticatedUser, authorizeRoles("admin"), updateAppreciation)
+  .patch(isAuthenticatedUser, authorizeRoles("admin"), updateAppreciation)
   .delete(isAuthenticatedUser, authorizeRoles("admin"), deleteAppreciation);
 
 router

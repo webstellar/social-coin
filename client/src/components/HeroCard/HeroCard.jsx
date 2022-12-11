@@ -19,7 +19,14 @@ const HeroCard = ({ hero }) => {
           <Card sx={{ display: "block" }}>
             <CardMedia
               component="img"
-              sx={{ width: "100%", height: 200 }}
+              sx={{
+                width: "100%",
+                height: 200,
+                filter: "grayscale(100%)",
+                "&:hover": {
+                  filter: "grayscale(0%)",
+                },
+              }}
               image={hero?.profilePicture?.url}
               alt={hero?.hero}
             />
@@ -47,7 +54,7 @@ const HeroCard = ({ hero }) => {
                   style={{ textDecoration: "none", cursor: "pointer" }}
                 >
                   <Typography variant="subtitle1" color="grey.900">
-                    GIVE
+                    EXPRESS
                   </Typography>
                 </Link>
               </div>

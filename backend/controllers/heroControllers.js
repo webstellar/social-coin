@@ -46,7 +46,7 @@ exports.getHeroes = catchAsyncErrors(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    heroesCount,
+    heroesCount: heroes.length,
     resPerPage,
     heroes,
   });
@@ -137,7 +137,7 @@ exports.deleteHero = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
-//Get logged in user heros => /api/v1/me/heroes/:id
+//Get logged in user heros => /api/v1/me/heroes/
 exports.myHeroes = catchAsyncErrors(async (req, res, next) => {
   const heroes = await Hero.find({ user: req.user.id });
 
@@ -189,7 +189,7 @@ exports.getHeroesBySearch = catchAsyncErrors(async (req, res) => {
   try {
     const title = new RegExp(searchQuery, "i");
     const heroes = await Hero.find({ title });
-    res.json(heroes);
+    res.status(200).json({ heroes });
   } catch (error) {
     res.status(404).json({
       message: "Heroes doesn't exist",
