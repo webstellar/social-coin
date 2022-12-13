@@ -87,12 +87,12 @@ const ShareAppreciations = () => {
             <Modal.Body>
               <p>Share on:</p>
               <div>
-                <button 
-                    onClick = {shareOnFacebook}
-                    className="pe-2"
-                    style={{ background: "transparent", border: "none"}}
-                  >
-                    <FacebookIcon size={40} round />
+                <button
+                  onClick={shareOnFacebook}
+                  className="pe-2"
+                  style={{ background: "transparent", border: "none" }}
+                >
+                  <FacebookIcon size={40} round />
                 </button>
                 <TwitterShareButton
                   title={appreciation.summary}
@@ -102,10 +102,10 @@ const ShareAppreciations = () => {
                 >
                   <TwitterIcon size={40} round />
                 </TwitterShareButton>
-                <button 
-                  onClick = {shareOnLinkedIn}
+                <button
+                  onClick={shareOnLinkedIn}
                   className="pe-2"
-                  style={{ background: "transparent", border: "none"}}
+                  style={{ background: "transparent", border: "none" }}
                 >
                   <LinkedinIcon size={40} round />
                 </button>
@@ -168,12 +168,12 @@ const ShareAppreciations = () => {
                     <Navbar.Toggle />
                     <Navbar.Collapse className="justify-content-end sc-appreciation-icon">
                       <div>
-                        <button 
-                            onClick = {shareOnFacebook}
-                            className="pe-2"
-                            style={{ background: "transparent", border: "none"}}
-                          >
-                            <FacebookIcon size={25} round />
+                        <button
+                          onClick={shareOnFacebook}
+                          className="pe-2"
+                          style={{ background: "transparent", border: "none" }}
+                        >
+                          <FacebookIcon size={25} round />
                         </button>
                         <TwitterShareButton
                           title={appreciation.summary}
@@ -223,15 +223,16 @@ const ShareAppreciations = () => {
 
                     <div className="mb-3">
                       {appreciation.tags &&
-                        appreciation.tags.map((tag, i) => { 
+                        appreciation.tags.map((tag, i) => {
                           return (
-                            <><Badge pill bg="dark" key={i}>
-                              {tag}
-                            </Badge>&nbsp;</>
-                          )}
-                        )
-                      }
-                      
+                            <>
+                              <Badge pill bg="dark" key={i}>
+                                {tag}
+                              </Badge>
+                              &nbsp;
+                            </>
+                          );
+                        })}
                     </div>
 
                     <div>
