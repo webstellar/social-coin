@@ -14,11 +14,11 @@ process.on("uncaughtException", (err) => {
 if (process.env.NODE_ENV !== "PRODUCTION")
   require("dotenv").config({ path: "backend/config/config.env" });
 
-// dotenv.config({ path: 'backend/config/config.env' })
-//Connecting to database
+// Dotenv.config({ path: 'backend/config/config.env' })
+// Connecting to database
 connectDatabase();
 
-//Setting up cloudinary configuration
+// Setting up cloudinary configuration
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
@@ -31,7 +31,7 @@ const server = app.listen(process.env.PORT, () => {
   );
 });
 
-//Handle Unhandled Promise rejections
+// Handle Unhandled Promise rejections
 process.on("unhandledRejection", (err) => {
   console.log(`ERROR: ${err.stack}`);
   console.log("Shutting down the server due to Unhandled Promise rejection");
