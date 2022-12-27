@@ -99,12 +99,12 @@ const Header = () => {
           position="static"
           elevation={0}
           color="default"
-          sx={{ bgcolor: "background.paper" }}
+          sx={{ bgcolor: "background.paper", p: 0 }}
         >
           <Container maxWidth="lg">
-            <GrToolBar>
+            <GrToolBar sx={{ p: 0 }} disableGutters="true">
               <Box sx={{ flexGrow: 1 }} component="a" href="/">
-                <GrImg src={BrandLogo} alt="brand logo" />
+                <GrImg src={BrandLogo} alt="gratitude logo" />
               </Box>
 
               <div>
