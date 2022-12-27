@@ -33,7 +33,7 @@ const HomeRecentTitle = () => {
   return (
     <>
       <GrBox sx={{ flexGrow: 1 }}>
-        <Container maxWidth="xl">
+        <Container maxWidth="lg">
           {user ? (
             <Grid
               container
@@ -82,7 +82,7 @@ const HomeRecentTitle = () => {
         </Container>
       </GrBox>
       <GrBox sx={{ flexGrow: 1 }}>
-        <Container maxWidth="xl">
+        <Container maxWidth="lg">
           <Grid
             container
             direction="row"
@@ -96,7 +96,7 @@ const HomeRecentTitle = () => {
                 color="inherit"
                 gutterBottom
               >
-                Indulge in our top picks
+                Our selection
               </GrTypography>
             </Grid>
           </Grid>
@@ -114,7 +114,7 @@ const HomeRecentTitle = () => {
         </Container>
       </GrBox>
       <GrBox sx={{ flexGrow: 1 }}>
-        <Container maxWidth="xl">
+        <Container maxWidth="lg">
           <Grid
             container
             direction="row"
@@ -128,7 +128,7 @@ const HomeRecentTitle = () => {
                 color="inherit"
                 gutterBottom
               >
-                Indulge in our latest stories
+                Our selection
               </GrTypography>
             </Grid>
           </Grid>

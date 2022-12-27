@@ -18,7 +18,7 @@ const GratitudeSubSection = ({ gratitude }) => {
   return (
     <section>
       <GrBox>
-        <Container maxWidth="xl">
+        <Container maxWidth="lg">
           <Typography component="p" variant="p" gutterBottom>
             {gratitude?.summary}
           </Typography>

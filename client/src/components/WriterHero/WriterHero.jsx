@@ -62,7 +62,7 @@ const WriterHero = ({ hero, appreciations }) => {
             alt="hero"
           />
         }
-        <Container maxWidth="xl">
+        <Container maxWidth="lg">
           <Box
             sx={{
               position: "absolute",
@@ -95,7 +95,7 @@ const WriterHero = ({ hero, appreciations }) => {
           </Grid>
         </Container>
       </GrPaper>
-      <Container maxWidth="xl">
+      <Container maxWidth="lg">
         <GrParaBox>
           <div
             style={{ fontSize: "20px", fontWeight: "300" }}
@@ -103,7 +103,7 @@ const WriterHero = ({ hero, appreciations }) => {
           />
         </GrParaBox>
       </Container>
-      <Container maxWidth="xl">
+      <Container maxWidth="lg">
         <GrParaBox>
           <Grid
             container

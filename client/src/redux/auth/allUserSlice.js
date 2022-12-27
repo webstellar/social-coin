@@ -28,6 +28,7 @@ export const allUserSlice = createSlice({
     builder.addCase(allUsers.fulfilled, (state, action) => {
       state.loading = false;
       state.users = action.payload.users;
+      localStorage.setItem("users", JSON.stringify(action.payload));
     });
     builder.addCase(allUsers.rejected, (state, action) => {
       state.loading = false;

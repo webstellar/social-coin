@@ -22,7 +22,7 @@ const PageHero = () => {
             alt="gratitude"
           />
         }
-        <Container maxWidth="xl">
+        <Container maxWidth="lg">
           <Box
             sx={{
               position: "absolute",

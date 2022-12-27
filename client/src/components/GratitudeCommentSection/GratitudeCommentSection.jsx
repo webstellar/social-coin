@@ -22,7 +22,7 @@ const GratitudeCommentSection = () => {
   return (
     <section>
       <GrBox>
-        <Container maxWidth="xl" sx={{ mb: 6 }}>
+        <Container maxWidth="lg" sx={{ mb: 6 }}>
           <Grid
             container
             direction="row"

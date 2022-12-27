@@ -101,7 +101,7 @@ const Header = () => {
           color="default"
           sx={{ bgcolor: "background.paper" }}
         >
-          <Container maxWidth="xl">
+          <Container maxWidth="lg">
             <GrToolBar>
               <Box sx={{ flexGrow: 1 }} component="a" href="/">
                 <GrImg src={BrandLogo} alt="brand logo" />

@@ -36,7 +36,7 @@ const HeroHero = () => {
             alt="gratitude"
           />
         }
-        <Container maxWidth="xl">
+        <Container maxWidth="lg">
           <Box
             sx={{
               position: "absolute",

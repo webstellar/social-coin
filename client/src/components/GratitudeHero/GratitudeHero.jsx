@@ -8,8 +8,13 @@ const GratitudeHero = ({ gratitude }) => {
   return (
     <>
       <GrPaper elevation={0}>
-        <Container maxWidth="xl">
-          <Grid container>
+        <Container maxWidth="lg">
+          <Grid
+            container
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+          >
             <Grid item xs={6} sm={6} md={6}>
               <GrBox>
                 <Link
@@ -22,8 +27,8 @@ const GratitudeHero = ({ gratitude }) => {
                 </Link>
 
                 <GrTypography
-                  component="h1"
-                  variant="h3"
+                  component="h2"
+                  variant="h4"
                   color="grey.900"
                   gutterBottom
                 >

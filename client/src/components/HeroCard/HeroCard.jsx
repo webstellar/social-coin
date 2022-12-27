@@ -50,7 +50,7 @@ const HeroCard = ({ hero }) => {
               >
                 <MenuIcon />
                 <Link
-                  to="/give-gratitude"
+                  to="/express-gratitude"
                   style={{ textDecoration: "none", cursor: "pointer" }}
                 >
                   <Typography variant="subtitle1" color="grey.900">

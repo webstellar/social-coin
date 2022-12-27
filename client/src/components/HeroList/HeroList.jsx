@@ -54,7 +54,7 @@ const HeroList = () => {
 
   return (
     <div>
-      <Container maxWidth="xl">
+      <Container maxWidth="lg">
         <GrParaBox>
           <Grid
             container
