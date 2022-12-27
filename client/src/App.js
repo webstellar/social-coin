@@ -49,7 +49,7 @@ function App() {
 
   useEffect(() => {
     dispatch(setUser(user));
-  }, [dispatch]);
+  }, [dispatch, user]);
 
   return (
     <ThemeProvider theme={theme}>

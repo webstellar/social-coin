@@ -47,6 +47,10 @@ const DashboardLayout = ({ children }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
 
+  React.useEffect(() => {
+    document.title = `My Dashboard | ${user?.user?.name}`;
+  });
+
   const handleLogout = () => {
     dispatch(setLogout());
     navigate("/");
