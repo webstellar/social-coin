@@ -56,6 +56,11 @@ const appreciationSchema = new mongoose.Schema(
         type: String,
       },
     ],
+    category: [
+      {
+        type: String,
+      },
+    ],
     comments: {
       type: {
         participants: [

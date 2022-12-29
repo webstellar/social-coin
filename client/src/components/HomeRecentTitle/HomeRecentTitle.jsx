@@ -32,9 +32,9 @@ const HomeRecentTitle = () => {
 
   return (
     <>
-      <GrBox sx={{ flexGrow: 1 }}>
-        <Container maxWidth="lg">
-          {user ? (
+      {user ? (
+        <GrBox sx={{ flexGrow: 1 }}>
+          <Container maxWidth="lg">
             <Grid
               container
               direction="row"
@@ -43,7 +43,7 @@ const HomeRecentTitle = () => {
             >
               <Grid item md={8}>
                 <GrTypography
-                  omponent="p"
+                  component="p"
                   variant="h2"
                   color="inherit"
                   gutterBottom
@@ -64,23 +64,24 @@ const HomeRecentTitle = () => {
                 </GrLink>
               </Grid>
             </Grid>
-          ) : null}
-          <GrDiv>
-            <Grid container spacing={4}>
-              {myappreciations &&
-                myappreciations
-                  .map((appreciation) => (
-                    <GratitudeCard
-                      key={appreciation._id}
-                      gratitude={appreciation}
-                    />
-                  ))
-                  .reverse()
-                  .slice(1, 4)}
-            </Grid>
-          </GrDiv>
-        </Container>
-      </GrBox>
+
+            <GrDiv>
+              <Grid container spacing={4}>
+                {myappreciations &&
+                  myappreciations
+                    .map((appreciation) => (
+                      <GratitudeCard
+                        key={appreciation._id}
+                        gratitude={appreciation}
+                      />
+                    ))
+                    .reverse()
+                    .slice(1, 4)}
+              </Grid>
+            </GrDiv>
+          </Container>
+        </GrBox>
+      ) : null}
       <GrBox sx={{ flexGrow: 1 }}>
         <Container maxWidth="lg">
           <Grid

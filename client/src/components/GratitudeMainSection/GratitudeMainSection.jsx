@@ -13,7 +13,9 @@ const GratitudeMainSection = ({ gratitude }) => {
             style={{ fontSize: "20px", fontWeight: "300" }}
             dangerouslySetInnerHTML={{ __html: gratitude.story }}
           />
-          <YoutubeEmbed gratitude={gratitude} />
+          <Container maxWidth="md">
+            <YoutubeEmbed gratitude={gratitude} />
+          </Container>
         </Container>
       </GrBox>
     </section>
