@@ -1,13 +1,11 @@
 import PropTypes from "prop-types";
-import { Fragment, useEffect } from "react";
+import { Fragment } from "react";
 import CookieConsent from "react-cookie-consent";
 import Header from "./../Header/Header";
 import Footer from "./../Footer/Footer";
 
 const Layout = ({ children }) => {
-  useEffect(() => {
-    document.title = "Gratitude";
-  }, []);
+ 
 
   return (
     <Fragment>
