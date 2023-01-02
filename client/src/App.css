@@ -10,5 +10,6 @@ body {
 }
 
 .tox-tinymce {
-  border: 2px solid #d1d1d1 !important;
+  border: 0px solid #d1d1d1 !important;
+  border-radius: 0px !important ;
 }

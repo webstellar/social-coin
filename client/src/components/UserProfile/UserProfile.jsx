@@ -57,8 +57,8 @@ const UserProfile = () => {
           >
             <Grid item xs={12} md={12}>
               <GrBigTypography
-                variant="h2"
-                component="h2"
+                variant="h3"
+                component="h3"
                 sx={{ fontWeight: "bold" }}
               >
                 Hi, {user && firstname}

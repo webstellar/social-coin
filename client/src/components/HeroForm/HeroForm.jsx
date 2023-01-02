@@ -12,7 +12,8 @@ import {
   Select,
 } from "@mui/material/";
 import { GrTypography, GrBox } from "./HeroForm.styles";
-//import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import { Link } from "react-router-dom";
 import FileBase from "react-file-base64";
 
@@ -37,6 +38,15 @@ const HeroForm = () => {
     email: "",
     profilePicture: "",
   });
+  const [currentStep, setCurrentStep] = React.useState(1);
+
+  const handleNext = () => {
+    setCurrentStep(currentStep + 1);
+  };
+
+  const handlePrev = () => {
+    setCurrentStep(currentStep - 1);
+  };
 
   const { name, description, gender, country, email, profilePicture } =
     formData;
@@ -71,17 +81,22 @@ const HeroForm = () => {
   }, [error]);
 
   return (
-    <Container maxWidth="xl">
+    <Container maxWidth="sm">
       <GrBox>
         <Grid
           container
           direction="row"
-          justifyContent="flex-start"
+          justifyContent="space-between"
           alignItems="flex-start"
         >
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={12}>
             <Box sx={{ my: 4 }}>
-              <GrTypography variant="h5" component="p" color="grey.900">
+              <GrTypography
+                variant="h6"
+                component="p"
+                color="grey.900"
+                sx={{ textAlign: "center" }}
+              >
                 CREATE A PROFILE FOR YOUR HUMBLE HERO
               </GrTypography>
             </Box>
@@ -94,122 +109,265 @@ const HeroForm = () => {
                 alignItems="stretch"
                 rowSpacing={4}
               >
-                <Grid item xs={12} md={12}>
-                  <TextField
-                    name="name"
-                    value={name}
-                    type="text"
-                    required
-                    fullWidth
-                    label="Add your hero's name"
-                    onChange={onChange}
-                  />
-                </Grid>
+                {currentStep === 1 && (
+                  <>
+                    <Grid item xs={12} md={12}>
+                      <TextField
+                        name="name"
+                        value={name}
+                        type="text"
+                        required
+                        fullWidth
+                        label="Add your hero's name"
+                        onChange={onChange}
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={12}>
+                      <ButtonGroup
+                        variant="text"
+                        aria-label="text button group"
+                        fullWidth
+                      >
+                        <Button component={Link} to="/express-gratitude">
+                          <GrTypography
+                            variant="p"
+                            component="p"
+                            color="grey.900"
+                          >
+                            Skip to Create Gratitude
+                          </GrTypography>
+                        </Button>
+                        <Button
+                          variant="contained"
+                          color="secondary"
+                          type="button"
+                          onClick={handleNext}
+                          fullWidth
+                          endIcon={
+                            <ArrowForwardIosIcon sx={{ fontSize: 10 }} />
+                          }
+                        >
+                          <GrTypography variant="h6" component="p" color="fff">
+                            NEXT
+                          </GrTypography>
+                        </Button>
+                      </ButtonGroup>
+                    </Grid>
+                  </>
+                )}
 
-                <Grid item xs={12} md={12}>
-                  <TextField
-                    name="description"
-                    value={description}
-                    type="text"
-                    required
-                    multiline
-                    rows={4}
-                    fullWidth
-                    label="Describe your hero"
-                    onChange={onChange}
-                  />
-                </Grid>
-                <Grid item xs={12} md={12}>
-                  <FormControl fullWidth>
-                    <InputLabel>Select your hero&apos;s gender</InputLabel>
-                    <Select
-                      name="gender"
-                      type="text"
-                      required
-                      value={gender}
-                      label="Select your hero's gender"
-                      onChange={onChange}
-                    >
-                      {genders.map((gender, i) => (
-                        <MenuItem key={i} value={gender}>
-                          {gender}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Grid>
-                <Grid item xs={12} md={12}>
-                  <FormControl fullWidth>
-                    <InputLabel>Select your hero&apos;s country</InputLabel>
-                    <Select
-                      name="country"
-                      type="text"
-                      required
-                      value={country}
-                      label="Select your hero's country"
-                      onChange={onChange}
-                    >
-                      {countries.map((country, i) => (
-                        <MenuItem key={i} value={country}>
-                          {country}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Grid>
+                {currentStep === 2 && (
+                  <>
+                    <Grid item xs={12} md={12}>
+                      <TextField
+                        name="description"
+                        value={description}
+                        type="text"
+                        required
+                        multiline
+                        rows={4}
+                        fullWidth
+                        label="Describe your hero"
+                        onChange={onChange}
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={12}>
+                      <ButtonGroup
+                        variant="text"
+                        aria-label="text button group"
+                        fullWidth
+                      >
+                        <Button
+                          onClick={handlePrev}
+                          startIcon={<ArrowBackIosIcon />}
+                          sx={{ color: "grey.900" }}
+                        >
+                          <GrTypography
+                            variant="p"
+                            component="p"
+                            color="grey.900"
+                          >
+                            Prev
+                          </GrTypography>
+                        </Button>
+                        <Button
+                          variant="contained"
+                          color="secondary"
+                          type="button"
+                          onClick={handleNext}
+                          fullWidth
+                          endIcon={
+                            <ArrowForwardIosIcon sx={{ fontSize: 10 }} />
+                          }
+                        >
+                          <GrTypography variant="h6" component="p" color="fff">
+                            NEXT
+                          </GrTypography>
+                        </Button>
+                      </ButtonGroup>
+                    </Grid>
+                  </>
+                )}
 
-                <Grid item xs={12} md={12}>
-                  <InputLabel>
-                    Do you want to inform your hero of your testimony?
-                  </InputLabel>
-                  <TextField
-                    name="email"
-                    value={email}
-                    type="email"
-                    fullWidth
-                    label="Add your hero’s email address"
-                    onChange={onChange}
-                  />
-                </Grid>
+                {currentStep === 3 && (
+                  <>
+                    <Grid item xs={12} md={12}>
+                      <FormControl fullWidth>
+                        <InputLabel>Select your hero&apos;s gender</InputLabel>
+                        <Select
+                          name="gender"
+                          type="text"
+                          required
+                          value={gender}
+                          label="Select your hero's gender"
+                          onChange={onChange}
+                        >
+                          {genders.map((gender, i) => (
+                            <MenuItem key={i} value={gender}>
+                              {gender}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    </Grid>
+                    <Grid item xs={12} md={12}>
+                      <FormControl fullWidth>
+                        <InputLabel>Select your hero&apos;s country</InputLabel>
+                        <Select
+                          name="country"
+                          type="text"
+                          required
+                          value={country}
+                          label="Select your hero's country"
+                          onChange={onChange}
+                        >
+                          {countries.map((country, i) => (
+                            <MenuItem key={i} value={country}>
+                              {country}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    </Grid>
 
-                <Grid item xs={12} md={12}>
-                  <FileBase
-                    type="file"
-                    multiple={false}
-                    onDone={({ base64 }) =>
-                      setFormData({ ...formData, profilePicture: base64 })
-                    }
-                  />
-                </Grid>
+                    <Grid item xs={12} md={12}>
+                      <InputLabel>
+                        Do you want to inform your hero of your testimony?
+                      </InputLabel>
+                      <TextField
+                        name="email"
+                        value={email}
+                        type="email"
+                        fullWidth
+                        label="Add your hero’s email address"
+                        onChange={onChange}
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={12}>
+                      <ButtonGroup
+                        variant="text"
+                        aria-label="text button group"
+                        fullWidth
+                      >
+                        <Button
+                          onClick={handlePrev}
+                          startIcon={<ArrowBackIosIcon />}
+                          sx={{ color: "grey.900" }}
+                        >
+                          <GrTypography
+                            variant="p"
+                            component="p"
+                            color="grey.900"
+                          >
+                            Prev
+                          </GrTypography>
+                        </Button>
+                        <Button
+                          variant="contained"
+                          color="secondary"
+                          type="button"
+                          onClick={handleNext}
+                          fullWidth
+                          endIcon={
+                            <ArrowForwardIosIcon sx={{ fontSize: 10 }} />
+                          }
+                        >
+                          <GrTypography variant="h6" component="p" color="fff">
+                            NEXT
+                          </GrTypography>
+                        </Button>
+                      </ButtonGroup>
+                    </Grid>
+                  </>
+                )}
 
-                <Grid item xs={12} md={12}>
-                  <ButtonGroup
-                    variant="text"
-                    aria-label="text button group"
-                    fullWidth
-                  >
-                    <Button
-                      variant="contained"
-                      size="large"
-                      color="secondary"
-                      type="submit"
-                      fullWidth
-                    >
-                      <GrTypography variant="h5" component="p" color="grey.900">
-                        NEXT
-                      </GrTypography>
-                    </Button>
-                    <Button component={Link} to="/express-gratitude">
-                      <GrTypography variant="p" component="p" color="grey.900">
-                        Skip
-                      </GrTypography>
-                    </Button>
-                  </ButtonGroup>
-                </Grid>
+                {currentStep === 4 && (
+                  <>
+                    <Grid item xs={12} md={12}>
+                      <Box>
+                        <img
+                          src={
+                            formData.profilePicture ||
+                            "https://source.unsplash.com/random"
+                          }
+                          alt=""
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            maxHeight: "10rem",
+                            objectFit: "cover",
+                            borderRadius: "1rem",
+                          }}
+                        />
+                      </Box>
+                    </Grid>
+                    <Grid item xs={12} md={12}>
+                      <FileBase
+                        type="file"
+                        multiple={false}
+                        onDone={({ base64 }) =>
+                          setFormData({ ...formData, profilePicture: base64 })
+                        }
+                      />
+                    </Grid>
+
+                    <Grid item xs={12} md={12}>
+                      <ButtonGroup
+                        variant="text"
+                        aria-label="text button group"
+                        fullWidth
+                      >
+                        <Button
+                          onClick={handlePrev}
+                          startIcon={<ArrowBackIosIcon />}
+                          sx={{ color: "grey.900" }}
+                        >
+                          <GrTypography
+                            variant="p"
+                            component="p"
+                            color="grey.900"
+                          >
+                            Prev
+                          </GrTypography>
+                        </Button>
+                        <Button
+                          variant="contained"
+                          size="large"
+                          color="secondary"
+                          type="submit"
+                          fullWidth
+                        >
+                          <GrTypography variant="h5" component="p" color="#fff">
+                            PUBLISH
+                          </GrTypography>
+                        </Button>
+                      </ButtonGroup>
+                    </Grid>
+                  </>
+                )}
               </Grid>
             </form>
           </Grid>
-          <Grid item xs={12} md={6}></Grid>
         </Grid>
       </GrBox>
     </Container>

@@ -17,7 +17,7 @@ export const GrBigTypography = styled(Typography)(({ theme }) => ({
 
 export const GrTypography = styled(Typography)({
   color: "grey.900",
-  fontWeight: "600",
+  fontWeight: "400",
 });
 
 export const GrLink = styled(Link)({

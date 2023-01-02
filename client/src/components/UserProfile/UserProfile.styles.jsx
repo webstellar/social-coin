@@ -17,17 +17,17 @@ export const GrItem = styled(Paper)(({ theme }) => ({
 }));
 
 export const GrAvatar = styled(Avatar)(({ theme }) => ({
-  width: 160,
-  height: 160,
+  width: 120,
+  height: 120,
   [theme.breakpoints.down("md")]: {
-    width: 100,
-    height: 100,
+    width: 75,
+    height: 75,
   },
 }));
 
 export const GrBigTypography = styled(Typography)(({ theme }) => ({
   [theme.breakpoints.down("md")]: {
-    fontSize: "2.5rem",
+    fontSize: "1.5rem",
   },
 }));
 

@@ -6,22 +6,28 @@ import {
   ButtonGroup,
   Grid,
   Container,
+  IconButton,
   InputLabel,
   Link,
-  FormControl,
-  Select,
-  MenuItem,
+  List,
+  ListItemButton,
+  Autocomplete,
+  ListItem,
+  ListItemText,
+  Backdrop,
+  CircularProgress,
+  Avatar,
 } from "@mui/material/";
 import { GrTypography, GrBox } from "./GratitudeForm.styles";
 import { Editor } from "@tinymce/tinymce-react";
 import ChipInput from "material-ui-chip-input";
-
-//import FileBase from "react-file-base64";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import PhotoCamera from "@mui/icons-material/PhotoCamera";
 
 import { useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-//import GratitudeCard from "../GratitudeCard/GratitudeCard";
 import { createGratitude } from "../../redux/gratitudes/createGratitudeSlice";
 import { getHeroes } from "../../redux/heroes/heroesSlice";
 import { getMyGratitudes } from "../../redux/gratitudes/myGratitudeSlice";
@@ -37,6 +43,17 @@ const GratitudeForm = () => {
   const [image, setImage] = React.useState("");
   const [tags, setTags] = React.useState(["caring", "magnanimous"]);
   const [video, setVideo] = React.useState("");
+  const [inputValue, setInputValue] = React.useState("");
+  const [currentStep, setCurrentStep] = React.useState(1);
+  const [open, setOpen] = React.useState(false);
+
+  const handleNext = () => {
+    setCurrentStep(currentStep + 1);
+  };
+
+  const handlePrev = () => {
+    setCurrentStep(currentStep - 1);
+  };
 
   const { error, loading } = useSelector((state) => ({
     ...state.newgratitude,
@@ -50,13 +67,13 @@ const GratitudeForm = () => {
     window.history.replaceState({}, document.title);
     dispatch(getHeroes());
     error && toast.error(error);
-  }, [error]);
+  }, [dispatch, error]);
 
-  React.useEffect(() => {
+  /*  React.useEffect(() => {
     if (hero === "" && heroes && heroes.length > 0) {
       setHero(heroes[0]._id);
     }
-  }, [heroes]);
+  }, [hero, heroes]); */
 
   //tinymce editor
   const storyChange = (story, editor) => {
@@ -82,9 +99,13 @@ const GratitudeForm = () => {
     setVideo("");
   };
 
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const onSubmit = (e) => {
     e.preventDefault();
-
+    setOpen(!open);
     const formData = {
       hero: data || hero,
       summary: summary,
@@ -120,8 +141,14 @@ const GratitudeForm = () => {
 
   const tinymce = "0z5qmo7cx8rjieka6xxb9nz2y1b8k8rdyluiq9zv9r0t6du2";
 
+  console.log(hero);
+  const heroesOptions = heroes.map((option) => ({
+    id: option._id,
+    label: option.name,
+  }));
+
   return (
-    <Container maxWidth="xl">
+    <Container maxWidth="md">
       <GrBox>
         <Grid
           container
@@ -129,9 +156,14 @@ const GratitudeForm = () => {
           justifyContent="flex-start"
           alignItems="flex-start"
         >
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={12}>
             <Box sx={{ my: 4 }}>
-              <GrTypography variant="h5" component="p" color="grey.900">
+              <GrTypography
+                variant="h5"
+                component="p"
+                color="grey.900"
+                sx={{ textAlign: "center" }}
+              >
                 EXPRESS GRATITUDE FOR YOUR HUMBLE HERO
               </GrTypography>
             </Box>
@@ -141,140 +173,298 @@ const GratitudeForm = () => {
                 item
                 container
                 direction="column"
-                justifyContent="flex-end"
+                justifyContent="center"
                 alignItems="stretch"
                 rowSpacing={4}
               >
-                <Grid item xs={12} md={12}>
-                  <FormControl fullWidth>
-                    {!data ? (
-                      <>
-                        <InputLabel>Select your hero</InputLabel>
-                        <Select
-                          name="hero"
-                          type="text"
-                          required
-                          value={hero}
-                          label="Select your hero"
-                          onChange={(e) => {
-                            setHero(e.target.value);
-                          }}
+                {currentStep === 1 && (
+                  <>
+                    <Grid item xs={12} md={12} sx={{ mt: 3, mb: 3 }}>
+                      <Autocomplete
+                        options={heroes}
+                        autoHighlight
+                        getOptionLabel={(option) => option.name || option}
+                        renderOption={(props, option) => (
+                          <Box
+                            component="li"
+                            sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
+                            {...props}
+                          >
+                            <Avatar
+                              src={option.profilePicture.url}
+                              alt=""
+                              sx={{ width: 40, height: 40, mr: 2 }}
+                            />
+                            {option.name}
+                          </Box>
+                        )}
+                        value={hero}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            variant="standard"
+                            label="Find your humble hero"
+                            inputProps={{
+                              ...params.inputProps,
+                              autoComplete: "hero", // disable autocomplete and autofill
+                            }}
+                          />
+                        )}
+                        onChange={(e, value) => setHero(value._id)}
+                        isOptionEqualToValue={(option, value) =>
+                          option._id === value._id
+                        }
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={12}>
+                      <ButtonGroup
+                        variant="text"
+                        aria-label="text button group"
+                        fullWidth
+                      >
+                        <Button disabled></Button>
+                        <Button
+                          variant="contained"
+                          color="secondary"
+                          type="button"
+                          onClick={handleNext}
+                          fullWidth
+                          endIcon={
+                            <ArrowForwardIosIcon sx={{ fontSize: 10 }} />
+                          }
                         >
-                          {heroes &&
-                            heroes.map((hero) => (
-                              <MenuItem key={hero._id} value={hero._id}>
-                                {hero.name}
-                              </MenuItem>
-                            ))}
-                        </Select>
-                      </>
-                    ) : null}
-                  </FormControl>
-                </Grid>
-                <Grid item xs={12} md={12}>
-                  <TextField
-                    name="summary"
-                    value={summary}
-                    type="text"
-                    required
-                    multiline
-                    rows={4}
-                    fullWidth
-                    label="summarize your story"
-                    onChange={(e) => {
-                      setSummary(e.target.value);
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={12} md={12}>
-                  <InputLabel>Express your appreciation here</InputLabel>
-                  <Editor
-                    apiKey={tinymce}
-                    value={story}
-                    plugins="wordcount fullscreen"
-                    init={{
-                      height: 500,
-                      menubar: false,
-                    }}
-                    onEditorChange={storyChange}
-                  />
-                </Grid>
+                          <GrTypography variant="h6" component="p" color="fff">
+                            NEXT
+                          </GrTypography>
+                        </Button>
+                      </ButtonGroup>
+                    </Grid>
+                  </>
+                )}
 
-                <Grid item xs={12} md={12}>
-                  <ChipInput
-                    value={tags}
-                    name="tags"
-                    variant="outlined"
-                    placeholder="Write out qualities of your hero"
-                    fullWidth
-                    onAdd={(tag) => handleAddTag(tag)}
-                    onDelete={(tag) => handleDeleteTag(tag)}
-                  />
-                </Grid>
-                <Grid item xs={12} md={12}>
-                  <InputLabel>
-                    <Link href="https://youtu.be/UjXTdZ45evs">Tutorial</Link>:
-                    How to get your Youtube Video Id
-                  </InputLabel>
-                  <TextField
-                    name="video"
-                    value={video}
-                    type="text"
-                    allowDuplicates={false}
-                    fullWidth
-                    label="Share youtube video id e.g. 75RjgtZ2tj0"
-                    onChange={(e) => {
-                      setVideo(e.target.value);
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={12} md={12}>
-                  <InputLabel>Upload a banner for your hero</InputLabel>
-                  <Button
-                    variant="contained"
-                    component="label"
-                    color="secondary"
-                  >
-                    Upload a banner for your hero
-                    <input
-                      hidden
-                      accept="image/*"
-                      multiple
-                      type="file"
-                      name="image"
-                      onChange={onChange}
-                    />
-                  </Button>
-                </Grid>
+                {currentStep === 2 && (
+                  <>
+                    <Grid item xs={12} md={12}>
+                      <TextField
+                        name="summary"
+                        value={summary}
+                        type="text"
+                        required
+                        multiline
+                        rows={1}
+                        fullWidth
+                        label="summarize your story"
+                        variant="standard"
+                        onChange={(e) => {
+                          setSummary(e.target.value);
+                        }}
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={12}>
+                      <InputLabel>Express your appreciation here</InputLabel>
+                      <Editor
+                        apiKey={tinymce}
+                        initialValue="<p><i>My story about my humble hero...</i></p>"
+                        value={story}
+                        plugins="wordcount media fullscreen"
+                        init={{
+                          height: 700,
+                          menubar: false,
+                        }}
+                        onEditorChange={storyChange}
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={12}>
+                      <ChipInput
+                        value={tags}
+                        name="tags"
+                        variant="standard"
+                        placeholder="Write out qualities of your hero"
+                        fullWidth
+                        onAdd={(tag) => handleAddTag(tag)}
+                        onDelete={(tag) => handleDeleteTag(tag)}
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={12}>
+                      <ButtonGroup
+                        variant="text"
+                        aria-label="text button group"
+                        fullWidth
+                      >
+                        <Button
+                          onClick={handlePrev}
+                          startIcon={<ArrowBackIosIcon />}
+                          sx={{ color: "grey.900" }}
+                        >
+                          <GrTypography
+                            variant="p"
+                            component="p"
+                            color="grey.900"
+                          >
+                            Prev
+                          </GrTypography>
+                        </Button>
+                        <Button
+                          variant="contained"
+                          color="secondary"
+                          type="button"
+                          onClick={handleNext}
+                          fullWidth
+                          endIcon={
+                            <ArrowForwardIosIcon sx={{ fontSize: 10 }} />
+                          }
+                        >
+                          <GrTypography variant="h6" component="p" color="fff">
+                            NEXT
+                          </GrTypography>
+                        </Button>
+                      </ButtonGroup>
+                    </Grid>
+                  </>
+                )}
 
-                <Grid item xs={12} md={12}>
-                  <ButtonGroup
-                    variant="text"
-                    aria-label="text button group"
-                    fullWidth
-                  >
-                    <Button
-                      variant="contained"
-                      size="large"
-                      color="secondary"
-                      type="submit"
-                      disabled={loading ? true : false}
-                    >
-                      <GrTypography variant="h6" component="p" color="grey.900">
-                        EXPRESS
-                      </GrTypography>
-                    </Button>
-                    <Button onClick={handleClear} fullWidth>
-                      <GrTypography variant="p" component="p" color="grey.900">
-                        Clear
-                      </GrTypography>
-                    </Button>
-                  </ButtonGroup>
-                </Grid>
+                {currentStep === 3 && (
+                  <>
+                    <Grid item xs={12} md={12}>
+                      <InputLabel>
+                        <Link href="https://youtu.be/UjXTdZ45evs">
+                          Tutorial
+                        </Link>
+                        : How to get your Youtube Video Id
+                      </InputLabel>
+                      <TextField
+                        name="video"
+                        value={video}
+                        type="text"
+                        allowDuplicates={false}
+                        fullWidth
+                        variant="standard"
+                        label="Share youtube video id e.g. 75RjgtZ2tj0"
+                        onChange={(e) => {
+                          setVideo(e.target.value);
+                        }}
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={12}>
+                      <ButtonGroup
+                        variant="text"
+                        aria-label="text button group"
+                        fullWidth
+                      >
+                        <Button
+                          onClick={handlePrev}
+                          startIcon={<ArrowBackIosIcon />}
+                          sx={{ color: "grey.900" }}
+                        >
+                          <GrTypography
+                            variant="p"
+                            component="p"
+                            color="grey.900"
+                          >
+                            Prev
+                          </GrTypography>
+                        </Button>
+                        <Button
+                          variant="contained"
+                          color="secondary"
+                          type="button"
+                          onClick={handleNext}
+                          fullWidth
+                          endIcon={
+                            <ArrowForwardIosIcon sx={{ fontSize: 10 }} />
+                          }
+                        >
+                          <GrTypography variant="h6" component="p" color="fff">
+                            NEXT
+                          </GrTypography>
+                        </Button>
+                      </ButtonGroup>
+                    </Grid>
+                  </>
+                )}
+                {currentStep === 4 && (
+                  <>
+                    <Grid item xs={12} md={12}>
+                      <Box>
+                        <img
+                          src={image || "https://source.unsplash.com/random"}
+                          alt=""
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            maxHeight: "10rem",
+                            objectFit: "cover",
+                            borderRadius: "1rem",
+                          }}
+                        />
+                      </Box>
+                    </Grid>
+                    <Grid item xs={12} md={12}>
+                      <InputLabel>Upload a banner for your hero</InputLabel>
+                      <IconButton
+                        variant="contained"
+                        component="label"
+                        color="secondary"
+                      >
+                        <input
+                          hidden
+                          accept="image/*"
+                          multiple
+                          type="file"
+                          name="image"
+                          onChange={onChange}
+                        />
+                        <PhotoCamera />
+                      </IconButton>
+                    </Grid>
+                    <Grid item xs={12} md={12}>
+                      <ButtonGroup
+                        variant="text"
+                        aria-label="text button group"
+                        fullWidth
+                      >
+                        <Button
+                          onClick={handlePrev}
+                          startIcon={<ArrowBackIosIcon />}
+                          sx={{ color: "grey.900" }}
+                          fullWidth
+                        >
+                          <GrTypography
+                            variant="p"
+                            component="p"
+                            color="grey.900"
+                          >
+                            Prev
+                          </GrTypography>
+                        </Button>
+                        <Button
+                          variant="contained"
+                          size="large"
+                          color="secondary"
+                          type="submit"
+                          fullWidth
+                        >
+                          <GrTypography variant="h5" component="p" color="#fff">
+                            PUBLISH
+                          </GrTypography>
+                        </Button>
+                      </ButtonGroup>
+                      <Backdrop
+                        sx={{
+                          color: "#fff",
+                          zIndex: (theme) => theme.zIndex.drawer + 1,
+                        }}
+                        open={open}
+                        onClick={handleClose}
+                      >
+                        <CircularProgress color="inherit" />
+                      </Backdrop>
+                    </Grid>
+                  </>
+                )}
               </Grid>
             </form>
           </Grid>
-          <Grid item xs={12} md={6}></Grid>
         </Grid>
       </GrBox>
     </Container>

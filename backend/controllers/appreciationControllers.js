@@ -266,6 +266,11 @@ exports.deleteMyAppreciation = catchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHandler("Appreciation not found", 404));
   }
 
+
+
+
+  
+
   //Deleting image associated with the appreciation
   if (appreciation.image && appreciation.image.public_id)
     await cloudinary.v2.uploader.destroy(appreciation.image.public_id);

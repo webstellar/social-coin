@@ -1,8 +1,6 @@
 import * as React from "react";
 import PropTypes from "prop-types";
 import { useTheme } from "@mui/material/styles";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import {
   Grid,
   Stack,
@@ -19,6 +17,7 @@ import {
   ListItemText,
   Menu,
   MenuItem,
+  Avatar,
 } from "@mui/material";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
@@ -28,8 +27,13 @@ import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
 import GroupsIcon from "@mui/icons-material/Groups";
-import { GrItem } from "./DashboardLayout.styles";
+import {
+  TbLayoutSidebarLeftCollapse,
+  TbLayoutSidebarLeftExpand,
+} from "react-icons/tb";
+import { GrItem, GrImg, GrListItemButton } from "./DashboardLayout.styles";
 import { DrawerHeader, AppBar, Drawer } from "../../config/dashboardConfig";
+import BrandLogo from "../../images/black-gratitude.svg";
 
 import { setLogout } from "../../redux/auth/authSlice";
 import { toast } from "react-toastify";
@@ -39,10 +43,10 @@ import { useNavigate, Link } from "react-router-dom";
 const DashboardLayout = ({ children }) => {
   const navigate = useNavigate();
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [openHero, setOpenHero] = React.useState(true);
-  const [openGratitude, setOpenGratitude] = React.useState(true);
+  const [openHero, setOpenHero] = React.useState(false);
+  const [openGratitude, setOpenGratitude] = React.useState(false);
 
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
@@ -113,7 +117,7 @@ const DashboardLayout = ({ children }) => {
                     ...(open && { display: "none" }),
                   }}
                 >
-                  <ChevronRightIcon />
+                  <TbLayoutSidebarLeftExpand />
                 </IconButton>
               </Grid>
               <Grid item xs={6} md={6}>
@@ -123,12 +127,22 @@ const DashboardLayout = ({ children }) => {
                   alignItems="center"
                   spacing={2}
                 >
-                  <GrItem elevation={0}>{user ? firstname : "John Doe"}</GrItem>
+                  <GrItem elevation={0}>
+                    {user ? `Hello, ${firstname}` : "John Doe"}
+                  </GrItem>
                   <GrItem elevation={0}>
                     <IconButton
                       size="large"
                       color="inherit"
                       onClick={handleMenu}
+                      component={Avatar}
+                      src={
+                        user.user
+                          ? user?.user?.profilePicture?.url
+                          : "https://source.unsplash.com/random"
+                      }
+                      alt={user?.user?.name}
+                      sx={{ width: 30, height: 30 }}
                     >
                       <AccountCircleIcon />
                     </IconButton>
@@ -164,15 +178,28 @@ const DashboardLayout = ({ children }) => {
           sx={{ color: "#fff", backgroundColor: "grey.900" }}
         >
           <DrawerHeader>
-            <IconButton onClick={handleDrawerClose}>
-              {theme.direction === "rtl" ? (
-                <ChevronRightIcon />
-              ) : (
-                <ChevronLeftIcon />
-              )}
-            </IconButton>
+            <Stack
+              direction="row"
+              justifyContent="space-between"
+              alignItems="center"
+              spacing={6}
+            >
+              <GrItem elevation={0}>
+                <GrImg src={BrandLogo} alt="gratitude logo" />
+              </GrItem>
+              <GrItem elevation={0}>
+                <IconButton onClick={handleDrawerClose}>
+                  {theme.direction === "rtl" ? (
+                    <TbLayoutSidebarLeftExpand />
+                  ) : (
+                    <TbLayoutSidebarLeftCollapse />
+                  )}
+                </IconButton>
+              </GrItem>
+            </Stack>
           </DrawerHeader>
           <Divider />
+
           <List>
             <ListItem disablePadding sx={{ display: "block" }}>
               <ListItemButton
@@ -198,7 +225,7 @@ const DashboardLayout = ({ children }) => {
             </ListItem>
             <Collapse in={openHero} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
-                <ListItemButton
+                <GrListItemButton
                   component={Link}
                   to="/list/myheroes"
                   sx={{ pl: 4 }}
@@ -207,8 +234,8 @@ const DashboardLayout = ({ children }) => {
                     <GroupsIcon />
                   </ListItemIcon>
                   <ListItemText primary="My Heroes" />
-                </ListItemButton>
-                <ListItemButton
+                </GrListItemButton>
+                <GrListItemButton
                   component={Link}
                   to="/create-hero"
                   sx={{ pl: 4 }}
@@ -217,7 +244,7 @@ const DashboardLayout = ({ children }) => {
                     <PersonAddIcon />
                   </ListItemIcon>
                   <ListItemText primary="New Hero" />
-                </ListItemButton>
+                </GrListItemButton>
               </List>
             </Collapse>
             <ListItem disablePadding sx={{ display: "block" }}>
@@ -250,7 +277,7 @@ const DashboardLayout = ({ children }) => {
             </ListItem>
             <Collapse in={openGratitude} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
-                <ListItemButton
+                <GrListItemButton
                   component={Link}
                   to="/list/mygratitudes"
                   sx={{ pl: 4 }}
@@ -259,8 +286,8 @@ const DashboardLayout = ({ children }) => {
                     <VolunteerActivismIcon />
                   </ListItemIcon>
                   <ListItemText primary="My Gratitudes" />
-                </ListItemButton>
-                <ListItemButton
+                </GrListItemButton>
+                <GrListItemButton
                   component={Link}
                   to="/express-gratitude"
                   sx={{ pl: 4 }}
@@ -269,11 +296,11 @@ const DashboardLayout = ({ children }) => {
                     <AddCommentIcon />
                   </ListItemIcon>
                   <ListItemText primary="New Gratitude" />
-                </ListItemButton>
+                </GrListItemButton>
               </List>
             </Collapse>
             <ListItem disablePadding sx={{ display: "block" }}>
-              <ListItemButton
+              <GrListItemButton
                 component={Link}
                 to="/my-profile"
                 sx={{
@@ -295,10 +322,10 @@ const DashboardLayout = ({ children }) => {
                   primary="View Profile"
                   sx={{ opacity: open ? 1 : 0 }}
                 />
-              </ListItemButton>
+              </GrListItemButton>
             </ListItem>
             <ListItem disablePadding sx={{ display: "block" }}>
-              <ListItemButton
+              <GrListItemButton
                 component={Link}
                 to="/edit-profile"
                 sx={{
@@ -320,7 +347,7 @@ const DashboardLayout = ({ children }) => {
                   primary="Edit Profile"
                   sx={{ opacity: open ? 1 : 0 }}
                 />
-              </ListItemButton>
+              </GrListItemButton>
             </ListItem>
           </List>
         </Drawer>
