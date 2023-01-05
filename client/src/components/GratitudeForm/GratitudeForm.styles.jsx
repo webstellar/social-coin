@@ -15,10 +15,13 @@ export const GrBigTypography = styled(Typography)(({ theme }) => ({
   },
 }));
 
-export const GrTypography = styled(Typography)({
+export const GrTypography = styled(Typography)(({ theme }) => ({
   color: "grey.900",
   fontWeight: "600",
-});
+  [theme.breakpoints.down("md")]: {
+    fontSize: "1rem",
+  },
+}));
 
 export const GrLink = styled(Link)({
   textDecoration: "none",

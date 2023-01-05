@@ -28,7 +28,7 @@ const GratitudeSubSection = ({ gratitude }) => {
             justifyContent="space-between"
             alignItems="center"
           >
-            <Grid item xs={6} sm={6} md={6}>
+            <Grid item xs={5} sm={5} md={6}>
               <Typography variant="caption" component="p">
                 by <strong>{gratitude?.user?.name}</strong>
               </Typography>
@@ -40,8 +40,8 @@ const GratitudeSubSection = ({ gratitude }) => {
               direction="row"
               justifyContent="flex-end"
               alignItems="center"
-              xs={6}
-              sm={6}
+              xs={7}
+              sm={7}
               md={4}
               spacing={2}
             >

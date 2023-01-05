@@ -54,7 +54,8 @@ const GratitudeHero = ({ gratitude }) => {
                   component="img"
                   sx={{
                     width: "100%",
-                    height: "100%",
+                    height: 480,
+                    objectFit: "cover",
                     filter: "grayscale(100%)",
                     "&:hover": {
                       filter: "grayscale(0%)",

@@ -304,6 +304,9 @@ const HeroForm = () => {
                 {currentStep === 4 && (
                   <>
                     <Grid item xs={12} md={12}>
+                      <InputLabel sx={{ mb: 2 }}>
+                        Upload a picture of your hero (optional)
+                      </InputLabel>
                       <Box>
                         <img
                           src={

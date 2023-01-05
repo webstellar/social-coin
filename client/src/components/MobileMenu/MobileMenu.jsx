@@ -13,14 +13,19 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import { Link } from "react-router-dom";
-import { Search, SearchIconWrapper, StyledInputBase } from "./MobileMenu.styles"
+import {
+  Search,
+  SearchIconWrapper,
+  StyledInputBase,
+} from "./MobileMenu.styles";
+import { useNavigate } from "react-router-dom";
 
 const drawerWidth = 240;
 const navItems = [
   {
     id: 1,
     name: "Give",
-    link: "/give-gratitude",
+    link: "/express-gratitude",
   },
   {
     id: 2,
@@ -41,6 +46,7 @@ const navItems = [
 
 const MobileMenu = (props) => {
   const { window } = props;
+  const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleDrawerToggle = () => {
@@ -56,12 +62,12 @@ const MobileMenu = (props) => {
       <List>
         <ListItem>
           <Search>
-            <SearchIconWrapper>
+            <SearchIconWrapper onClick={() => navigate("/search")}>
               <SearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
               placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
+              inputProps={{ "aria-label": "search" }}
             />
           </Search>
         </ListItem>
