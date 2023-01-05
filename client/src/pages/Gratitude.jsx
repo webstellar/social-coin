@@ -33,7 +33,7 @@ const Gratitude = () => {
         <GratitudeHero gratitude={appreciation} />
         <GratitudeSubSection gratitude={appreciation} />
         <GratitudeMainSection gratitude={appreciation} />
-        <GratitudeCommentSection />
+        {/* <GratitudeCommentSection /> */}
       </Layout>
     </>
   );

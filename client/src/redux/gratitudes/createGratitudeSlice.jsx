@@ -10,10 +10,11 @@ const initialState = {
 
 export const createGratitude = createAsyncThunk(
   "gratitude/createGratitude",
-  async ({ formData, toast }, { rejectWithValue }) => {
+  async ({ formData, toast, navigate }, { rejectWithValue }) => {
     try {
       const response = await axios.post("/api/v1/appreciation/new", formData);
       toast.success("Your gratitude was created successfully");
+      navigate(`/appreciation/${response.data?.appreciation?._id}`);
       return response.data;
     } catch (err) {
       toast.error(err.response.data.errMessage);
@@ -37,7 +38,7 @@ export const createGratitudeSlice = createSlice({
     builder.addCase(createGratitude.fulfilled, (state, action) => {
       state.loading = false;
       localStorage.setItem("gratitudes", JSON.stringify({ ...action.payload }));
-      state.appreciation = action.payload;
+      state.appreciation = action.payload.appreciation;
       state.success = true;
       console.log(state.appreciation);
     });

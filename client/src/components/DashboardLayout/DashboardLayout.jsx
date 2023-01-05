@@ -135,16 +135,16 @@ const DashboardLayout = ({ children }) => {
                       size="large"
                       color="inherit"
                       onClick={handleMenu}
-                      component={Avatar}
-                      src={
-                        user.user
-                          ? user?.user?.profilePicture?.url
-                          : "https://source.unsplash.com/random"
-                      }
-                      alt={user?.user?.name}
-                      sx={{ width: 30, height: 30 }}
                     >
-                      <AccountCircleIcon />
+                      <Avatar
+                        src={
+                          user.user
+                            ? user?.user?.profilePicture?.url
+                            : "https://source.unsplash.com/random"
+                        }
+                        alt={user?.user?.name}
+                        sx={{ width: 30, height: 30, borderRadius: "100px" }}
+                      />
                     </IconButton>
                   </GrItem>
 

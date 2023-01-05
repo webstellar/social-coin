@@ -20,7 +20,7 @@ const navItems = [
   {
     id: 1,
     name: "Give",
-    link: "/give-gratitude",
+    link: "/express-gratitude",
   },
   {
     id: 2,

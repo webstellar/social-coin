@@ -9,11 +9,7 @@ import {
   IconButton,
   InputLabel,
   Link,
-  List,
-  ListItemButton,
   Autocomplete,
-  ListItem,
-  ListItemText,
   Backdrop,
   CircularProgress,
   Avatar,
@@ -25,15 +21,16 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
 
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { createGratitude } from "../../redux/gratitudes/createGratitudeSlice";
 import { getHeroes } from "../../redux/heroes/heroesSlice";
-import { getMyGratitudes } from "../../redux/gratitudes/myGratitudeSlice";
+import GratitudeFormCard from "../GratitudeFormCard/GratitudeFormCard";
 
 const GratitudeForm = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const location = useLocation();
   const data = location.state?.data._id;
 
@@ -43,7 +40,6 @@ const GratitudeForm = () => {
   const [image, setImage] = React.useState("");
   const [tags, setTags] = React.useState(["caring", "magnanimous"]);
   const [video, setVideo] = React.useState("");
-  const [inputValue, setInputValue] = React.useState("");
   const [currentStep, setCurrentStep] = React.useState(1);
   const [open, setOpen] = React.useState(false);
 
@@ -55,7 +51,7 @@ const GratitudeForm = () => {
     setCurrentStep(currentStep - 1);
   };
 
-  const { error, loading } = useSelector((state) => ({
+  const { error, success, appreciation } = useSelector((state) => ({
     ...state.newgratitude,
   }));
 
@@ -67,17 +63,24 @@ const GratitudeForm = () => {
     window.history.replaceState({}, document.title);
     dispatch(getHeroes());
     error && toast.error(error);
-  }, [dispatch, error]);
 
-  /*  React.useEffect(() => {
+    if (success) {
+      navigate(`/appreciation/${appreciation._id}`);
+      toast.success("Your gratitude was created successfully");
+    }
+  }, [dispatch, navigate, error, success, appreciation]);
+
+  /*  
+  React.useEffect(() => {
     if (hero === "" && heroes && heroes.length > 0) {
       setHero(heroes[0]._id);
     }
-  }, [hero, heroes]); */
+  }, [hero, heroes]); 
+  */
 
   //tinymce editor
   const storyChange = (story, editor) => {
-    if (editor.getContent({ format: "text" }).length < 2000) {
+    if (editor.getContent({ format: "text" }).length < 100000) {
       setStory(story);
     }
   };
@@ -115,11 +118,11 @@ const GratitudeForm = () => {
       tags: tags,
     };
     console.log(formData);
-    dispatch(createGratitude({ formData, toast }));
+    dispatch(createGratitude({ formData, toast, navigate }));
     setTimeout(() => {
       handleClear();
+      setOpen(open);
     }, 10000);
-    dispatch(getMyGratitudes());
   };
 
   //images
@@ -141,11 +144,10 @@ const GratitudeForm = () => {
 
   const tinymce = "0z5qmo7cx8rjieka6xxb9nz2y1b8k8rdyluiq9zv9r0t6du2";
 
-  console.log(hero);
-  const heroesOptions = heroes.map((option) => ({
-    id: option._id,
-    label: option.name,
-  }));
+  const heroDisplay = heroes.filter((halo) =>
+    hero === halo._id ? halo : null
+  );
+  console.log(heroDisplay);
 
   return (
     <Container maxWidth="md">
@@ -179,6 +181,20 @@ const GratitudeForm = () => {
               >
                 {currentStep === 1 && (
                   <>
+                    <Grid
+                      item
+                      container
+                      direction="row"
+                      justifyContent="center"
+                      alignItems="center"
+                      xs={12}
+                      md={12}
+                      sx={{ mt: 3, mb: 3 }}
+                    >
+                      {heroDisplay.map((hero) => (
+                        <GratitudeFormCard key={hero?._id} hero={hero} />
+                      ))}
+                    </Grid>
                     <Grid item xs={12} md={12} sx={{ mt: 3, mb: 3 }}>
                       <Autocomplete
                         options={heroes}
@@ -187,11 +203,11 @@ const GratitudeForm = () => {
                         renderOption={(props, option) => (
                           <Box
                             component="li"
-                            sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
+                            sx={{ "& > Avatar": { mr: 2, flexShrink: 0 } }}
                             {...props}
                           >
                             <Avatar
-                              src={option.profilePicture.url}
+                              src={option?.profilePicture?.url}
                               alt=""
                               sx={{ width: 40, height: 40, mr: 2 }}
                             />
@@ -210,9 +226,9 @@ const GratitudeForm = () => {
                             }}
                           />
                         )}
-                        onChange={(e, value) => setHero(value._id)}
+                        onChange={(e, value) => setHero(value?._id)}
                         isOptionEqualToValue={(option, value) =>
-                          option._id === value._id
+                          option === value
                         }
                       />
                     </Grid>
@@ -253,7 +269,7 @@ const GratitudeForm = () => {
                         multiline
                         rows={1}
                         fullWidth
-                        label="summarize your story"
+                        label="Give your story a title"
                         variant="standard"
                         onChange={(e) => {
                           setSummary(e.target.value);
@@ -264,9 +280,8 @@ const GratitudeForm = () => {
                       <InputLabel>Express your appreciation here</InputLabel>
                       <Editor
                         apiKey={tinymce}
-                        initialValue="<p><i>My story about my humble hero...</i></p>"
                         value={story}
-                        plugins="wordcount media fullscreen"
+                        plugins="wordcount fullscreen"
                         init={{
                           height: 700,
                           menubar: false,

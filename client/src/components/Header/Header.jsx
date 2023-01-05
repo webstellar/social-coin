@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { GrAppBar, GrToolBar, GrImg, GrLink } from "./Header.styles";
+import { GrAppBar, GrToolBar, GrImg, GrLink, GrBadge } from "./Header.styles";
 import {
   Box,
+  Avatar,
   Typography,
   IconButton,
   useMediaQuery,
@@ -122,7 +123,19 @@ const Header = () => {
 
                     {/* Login Modal */}
                   </IconButton>
-                ) : null}
+                ) : (
+                  <GrBadge
+                    anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                    overlap="circular"
+                    variant="dot"
+                    sx={{ mr: 2 }}
+                  >
+                    <Avatar
+                      alt={user?.user?.name}
+                      src={user?.user?.profilePicture?.url}
+                    />
+                  </GrBadge>
+                )}
 
                 <Modal
                   id="login"

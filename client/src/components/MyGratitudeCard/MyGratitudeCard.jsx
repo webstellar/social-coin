@@ -43,7 +43,7 @@ const MyGratitudeCard = ({ gratitude, handleDelete }) => {
                 written by {gratitude?.user?.name || "gratitude"}
               </GrGiverTypography>
 
-              <GrLink to={`/hero/${gratitude?._id}`}>
+              <GrLink to={`/appreciation/${gratitude?._id}`}>
                 <GrHeroTypography variant="h6" component="h6" gutterBottom>
                   for {gratitude?.hero?.name}
                 </GrHeroTypography>

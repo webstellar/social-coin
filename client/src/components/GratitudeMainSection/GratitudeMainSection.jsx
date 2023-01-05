@@ -17,6 +17,7 @@ const GratitudeMainSection = ({ gratitude }) => {
             <YoutubeEmbed gratitude={gratitude} />
           </Container>
         </Container>
+        s
       </GrBox>
     </section>
   );

@@ -21,6 +21,7 @@ export const googleSignIn = createAsyncThunk(
       const { data } = await axios.post("/api/v1/authGoogle", userData, config);
       toast.success("Logged in successfully");
       navigate("/my-profile");
+      localStorage.setItem("token", JSON.stringify(data.token));
       return data;
     } catch (err) {
       toast.error(err.response.data.errMessage);

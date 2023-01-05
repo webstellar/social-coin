@@ -14,6 +14,7 @@ import { allUserSlice } from "./auth/allUserSlice";
 import { myHeroesSlice } from "./heroes/myHeroSlice";
 import { deleteMyHeroSlice } from "./heroes/deleteMyHeroSlice";
 import { deleteMyGratitudeSlice } from "./gratitudes/deleteMyGratitudeSlice";
+import { commentSlice } from "./comment/commentSlice";
 
 export default configureStore({
   reducer: {
@@ -26,6 +27,7 @@ export default configureStore({
     auth: authSlice.reducer,
     user: myAuthSlice.reducer,
     users: allUserSlice.reducer,
+    comment: commentSlice.reducer,
     authGoogle: googleSlice.reducer,
     createHero: createHeroSlice.reducer,
     deleteHeroes: deleteMyHeroSlice.reducer,
