@@ -303,10 +303,19 @@ const HeroForm = () => {
 
                 {currentStep === 4 && (
                   <>
-                    <Grid item xs={12} md={12}>
+                    <Grid
+                      item
+                      xs={12}
+                      md={12}
+                      container
+                      direction="column"
+                      justifyContent="center"
+                      alignItems="center"
+                    >
                       <InputLabel sx={{ mb: 2 }}>
                         Upload a picture of your hero (optional)
                       </InputLabel>
+
                       <Box>
                         <img
                           src={
@@ -315,16 +324,23 @@ const HeroForm = () => {
                           }
                           alt=""
                           style={{
-                            width: "100%",
-                            height: "100%",
-                            maxHeight: "10rem",
+                            width: 250,
+                            height: 250,
                             objectFit: "cover",
-                            borderRadius: "1rem",
+                            borderRadius: "0.5rem",
                           }}
                         />
                       </Box>
                     </Grid>
-                    <Grid item xs={12} md={12}>
+                    <Grid
+                      item
+                      xs={12}
+                      md={12}
+                      container
+                      direction="column"
+                      justifyContent="center"
+                      alignItems="center"
+                    >
                       <FileBase
                         type="file"
                         multiple={false}
