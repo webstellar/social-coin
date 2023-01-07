@@ -97,7 +97,7 @@ const HeroForm = () => {
                 color="grey.900"
                 sx={{ textAlign: "center" }}
               >
-                CREATE A PROFILE FOR YOUR HUMBLE HERO
+                WHAT IS THE NAME OF YOUR HERO
               </GrTypography>
             </Box>
             <form noValidate autoComplete="off" onSubmit={onSubmit}>

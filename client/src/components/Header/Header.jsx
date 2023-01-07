@@ -2,6 +2,7 @@ import { useState } from "react";
 import { GrAppBar, GrToolBar, GrImg, GrLink, GrBadge } from "./Header.styles";
 import {
   Box,
+  Button,
   Typography,
   IconButton,
   useMediaQuery,
@@ -14,6 +15,10 @@ import {
 } from "@mui/material";
 import BrandLogo from "../../images/black-gratitude.svg";
 import MenuIcon from "@mui/icons-material/Menu";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import GroupsIcon from "@mui/icons-material/Groups";
+import LogoutIcon from "@mui/icons-material/Logout";
+import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
 import { useNavigate } from "react-router-dom";
 import Modal from "react-modal";
 
@@ -120,15 +125,15 @@ const Header = () => {
                     <Typography variant="h6" sx={{ fontWeight: "bold" }}>
                       LOGIN
                     </Typography>
-
-                    {/* Login Modal */}
                   </IconButton>
                 ) : (
                   <GrBadge
                     anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
                     overlap="circular"
                     variant="dot"
-                    sx={{ mr: 2 }}
+                    sx={{ mr: 2, cursor: "pointer" }}
+                    components={Button}
+                    onClick={() => navigate("/my-profile")}
                   >
                     <Avatar
                       alt={user?.user?.name}
@@ -221,7 +226,7 @@ const Header = () => {
                       id="menu-appbar"
                       anchorEl={anchorEl}
                       anchorOrigin={{
-                        vertical: "top",
+                        vertical: "bottom",
                         horizontal: "right",
                       }}
                       keepMounted
@@ -232,13 +237,25 @@ const Header = () => {
                       open={Boolean(anchorEl)}
                       onClose={handleMenuClose}
                     >
-                      <MenuItem onClick={() => navigate("/my-profile")}>
-                        Profile
+                      <MenuItem onClick={() => navigate("/list/myheroes")}>
+                        <GroupsIcon color="secondary" sx={{ mr: 1 }} /> My
+                        Heroes
                       </MenuItem>
-                      <MenuItem onClick={() => navigate("/edit-profile")}>
+                      <MenuItem onClick={() => navigate("/list/mygratitudes")}>
+                        <VolunteerActivismIcon
+                          color="secondary"
+                          sx={{ mr: 1 }}
+                        />
+                        My Gratitudes
+                      </MenuItem>
+                      <MenuItem onClick={() => navigate("/my-profile")}>
+                        <AccountCircleIcon color="secondary" sx={{ mr: 1 }} />
                         My account
                       </MenuItem>
-                      <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                      <MenuItem onClick={handleLogout}>
+                        <LogoutIcon color="secondary" sx={{ mr: 1 }} />
+                        Logout
+                      </MenuItem>
                     </Menu>
                   </>
                 )}

@@ -27,7 +27,7 @@ export const login = createAsyncThunk(
       let authVia = "login";
       const { data } = await axios.post(`/api/v1/${authVia}`, formData, config);
       toast.success("Logged in successfully");
-      navigate("/my-profile");
+      navigate("/");
       localStorage.setItem("token", JSON.stringify(data.token));
       return data;
     } catch (err) {

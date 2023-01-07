@@ -20,7 +20,8 @@ export const googleSignIn = createAsyncThunk(
       };
       const { data } = await axios.post("/api/v1/authGoogle", userData, config);
       toast.success("Logged in successfully");
-      navigate("/my-profile");
+      navigate("/");
+      document.location.reload();
       return data;
     } catch (err) {
       toast.error(err.response.data.errMessage);
@@ -41,7 +42,11 @@ export const googleSignUp = createAsyncThunk(
 
       const { data } = await axios.post("/api/v1/authGoogle", formData, config);
       toast.success("Registered successfully");
-      navigate("/");
+      document.location.reload();
+      setTimeout(() => {
+        navigate("/create-hero");
+      }, 3000);
+
       return data;
     } catch (error) {
       return rejectWithValue(error.response.data.message);
@@ -61,6 +66,7 @@ export const googleSlice = createSlice({
       state.loading = false;
       localStorage.setItem("profile", JSON.stringify({ ...action.payload }));
       state.user = action.payload;
+      state.isAuthenticated = true;
       state.success = true;
     });
     builder.addCase(googleSignIn.rejected, (state, action) => {
@@ -76,6 +82,8 @@ export const googleSlice = createSlice({
       state.loading = false;
       localStorage.setItem("profile", JSON.stringify({ ...action.payload }));
       state.user = action.payload;
+      state.isAuthenticated = true;
+      state.success = true;
     });
     builder.addCase(googleSignUp.rejected, (state, action) => {
       state.loading = false;

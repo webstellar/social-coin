@@ -14,7 +14,7 @@ import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { login, register, reset } from "../../redux/auth/authSlice";
-import { googleSignIn } from "../../redux/auth/authGoogleSlice";
+import { googleSignIn, googleSignUp } from "../../redux/auth/authGoogleSlice";
 import jwt_decode from "jwt-decode";
 import { LinkedInApi } from "../../config/linkedInconfig";
 import { useScript } from "../../hooks/useScript";
@@ -66,8 +66,7 @@ const Register = () => {
       profilePicture: payload.picture,
       googleId: payload.sub,
     };
-    console.log(userData);
-    dispatch(googleSignIn({ userData, navigate, toast }));
+    dispatch(googleSignUp({ userData, navigate, toast }));
   };
 
   useScript("https://accounts.google.com/gsi/client", () => {
@@ -115,7 +114,7 @@ const Register = () => {
       const code = url.split("code=")[1].split("&")[0];
       if (authCode !== code && linkedinUser === null) signupLinkedin();
     }
-  }, []);
+  });
 
   return (
     <>

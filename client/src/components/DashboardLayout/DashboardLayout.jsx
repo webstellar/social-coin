@@ -27,6 +27,8 @@ import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
 import GroupsIcon from "@mui/icons-material/Groups";
+import LogoutIcon from "@mui/icons-material/Logout";
+import HomeIcon from "@mui/icons-material/Home";
 import {
   TbLayoutSidebarLeftCollapse,
   TbLayoutSidebarLeftExpand,
@@ -152,7 +154,7 @@ const DashboardLayout = ({ children }) => {
                     id="menu-appbar"
                     anchorEl={anchorEl}
                     anchorOrigin={{
-                      vertical: "top",
+                      vertical: "bottom",
                       horizontal: "right",
                     }}
                     keepMounted
@@ -163,8 +165,14 @@ const DashboardLayout = ({ children }) => {
                     open={Boolean(anchorEl)}
                     onClose={handleMenuClose}
                   >
-                    <MenuItem onClick={() => navigate("/")}>Home</MenuItem>
-                    <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                    <MenuItem onClick={() => navigate("/")}>
+                      <HomeIcon color="secondary" sx={{ mr: 1 }} />
+                      Home
+                    </MenuItem>
+                    <MenuItem onClick={handleLogout}>
+                      <LogoutIcon color="secondary" sx={{ mr: 1 }} />
+                      Logout
+                    </MenuItem>
                   </Menu>
                 </Stack>
               </Grid>
@@ -185,7 +193,9 @@ const DashboardLayout = ({ children }) => {
               spacing={6}
             >
               <GrItem elevation={0}>
-                <GrImg src={BrandLogo} alt="gratitude logo" />
+                <Link to="/">
+                  <GrImg src={BrandLogo} alt="gratitude logo" />
+                </Link>
               </GrItem>
               <GrItem elevation={0}>
                 <IconButton onClick={handleDrawerClose}>
