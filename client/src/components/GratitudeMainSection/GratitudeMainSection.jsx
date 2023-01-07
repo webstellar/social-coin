@@ -10,7 +10,7 @@ const GratitudeMainSection = ({ gratitude }) => {
       <GrBox>
         <Container maxWidth="lg">
           <div
-            style={{ fontSize: "20px", fontWeight: "300" }}
+            style={{ fontSize: "20px", fontWeight: "400" }}
             dangerouslySetInnerHTML={{ __html: gratitude.story }}
           />
           <Container maxWidth="md">

@@ -408,7 +408,9 @@ const GratitudeForm = () => {
                       </Box>
                     </Grid>
                     <Grid item xs={12} md={12}>
-                      <InputLabel>Upload a banner for your hero</InputLabel>
+                      <InputLabel>
+                        Upload a banner for your testimony
+                      </InputLabel>
                       <IconButton
                         variant="contained"
                         component="label"
