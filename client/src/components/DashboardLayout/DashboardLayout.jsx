@@ -45,7 +45,7 @@ import { useNavigate, Link } from "react-router-dom";
 const DashboardLayout = ({ children }) => {
   const navigate = useNavigate();
   const theme = useTheme();
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [openHero, setOpenHero] = React.useState(false);
   const [openGratitude, setOpenGratitude] = React.useState(false);

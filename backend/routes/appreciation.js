@@ -15,11 +15,16 @@ const {
   addCommentToAppreciation,
   addMyReactionToAppreciation,
   deleteComment,
+  getAppreciationByTag,
+  getAppreciationByCategory,
 } = require("../controllers/appreciationControllers");
 const { isAuthenticatedUser, authorizeRoles } = require("../middlewares/auth");
 
 router.route("/appreciations").get(getAppreciations);
 router.route("/appreciation/:id").get(getSingleAppreciation);
+router.route("/appreciation/tag/:tag").get(getAppreciationByTag);
+router.route("/appreciation/category/:category").get(getAppreciationByCategory);
+
 
 //users
 router.route("/appreciation/new").post(isAuthenticatedUser, newAppreciation);

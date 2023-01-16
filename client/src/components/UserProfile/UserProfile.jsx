@@ -2,6 +2,7 @@ import {
   Container,
   Stack,
   Grid,
+  IconButton,
   Typography,
   Divider,
   useMediaQuery,
@@ -13,7 +14,12 @@ import {
   GrAvatar,
   GrBigTypography,
   GrLink,
+  GrImageBackdrop,
+  GrImageButton,
+  GrImageSrc,
+  GrImage,
 } from "./UserProfile.styles";
+import PhotoCamera from "@mui/icons-material/PhotoCamera";
 
 import { useSelector } from "react-redux";
 
@@ -26,8 +32,14 @@ const UserProfile = () => {
   const username = user?.user?.name;
   const firstname = username.split(" ")[0];
 
+  const handleInput = () => {
+    return (
+      <input hidden accept="image/*" type="file" style={{ zIndex: 100 }} />
+    );
+  };
+
   return (
-    <Container maxWidth="xl">
+    <Container maxWidth="lg">
       <GrBox>
         <Grid
           container
@@ -37,14 +49,39 @@ const UserProfile = () => {
           spacing={2}
         >
           <Grid item xs={3} md={2}>
-            <GrAvatar
-              src={
-                user.user
-                  ? user?.user?.profilePicture?.url
-                  : "https://source.unsplash.com/random"
-              }
-              alt={user?.user?.name}
-            />
+            <GrAvatar>
+              <IconButton
+                color="primary"
+                aria-label="upload picture"
+                component="label"
+                sx={{ zIndex: 20 }}
+              >
+                <input hidden accept="image/*" type="file" />
+                <PhotoCamera />
+              </IconButton>
+            </GrAvatar>
+          </Grid>
+          <Grid item xs={3} md={2}>
+            <GrImageButton focusRipple>
+              <GrImageSrc
+                style={{
+                  backgroundImage:
+                    `url(${user?.user?.profilePicture?.url})` ||
+                    "https://source.unsplash.com/random",
+                }}
+              />
+
+              <GrImageBackdrop className="MuiImageBackdrop-root" />
+              <GrImage>
+                <input
+                  hidden
+                  accept="image/*"
+                  type="file"
+                  style={{ zIndex: 100, position: "relative" }}
+                />
+                <PhotoCamera />
+              </GrImage>
+            </GrImageButton>
           </Grid>
           <Grid
             item

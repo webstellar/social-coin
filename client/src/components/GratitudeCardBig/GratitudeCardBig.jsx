@@ -22,13 +22,13 @@ const GratitudeCardBig = ({ gratitude }) => {
   return (
     <>
       <Grid item xs={12} md={3}>
-        <CardActionArea component={Link} to={`/appreciation/${gratitude._id}`}>
+        <CardActionArea>
           <Card sx={{ display: "block" }}>
             <CardMedia
               component="img"
               sx={{
                 width: "100%",
-                height: 200,
+                height: 150,
                 filter: "grayscale(100%)",
                 "&:hover": {
                   filter: "grayscale(0%)",
@@ -38,9 +38,34 @@ const GratitudeCardBig = ({ gratitude }) => {
               alt={gratitude?.summary}
             />
             <CardContent sx={{ flex: 1 }}>
-              <Typography variant="subtitle1">{gratitude?.tags[0]}</Typography>
+              <Link
+                to={`/appreciation/tag/${gratitude?.tags[0]}`}
+                style={{
+                  color: "#000",
+                  textDecoration: "none",
+                  "&:hover": {
+                    color: "#F6430A",
+                  },
+                }}
+              >
+                <Typography
+                  variant="subtitle1"
+                  sx={{
+                    textDecoration: "none",
+                    "&:hover": {
+                      color: "#F6430A",
+                    },
+                  }}
+                >
+                  {gratitude?.tags[0]}
+                </Typography>
+              </Link>
 
-              <GrStoriesTypography variant="h6" component="h6" gutterBottom>
+              <GrStoriesTypography
+                variant="subtitle1"
+                component="p"
+                gutterBottom
+              >
                 {gratitude.summary.substring(0, 40)}...
               </GrStoriesTypography>
 
@@ -48,7 +73,7 @@ const GratitudeCardBig = ({ gratitude }) => {
                 written by {gratitude.user && gratitude?.user?.name}
               </GrGiverTypography>*/}
 
-              <GrHeroTypography variant="h6" component="h6" gutterBottom>
+              <GrHeroTypography variant="subtitle1" component="p" gutterBottom>
                 for {gratitude?.hero?.name}
               </GrHeroTypography>
 
@@ -61,11 +86,24 @@ const GratitudeCardBig = ({ gratitude }) => {
                 <GrItem elevation={0}>
                   <MenuIcon sx={{ color: "#000" }} />
                 </GrItem>
-                <GrItem elevation={0}>
+                <GrItem
+                  elevation={0}
+                  component={Link}
+                  to={`/appreciation/${gratitude._id}`}
+                  sx={{
+                    textDecoration: "none",
+                  }}
+                >
                   <Typography
-                    variant="h6"
-                    component="h6"
-                    sx={{ color: "#000", textDecoration: "none" }}
+                    variant="subtitle1"
+                    component="p"
+                    sx={{
+                      color: "#000",
+                      textDecoration: "none",
+                      "&:hover": {
+                        color: "#F6430A",
+                      },
+                    }}
                   >
                     READ
                   </Typography>

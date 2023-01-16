@@ -4,13 +4,13 @@ import axios from "axios";
 const initialState = {
   loading: true,
   user: {},
-  gError: null,
+  lError: null,
   success: false,
   isAuthenticated: false,
 };
 
-export const googleSignIn = createAsyncThunk(
-  "google/login",
+export const linkedinSignIn = createAsyncThunk(
+  "linkedin/login",
   async ({ userData, navigate, toast }, { rejectWithValue }) => {
     try {
       const config = {
@@ -18,20 +18,24 @@ export const googleSignIn = createAsyncThunk(
           "Content-Type": "application/json",
         },
       };
-      const { data } = await axios.post("/api/v1/authGoogle", userData, config);
+      const { data } = await axios.post(
+        "/api/v1/authLinkedin",
+        userData,
+        config
+      );
       toast.success("Logged in successfully");
       navigate("/");
       document.location.reload();
       return data;
     } catch (err) {
-      toast.error(err.response.data.errMessage);
+      toast.error(err.response.data);
       return rejectWithValue(err.response.data);
     }
   }
 );
 
-export const googleSignUp = createAsyncThunk(
-  "google/signup",
+export const linkedinSignUp = createAsyncThunk(
+  "linkedin/signup",
   async ({ formData, navigate, toast }, { rejectWithValue }) => {
     try {
       const config = {
@@ -40,7 +44,11 @@ export const googleSignUp = createAsyncThunk(
         },
       };
 
-      const { data } = await axios.post("/api/v1/authGoogle", formData, config);
+      const { data } = await axios.post(
+        "/api/v1/authLinkedin",
+        formData,
+        config
+      );
       toast.success("Registered successfully");
       document.location.reload();
       setTimeout(() => {
@@ -54,40 +62,41 @@ export const googleSignUp = createAsyncThunk(
   }
 );
 
-export const googleSlice = createSlice({
-  name: "authGoogle",
+export const linkedinSlice = createSlice({
+  name: "authLinkedin",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(googleSignIn.pending, (state) => {
+    builder.addCase(linkedinSignIn.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(googleSignIn.fulfilled, (state, action) => {
+    builder.addCase(linkedinSignIn.fulfilled, (state, action) => {
       state.loading = false;
       localStorage.setItem("profile", JSON.stringify({ ...action.payload }));
       state.user = action.payload;
       state.isAuthenticated = true;
       state.success = true;
     });
-    builder.addCase(googleSignIn.rejected, (state, action) => {
+    builder.addCase(linkedinSignIn.rejected, (state, action) => {
       state.loading = false;
-      state.gError = action.error.message;
+      //state.lError = action.error.message;
+      state.lError = "Unable to fetch profile data from linkedin";
       state.user = null;
     });
 
-    builder.addCase(googleSignUp.pending, (state) => {
+    builder.addCase(linkedinSignUp.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(googleSignUp.fulfilled, (state, action) => {
+    builder.addCase(linkedinSignUp.fulfilled, (state, action) => {
       state.loading = false;
       localStorage.setItem("profile", JSON.stringify({ ...action.payload }));
       state.user = action.payload;
       state.isAuthenticated = true;
       state.success = true;
     });
-    builder.addCase(googleSignUp.rejected, (state, action) => {
+    builder.addCase(linkedinSignUp.rejected, (state, action) => {
       state.loading = false;
-      state.gError = action.error.message;
+      state.lError = action.error.message;
       state.user = null;
     });
   },

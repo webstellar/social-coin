@@ -1,20 +1,14 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import {
-  Box,
-  TextField,
-  Button,
-  Grid,
-  CssBaseline,
-  CircularProgress,
-} from "@mui/material/";
+import { Box, TextField, Button, Grid, CssBaseline } from "@mui/material/";
 import { GrTypography, GrContainer } from "./Register.styles";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { login, register, reset } from "../../redux/auth/authSlice";
-import { googleSignIn, googleSignUp } from "../../redux/auth/authGoogleSlice";
+import { register, reset } from "../../redux/auth/authSlice";
+import { googleSignUp } from "../../redux/auth/authGoogleSlice";
+import { linkedinSignIn } from "../../redux/auth/authLinkedInSlice";
 import jwt_decode from "jwt-decode";
 import { LinkedInApi } from "../../config/linkedInconfig";
 import { useScript } from "../../hooks/useScript";
@@ -32,12 +26,17 @@ const Register = () => {
   });
 
   const { name, email, password, confirmPassword } = formData;
-  const { user, loading, error } = useSelector((state) => state.auth);
+  const { user, error } = useSelector((state) => state.auth);
+  const { gError } = useSelector((state) => state.authGoogle);
+  const { lError } = useSelector((state) => state.authLinkedin);
 
   useEffect(() => {
     error && toast.error(error);
+    gError && toast.error(gError);
+    lError && toast.error(lError);
+
     dispatch(reset());
-  }, [user, error, dispatch]);
+  }, [error, gError, lError, dispatch]);
 
   const onChange = (e) => {
     setFormData((prevState) => ({
@@ -103,7 +102,7 @@ const Register = () => {
     const url = window.location.href;
     if (url.includes("code=") && url.includes("state=")) {
       const code = url.split("code=")[1].split("&")[0];
-      dispatch(login({ code }, navigate, toast));
+      dispatch(linkedinSignIn({ code }, navigate, toast));
     }
   };
 
@@ -218,7 +217,6 @@ const Register = () => {
                 }}
                 fullWidth
               >
-                {loading && <CircularProgress />}
                 <GrTypography variant="h5" component="p" color="grey.900">
                   CONTINUE
                 </GrTypography>
@@ -229,7 +227,7 @@ const Register = () => {
               <div id="signUpDiv" />
             </Grid>
 
-            <Grid item xs={12} md={12}>
+            {/*  <Grid item xs={12} md={12}>
               <Button
                 variant="contained"
                 size="large"
@@ -248,7 +246,7 @@ const Register = () => {
                   LOGIN WITH LINKEDIN
                 </GrTypography>
               </Button>
-            </Grid>
+            </Grid> */}
           </Grid>
         </Box>
       </GrContainer>

@@ -60,60 +60,6 @@ exports.newAppreciation = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
-/*
-  hero = await Hero.findById(req.params.id);
-  console.log(hero);
-*/
-
-/*
-  const hero = await Hero.findByIdAndUpdate(
-    req.params.id,
-    { $push: { appreciations: appreciation } },
-    { $push: { appreciations: appreciation } },
-    { safe: true, upsert: false }
-    function (err, docs) {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log("Updated Hero : ", docs);
-      }
-    }
-  );*/
-
-/*
-    const filter = { _id: req.params.id };
-    const update = { $push: { appreciations: appreciation } };
-    const safety = { safe: true, upsert: true };
-
-    
-  const hero = await Hero.findOneAndUpdate(
-    { _id: req.params.id },
-    { $push: { appreciations: appreciation } },
-    { safe: true, upsert: true }
-  );
-  */
-/*
-  console.log("appreciation hero", req.params.id);
-
-  const hero = await Hero.findById(req.params.id);
-  console.log("Hero Id", hero);
-  */
-
-/*
-  const hero = await Hero.findByIdAndUpdate(
-    req.params.id,
-    { $push: { appreciations: appreciation } },
-    { safe: true, upsert: false },
-    function (err, docs) {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log("Updated Hero : ", docs);
-      }
-    }
-  );
-*/
-
 //Get all appreciations => /api/v1/appreciations
 exports.getAppreciations = catchAsyncErrors(async (req, res, next) => {
   const appreciationsCount = await Appreciation.countDocuments();
@@ -128,6 +74,32 @@ exports.getAppreciations = catchAsyncErrors(async (req, res, next) => {
   res.status(200).json({
     success: true,
     appreciationsCount,
+    appreciations,
+  });
+});
+
+// get Appreciations by Tags
+exports.getAppreciationByTag = catchAsyncErrors(async (req, res, next) => {
+  const { tag } = req.params;
+
+  const appreciations = await Appreciation.find({ tags: { $in: tag } });
+
+  res.status(200).json({
+    success: true,
+    appreciations,
+  });
+});
+
+// get Appreciations by Categories
+exports.getAppreciationByCategory = catchAsyncErrors(async (req, res, next) => {
+  const { category } = req.params;
+
+  const appreciations = await Appreciation.find({
+    categories: { $in: category },
+  });
+
+  res.status(200).json({
+    success: true,
     appreciations,
   });
 });
@@ -265,11 +237,6 @@ exports.deleteMyAppreciation = catchAsyncErrors(async (req, res, next) => {
   if (!appreciation) {
     return next(new ErrorHandler("Appreciation not found", 404));
   }
-
-
-
-
-  
 
   //Deleting image associated with the appreciation
   if (appreciation.image && appreciation.image.public_id)
@@ -559,3 +526,57 @@ exports.addMyReactionToAppreciation = catchAsyncErrors(
     });
   }
 );
+
+/*
+  hero = await Hero.findById(req.params.id);
+  console.log(hero);
+*/
+
+/*
+  const hero = await Hero.findByIdAndUpdate(
+    req.params.id,
+    { $push: { appreciations: appreciation } },
+    { $push: { appreciations: appreciation } },
+    { safe: true, upsert: false }
+    function (err, docs) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log("Updated Hero : ", docs);
+      }
+    }
+  );*/
+
+/*
+    const filter = { _id: req.params.id };
+    const update = { $push: { appreciations: appreciation } };
+    const safety = { safe: true, upsert: true };
+
+    
+  const hero = await Hero.findOneAndUpdate(
+    { _id: req.params.id },
+    { $push: { appreciations: appreciation } },
+    { safe: true, upsert: true }
+  );
+  */
+/*
+  console.log("appreciation hero", req.params.id);
+
+  const hero = await Hero.findById(req.params.id);
+  console.log("Hero Id", hero);
+  */
+
+/*
+  const hero = await Hero.findByIdAndUpdate(
+    req.params.id,
+    { $push: { appreciations: appreciation } },
+    { safe: true, upsert: false },
+    function (err, docs) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log("Updated Hero : ", docs);
+      }
+    }
+  );
+*/

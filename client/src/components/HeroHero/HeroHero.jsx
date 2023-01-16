@@ -3,29 +3,6 @@ import HeroImage from "./../../images/heroList.webp";
 import { Grid, Box, Container } from "@mui/material";
 
 const HeroHero = () => {
-  /*
-        const [quotes, setQuotes] = useState([])
-        const api_url = 'https://quotes15.p.rapidapi.com/quotes/random/';
-    
-        const options = {
-            method: 'GET',
-            url: api_url,
-            params: { author: 'Albert', count: '1' },
-            headers: {
-                'X-RapidAPI-Key': "0c5a99391fmshba31ce56629a9d7p11f911jsna09a2e210410",
-                'X-RapidAPI-Host': 'quotes15.p.rapidapi.com'
-            }
-        };
-    
-    
-        useEffect(() => {
-            axios.request(options).then(function (response) {
-                setQuotes(response.data);
-            }).catch(function (error) {
-                console.error(error);
-            });
-        });
-    */
   return (
     <>
       <GrPaper elevation={0} sx={{ backgroundImage: `url(${HeroImage})` }}>

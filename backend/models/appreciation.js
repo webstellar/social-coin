@@ -49,14 +49,14 @@ const appreciationSchema = new mongoose.Schema(
     },
     video: {
       type: String,
-      maxLength: [200, "Please video link cannot exceed 65 characters"],
+      maxLength: [200, "Please youtube video link cannot exceed 65 characters"],
     },
     tags: [
       {
         type: String,
       },
     ],
-    category: [
+    categories: [
       {
         type: String,
       },

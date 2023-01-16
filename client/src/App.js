@@ -28,6 +28,10 @@ import EditHero from "./pages/EditHero";
 import EditGratitude from "./pages/EditGratitude";
 import MyGratitudesList from "./pages/MyGratitudesList";
 import MyHeroesList from "./pages/MyHeroesList";
+import AppreciationTag from "./pages/AppreciationTag";
+import AppreciationCategory from "./pages/AppreciationCategory";
+import HeroTag from "./pages/HeroTag";
+import HeroCategory from "./pages/HeroCategory";
 
 import { useDispatch } from "react-redux";
 import { setUser } from "./redux/auth/authSlice";
@@ -58,6 +62,13 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/search" element={<Search />} />
           <Route path="/search/:keyword" element={<Search />} />
+          <Route path="/appreciation/tag/:tag" element={<AppreciationTag />} />
+          <Route
+            path="/appreciation/category/:caregory"
+            element={<AppreciationCategory />}
+          />
+          <Route path="/hero/tag/:tag" element={<HeroTag />} />
+          <Route path="/hero/category/:caregory" element={<HeroCategory />} />
           <Route
             path="/login"
             element={user ? <Navigate to="/my-profile" /> : <SignIn />}

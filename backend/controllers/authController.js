@@ -77,6 +77,7 @@ async function getUserFromLinkedin(code) {
 
 exports.authenticateViaLinkedIn = catchAsyncErrors(async (req, res, next) => {
   const code = req.body.code;
+  console.log(code);
   const response = await getUserFromLinkedin(code);
   if (response.error) {
     return next(

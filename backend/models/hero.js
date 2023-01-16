@@ -26,13 +26,13 @@ const heroSchema = new mongoose.Schema(
       type: String,
       required: [true, "Please select a gender type for your Hero"],
       enum: {
-        values: ["Male", "Female", "Others"],
+        values: ["Male", "Female", "Non-Binary", "Others"],
         message: "Please select a gender",
       },
     },
     country: {
       type: String,
-      default: "Nigeria",
+      default: "France",
     },
     email: {
       type: String,
@@ -44,7 +44,11 @@ const heroSchema = new mongoose.Schema(
         "Please fill a valid email address",
       ],
     },
-
+    category: [
+      {
+        type: String,
+      },
+    ],
     appreciationsCount: {
       type: Number,
       default: 0,

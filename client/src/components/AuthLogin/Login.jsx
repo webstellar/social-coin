@@ -17,6 +17,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { login } from "../../redux/auth/authSlice";
 import { googleSignIn } from "../../redux/auth/authGoogleSlice";
+import { linkedinSignIn } from "../../redux/auth/authLinkedInSlice";
 import jwt_decode from "jwt-decode";
 import { LinkedInApi } from "../../config/linkedInconfig";
 import { useScript } from "../../hooks/useScript";
@@ -29,13 +30,15 @@ const Login = () => {
     password: "",
   });
   const { email, password } = formData;
-  const { user, loading, error } = useSelector((state) => state.auth);
-
-  console.log({ user });
+  const { loading, error } = useSelector((state) => state.auth);
+  const { gError } = useSelector((state) => state.authGoogle);
+  const { lError } = useSelector((state) => state.authLinkedin);
 
   useEffect(() => {
     error && toast.error(error);
-  }, [error]);
+    gError && toast.error(gError);
+    lError && toast.error(lError);
+  }, [error, gError, lError]);
 
   const onChange = (e) => {
     setFormData((prevState) => ({
@@ -94,6 +97,24 @@ const Login = () => {
     oauthUrl = `${oauthUrl}&client_id=${clientId}&scope=${scope}&state=${state}&redirect_uri=${redirectUrl}`;
     window.open(oauthUrl, "_self");
   };
+
+  const signupLinkedin = async () => {
+    const url = window.location.href;
+    if (url.includes("code=") && url.includes("state=")) {
+      const code = url.split("code=")[1].split("&")[0];
+      console.log({ code });
+      dispatch(linkedinSignIn({ code }, navigate, toast));
+    }
+  };
+
+  // For LinkedIn only
+  useEffect(() => {
+    const url = window.location.href;
+    if (url.includes("code=") && url.includes("state=")) {
+      const code = url.split("code=")[1].split("&")[0];
+      signupLinkedin();
+    }
+  });
 
   return (
     <>
@@ -182,7 +203,7 @@ const Login = () => {
               <div id="signInDiv" />
             </Grid>
 
-            <Grid item xs={12} md={12}>
+            {/* <Grid item xs={12} md={12}>
               <Button
                 variant="contained"
                 size="large"
@@ -201,7 +222,7 @@ const Login = () => {
                   LOGIN WITH LINKEDIN
                 </GrTypography>
               </Button>
-            </Grid>
+            </Grid> */}
           </Grid>
         </Box>
       </GrContainer>

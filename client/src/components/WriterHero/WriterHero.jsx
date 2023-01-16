@@ -1,6 +1,6 @@
-import { useState } from "react";
 import PropTypes from "prop-types";
 import {
+  GrDiv,
   GrPaper,
   GrHeroImage,
   GrTypography,
@@ -8,45 +8,10 @@ import {
   GrParaBox,
 } from "./WriterHero.styles";
 import HeroImage from "./../../images/writer-author.webp";
-import { Grid, Box, Container, Typography, Tab, Tabs } from "@mui/material";
+import { Grid, Box, Container } from "@mui/material";
 import GratitudeCardBig from "../GratitudeCardBig/GratitudeCardBig";
 
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
-    </div>
-  );
-}
-
-function a11yProps(index) {
-  return {
-    id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
-  };
-}
-
-const WriterHero = ({ hero, appreciations }) => {
-  const [value, setValue] = useState(0);
-
-  let id = hero?._id;
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
-
+const WriterHero = ({ hero }) => {
   return (
     <div>
       <GrPaper
@@ -105,62 +70,25 @@ const WriterHero = ({ hero, appreciations }) => {
       </Container>
       <Container maxWidth="lg">
         <GrParaBox>
-          <Grid
-            container
-            direction="row"
-            justifyContent="space-between"
-            alignItems="flex-start"
-          >
-            <Grid item xs={12} md={8}>
-              <Box sx={{ borderBottom: 1, borderColor: "rgba(255,255,255,0)" }}>
-                <Tabs
-                  value={value}
-                  onChange={handleChange}
-                  aria-label="basic tabs example"
-                  indicatorColor="secondary"
-                  textColor="secondary"
-                >
-                  <Tab label="ALL STORIES" {...a11yProps(0)} />
-                  <Tab label="CONTRIBUTORS" {...a11yProps(1)} />
-                </Tabs>
-              </Box>
-              <TabPanel value={value} index={0}>
-                <Grid container spacing={4}>
-                  {appreciations &&
-                    appreciations
-                      .filter((appr) => appr.hero._id === id)
-                      .map((appreciation) => (
-                        <GratitudeCardBig
-                          key={appreciation._id}
-                          gratitude={appreciation}
-                        />
-                      ))}
-                </Grid>
-              </TabPanel>
-              <TabPanel value={value} index={1}>
-                {hero?.user?.name}
-              </TabPanel>
+          <GrDiv>
+            <Grid container spacing={4}>
+              {hero &&
+                hero?.appreciations?.map((appreciation) => (
+                  <GratitudeCardBig
+                    key={appreciation._id}
+                    gratitude={appreciation}
+                  />
+                ))}
             </Grid>
-            <Grid item xs={12} md={4}>
-              Box
-            </Grid>
-          </Grid>
+          </GrDiv>
         </GrParaBox>
       </Container>
     </div>
   );
 };
 
-TabPanel.propTypes = {
-  children: PropTypes.any,
-  value: PropTypes.any,
-  index: PropTypes.any,
-  other: PropTypes.any,
-};
-
 WriterHero.propTypes = {
   hero: PropTypes.object,
-  appreciations: PropTypes.array,
 };
 
 export default WriterHero;

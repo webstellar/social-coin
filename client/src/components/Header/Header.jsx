@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { GrAppBar, GrToolBar, GrImg, GrLink, GrBadge } from "./Header.styles";
 import {
   Box,
@@ -96,6 +96,13 @@ const Header = () => {
   };
 
   const handleLoggedUser = () => navigate("/create-hero");
+
+  useEffect(() => {
+    if (user) {
+      handleClose();
+      handleSecondClose();
+    }
+  });
 
   return (
     <div>
@@ -252,10 +259,12 @@ const Header = () => {
                         <AccountCircleIcon color="secondary" sx={{ mr: 1 }} />
                         My account
                       </MenuItem>
-                      <MenuItem onClick={handleLogout}>
-                        <LogoutIcon color="secondary" sx={{ mr: 1 }} />
-                        Logout
-                      </MenuItem>
+                      {user?.user ? (
+                        <MenuItem onClick={handleLogout}>
+                          <LogoutIcon color="secondary" sx={{ mr: 1 }} />
+                          Logout
+                        </MenuItem>
+                      ) : null}
                     </Menu>
                   </>
                 )}

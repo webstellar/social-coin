@@ -7,7 +7,6 @@ import {
   Grid,
   CssBaseline,
   IconButton,
-  CircularProgress,
 } from "@mui/material/";
 import { GrTypography } from "./Register.styles";
 import ClearIcon from "@mui/icons-material/Clear";
@@ -16,7 +15,8 @@ import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { login, register, reset } from "../../redux/auth/authSlice";
-import { googleSignIn, googleSignUp } from "../../redux/auth/authGoogleSlice";
+import { googleSignUp } from "../../redux/auth/authGoogleSlice";
+import { linkedinSignIn } from "../../redux/auth/authLinkedInSlice";
 import jwt_decode from "jwt-decode";
 import { LinkedInApi } from "../../config/linkedInconfig";
 import { useScript } from "../../hooks/useScript";
@@ -51,13 +51,17 @@ const ModalRegister = ({ handleRClose }) => {
 
   const { name, email, password, confirmPassword } = formData;
 
-  const { loading, error } = useSelector((state) => state.auth);
+  const { error } = useSelector((state) => state.auth);
+  const { gError } = useSelector((state) => state.authGoogle);
+  const { lError } = useSelector((state) => state.authLinkedin);
 
   useEffect(() => {
     error && toast.error(error);
+    gError && toast.error(gError);
+    lError && toast.error(lError);
 
     dispatch(reset());
-  }, [error, dispatch]);
+  }, [error, gError, lError, dispatch]);
 
   const onChange = (e) => {
     setFormData((prevState) => ({
@@ -123,7 +127,7 @@ const ModalRegister = ({ handleRClose }) => {
     const url = window.location.href;
     if (url.includes("code=") && url.includes("state=")) {
       const code = url.split("code=")[1].split("&")[0];
-      dispatch(login({ code }, navigate, toast));
+      dispatch(linkedinSignIn({ code }, navigate, toast));
     }
   };
 
@@ -262,7 +266,6 @@ const ModalRegister = ({ handleRClose }) => {
               }}
               fullWidth
             >
-              {loading && <CircularProgress />}
               <GrTypography variant="h5" component="p" color="grey.900">
                 CONTINUE
               </GrTypography>
@@ -273,7 +276,7 @@ const ModalRegister = ({ handleRClose }) => {
             <div id="signUpDiv" />
           </Grid>
 
-          <Grid item xs={12} md={12}>
+          {/*  <Grid item xs={12} md={12}>
             <Button
               variant="contained"
               size="large"
@@ -292,7 +295,7 @@ const ModalRegister = ({ handleRClose }) => {
                 LOGIN WITH LINKEDIN
               </GrTypography>
             </Button>
-          </Grid>
+          </Grid> */}
         </Grid>
       </Box>
     </>
