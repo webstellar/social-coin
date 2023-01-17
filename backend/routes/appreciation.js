@@ -3,28 +3,33 @@ const router = express.Router();
 
 //routes interact with the controllers
 const {
-  getAppreciations,
+  deleteComment,
   newAppreciation,
-  getSingleAppreciation,
+  myAppreciations,
+  getAppreciations,
   updateAppreciation,
   deleteAppreciation,
-  getAdminAppreciations,
-  myAppreciations,
   updateMyAppreciation,
-  deleteMyAppreciation,
-  addCommentToAppreciation,
-  addMyReactionToAppreciation,
-  deleteComment,
   getAppreciationByTag,
+  deleteMyAppreciation,
+  getAdminAppreciations,
+  getSingleAppreciation,
+  addCommentToAppreciation,
   getAppreciationByCategory,
+  getAppreciationByRelatedTag,
+  addMyReactionToAppreciation,
+  getAppreciationByRelatedCategory,
 } = require("../controllers/appreciationControllers");
 const { isAuthenticatedUser, authorizeRoles } = require("../middlewares/auth");
 
 router.route("/appreciations").get(getAppreciations);
 router.route("/appreciation/:id").get(getSingleAppreciation);
 router.route("/appreciation/tag/:tag").get(getAppreciationByTag);
+router.route("/appreciation/relatedtag").get(getAppreciationByRelatedTag);
 router.route("/appreciation/category/:category").get(getAppreciationByCategory);
-
+router
+  .route("/appreciation/relatedcategory")
+  .get(getAppreciationByRelatedCategory);
 
 //users
 router.route("/appreciation/new").post(isAuthenticatedUser, newAppreciation);

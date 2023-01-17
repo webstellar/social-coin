@@ -64,11 +64,11 @@ function App() {
           <Route path="/search/:keyword" element={<Search />} />
           <Route path="/appreciation/tag/:tag" element={<AppreciationTag />} />
           <Route
-            path="/appreciation/category/:caregory"
+            path="/appreciation/category/:category"
             element={<AppreciationCategory />}
           />
           <Route path="/hero/tag/:tag" element={<HeroTag />} />
-          <Route path="/hero/category/:caregory" element={<HeroCategory />} />
+          <Route path="/hero/category/:category" element={<HeroCategory />} />
           <Route
             path="/login"
             element={user ? <Navigate to="/my-profile" /> : <SignIn />}

@@ -19,6 +19,7 @@ const HomeRecentTitle = () => {
   const dispatch = useDispatch();
 
   const { appreciations } = useSelector((state) => ({ ...state.gratitudes }));
+  
   const { myappreciations } = useSelector((state) => ({
     ...state.mygratitudes,
   }));

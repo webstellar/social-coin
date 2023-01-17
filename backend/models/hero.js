@@ -44,7 +44,7 @@ const heroSchema = new mongoose.Schema(
         "Please fill a valid email address",
       ],
     },
-    category: [
+    categories: [
       {
         type: String,
       },

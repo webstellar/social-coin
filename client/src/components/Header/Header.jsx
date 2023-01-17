@@ -115,7 +115,7 @@ const Header = () => {
           sx={{ bgcolor: "background.paper", p: 0 }}
         >
           <Container maxWidth="lg">
-            <GrToolBar sx={{ p: 0 }} disableGutters="true">
+            <GrToolBar sx={{ p: 0 }} disableGutters>
               <Box sx={{ flexGrow: 1 }} component="a" href="/">
                 <GrImg src={BrandLogo} alt="gratitude logo" />
               </Box>

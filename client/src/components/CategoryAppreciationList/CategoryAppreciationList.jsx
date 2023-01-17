@@ -1,10 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { GrDiv, GrParaBox } from "./TagAppreciationList.styles";
+import { GrDiv, GrParaBox } from "./CategoryAppreciationList.styles";
 import { Grid, Container } from "@mui/material";
 import GratitudeCardBig from "../GratitudeCardBig/GratitudeCardBig";
 
-const TagAppreciationList = ({ appreciations }) => {
+const CategoryAppreciationList = ({ appreciations }) => {
   return (
     <div>
       <Container maxWidth="lg">
@@ -26,8 +26,8 @@ const TagAppreciationList = ({ appreciations }) => {
   );
 };
 
-TagAppreciationList.propTypes = {
+CategoryAppreciationList.propTypes = {
   appreciations: PropTypes.array,
 };
 
-export default TagAppreciationList;
+export default CategoryAppreciationList;

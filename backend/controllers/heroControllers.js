@@ -62,6 +62,33 @@ exports.getAdminHeroes = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
+// get Appreciations by Categories
+exports.getHeroesByCategory = catchAsyncErrors(async (req, res, next) => {
+  const { category } = req.params;
+
+  const heroes = await Hero.find({
+    categories: { $in: category },
+  });
+
+  res.status(200).json({
+    success: true,
+    heroes,
+  });
+});
+
+exports.getHeroByRelatedCategory = catchAsyncErrors(async (req, res, next) => {
+  const categories = req.body;
+
+  const heroes = await Hero.find({
+    categories: { $in: categories },
+  });
+
+  res.status(200).json({
+    success: true,
+    heroes,
+  });
+});
+
 //Get a Single Hero
 exports.getSingleHero = catchAsyncErrors(async (req, res, next) => {
   const hero = await Hero.findById(req.params.id).populate("appreciations");

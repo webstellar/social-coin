@@ -15,7 +15,6 @@ import {
 
 import GratitudeCard from "../GratitudeCard/GratitudeCard";
 import HeroCard from "../HeroCard/HeroCard";
-import { fontWeight } from "@mui/system";
 
 const HomeHeroCategory = () => {
   const dispatch = useDispatch();
@@ -25,7 +24,9 @@ const HomeHeroCategory = () => {
   }));
 
   const { user } = useSelector((state) => state.auth);
-  const { heroes } = useSelector((state) => ({ ...state.heroes }));
+  const { heroes, categoryHeroes } = useSelector((state) => ({
+    ...state.heroes,
+  }));
 
   useEffect(() => {
     dispatch(getHeroes());
@@ -93,6 +94,7 @@ const HomeHeroCategory = () => {
           </Container>
         </GrBox>
       ) : null}
+
       <GrBox sx={{ flexGrow: 1 }}>
         <Container maxWidth="lg">
           <Grid
@@ -110,6 +112,18 @@ const HomeHeroCategory = () => {
               >
                 Our Time Favorites
               </GrTypography>
+            </Grid>
+            <Grid item md={4}>
+              <GrLink to="/heroeslist">
+                <GrCTypography
+                  component="p"
+                  variant="p"
+                  color="inherit"
+                  gutterBottom
+                >
+                  All heroes
+                </GrCTypography>
+              </GrLink>
             </Grid>
           </Grid>
           <GrDiv>
@@ -135,14 +149,31 @@ const HomeHeroCategory = () => {
                 color="inherit"
                 gutterBottom
               >
-                Our selection
+                Family
               </GrTypography>
+            </Grid>
+            <Grid item md={4}>
+              <GrLink to="/my-profile">
+                <GrCTypography
+                  component="p"
+                  variant="p"
+                  color="inherit"
+                  gutterBottom
+                >
+                  My collection
+                </GrCTypography>
+              </GrLink>
             </Grid>
           </Grid>
           <GrDiv>
             <Grid container spacing={4}>
-              {heroes &&
-                heroes.map((hero) => <HeroCard key={hero._id} hero={hero} />)}
+              {categoryHeroes &&
+                categoryHeroes.map((hero) => ({
+                  ...(<HeroCard key={hero._id} hero={hero} />),
+                  categories: hero.categories.filter(
+                    (subhero) => subhero.categories === "Family"
+                  ),
+                }))}
             </Grid>
           </GrDiv>
         </Container>

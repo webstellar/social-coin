@@ -13,11 +13,15 @@ const {
   myHeroes,
   updateMyHero,
   getHeroesBySearch,
+  getHeroesByCategory,
+  getHeroByRelatedCategory,
 } = require("../controllers/heroControllers");
 const { isAuthenticatedUser, authorizeRoles } = require("../middlewares/auth");
 
 router.route("/heroes").get(getHeroes);
 router.route("/hero/:id").get(getSingleHero);
+router.route("/hero/category/:category").get(getHeroesByCategory);
+router.route("/hero/relatedcategory").get(getHeroByRelatedCategory);
 
 //Both Admin and User (slate)
 router

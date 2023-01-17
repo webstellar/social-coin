@@ -90,6 +90,22 @@ exports.getAppreciationByTag = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
+// get Appreciations by Related Tags
+exports.getAppreciationByRelatedTag = catchAsyncErrors(
+  async (req, res, next) => {
+    const tags = req.body;
+
+    const appreciations = await Appreciation.find({
+      tags: { $in: tags },
+    });
+
+    res.status(200).json({
+      success: true,
+      appreciations,
+    });
+  }
+);
+
 // get Appreciations by Categories
 exports.getAppreciationByCategory = catchAsyncErrors(async (req, res, next) => {
   const { category } = req.params;
@@ -103,6 +119,22 @@ exports.getAppreciationByCategory = catchAsyncErrors(async (req, res, next) => {
     appreciations,
   });
 });
+
+// get Appreciations by Related Categories
+exports.getAppreciationByRelatedCategory = catchAsyncErrors(
+  async (req, res, next) => {
+    const categories = req.body;
+
+    const appreciations = await Appreciation.find({
+      categories: { $in: categories },
+    });
+
+    res.status(200).json({
+      success: true,
+      appreciations,
+    });
+  }
+);
 
 //Get all appreciations => /api/v1/admin/appreciations
 exports.getAdminAppreciations = catchAsyncErrors(async (req, res, next) => {

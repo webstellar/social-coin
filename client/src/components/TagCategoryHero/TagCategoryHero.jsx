@@ -5,16 +5,26 @@ import {
   GrHeroImage,
   GrTypography,
   GrBox,
-} from "./TagAppreciationHero.styles";
+} from "./TagCategoryHero.styles";
 import { Grid, Box, Container } from "@mui/material";
 
-const TagAppreciationHero = () => {
-  
+const TagCategoryHero = () => {
+  const [title, setTitle] = React.useState("");
+  const [categoryTitle, setCategoryTitle] = React.useState("");
+
   React.useState(() => {
     const url = window.location.href;
-    if (url.includes("appreciation/tag")) {
-      const tagTitle = url.split("appreciation/tag")[1];
-      return tagTitle;
+    if (
+      url.includes("appreciation/tag/") ||
+      url.includes("appreciation/category/") ||
+      url.includes("hero/category/")
+    ) {
+      const tagTitle = url.split("appreciation/tag/")[1];
+      const categoryTitle =
+        url.split("appreciation/category/")[1] ||
+        url.split("hero/category/")[1];
+      setTitle(tagTitle);
+      setCategoryTitle(categoryTitle);
     }
   });
 
@@ -59,7 +69,7 @@ const TagAppreciationHero = () => {
                   color="inherit"
                   gutterBottom
                 >
-                  {tagTitle}
+                  {title || categoryTitle}
                 </GrTypography>
               </GrBox>
             </Grid>
@@ -70,4 +80,4 @@ const TagAppreciationHero = () => {
   );
 };
 
-export default TagAppreciationHero;
+export default TagCategoryHero;
