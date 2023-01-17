@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import {
   Container,
   Divider,
@@ -17,8 +18,11 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import MailIcon from "@mui/icons-material/Mail";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { shareOnFacebook, shareOnLinkedIn } from "../../utils/SocialShare";
+import DisqusThread from "../Disqus/DisqusThread";
 
-const GratitudeCommentSection = () => {
+const GratitudeCommentSection = ({ gratitude, id }) => {
+  console.log(gratitude);
+  console.log(id);
   return (
     <section>
       <GrBox>
@@ -32,7 +36,7 @@ const GratitudeCommentSection = () => {
           >
             <Grid item xs={3} md={3}>
               <GrItem>
-                <GrTypography>Share on Facebook</GrTypography>{" "}
+                <GrTypography>Share on Facebook</GrTypography>
                 <IconButton onClick={shareOnFacebook}>
                   <FacebookIcon fontSize="large" />
                 </IconButton>
@@ -64,6 +68,18 @@ const GratitudeCommentSection = () => {
             </Grid>
           </Grid>
           <Divider sx={{ bgcolor: "background.paper", mt: 9, mb: 6 }} />
+          <Grid
+            container
+            direction="row"
+            justifyContent="space-between"
+            alignItems="flex-start"
+          >
+            <DisqusThread
+              id={id}
+              title="Testimony"
+              path={`/appreciation/${id}`}
+            />
+          </Grid>
           <Grid
             container
             direction="row"
@@ -160,4 +176,8 @@ const GratitudeCommentSection = () => {
   );
 };
 
+GratitudeCommentSection.propTypes = {
+  gratitude: PropTypes.any,
+  id: PropTypes.any,
+};
 export default GratitudeCommentSection;

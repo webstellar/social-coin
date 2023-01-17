@@ -9,13 +9,17 @@ const GratitudeMainSection = ({ gratitude }) => {
     <section>
       <GrBox>
         <Container maxWidth="lg">
+          <div id="video">
+            <Container maxWidth="md">
+              <YoutubeEmbed gratitude={gratitude} />
+            </Container>
+          </div>
+
           <div
+            id="testimony"
             style={{ fontSize: "20px", fontWeight: "400" }}
             dangerouslySetInnerHTML={{ __html: gratitude.story }}
           />
-          <Container maxWidth="md">
-            <YoutubeEmbed gratitude={gratitude} />
-          </Container>
         </Container>
       </GrBox>
     </section>

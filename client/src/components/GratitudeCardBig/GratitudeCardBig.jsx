@@ -24,19 +24,26 @@ const GratitudeCardBig = ({ gratitude }) => {
       <Grid item xs={12} md={3}>
         <CardActionArea>
           <Card sx={{ display: "block" }}>
-            <CardMedia
-              component="img"
+            <Link
+              to={`/appreciation/${gratitude._id}`}
               sx={{
-                width: "100%",
-                height: 150,
-                filter: "grayscale(100%)",
-                "&:hover": {
-                  filter: "grayscale(0%)",
-                },
+                textDecoration: "none",
               }}
-              image={gratitude?.image?.url || defaultImage}
-              alt={gratitude?.summary}
-            />
+            >
+              <CardMedia
+                component="img"
+                sx={{
+                  width: "100%",
+                  height: 150,
+                  filter: "grayscale(100%)",
+                  "&:hover": {
+                    filter: "grayscale(0%)",
+                  },
+                }}
+                image={gratitude?.image?.url || defaultImage}
+                alt={gratitude?.summary}
+              />
+            </Link>
             <CardContent sx={{ flex: 1 }}>
               <Link
                 to={`/appreciation/tag/${gratitude?.tags[0]}`}
@@ -82,18 +89,16 @@ const GratitudeCardBig = ({ gratitude }) => {
                 justifyContent="flex-start"
                 alignItems="center"
                 spacing={0}
+                component={Link}
+                to={`/appreciation/${gratitude._id}`}
+                sx={{
+                  textDecoration: "none",
+                }}
               >
                 <GrItem elevation={0}>
                   <MenuIcon sx={{ color: "#000" }} />
                 </GrItem>
-                <GrItem
-                  elevation={0}
-                  component={Link}
-                  to={`/appreciation/${gratitude._id}`}
-                  sx={{
-                    textDecoration: "none",
-                  }}
-                >
+                <GrItem elevation={0}>
                   <Typography
                     variant="subtitle1"
                     component="p"
