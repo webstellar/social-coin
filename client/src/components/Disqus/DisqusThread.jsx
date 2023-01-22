@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const SHORTNAME = "Humble Hero";
+const SHORTNAME = "humble-hero";
 const WEBSITE_URL = "https://hhero.org";
 
 function renderDisqus() {

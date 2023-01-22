@@ -19,6 +19,7 @@ import Hero from "./pages/Hero";
 import UserDashboard from "./pages/UserDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import CreateHero from "./pages/CreateHero";
+import CreateGratitude from "./pages/CreateGratitude";
 import ExpressGratitude from "./pages/ExpressGratitude";
 import Writer from "./pages/Writer";
 import EditProfile from "./pages/EditProfile";
@@ -94,6 +95,9 @@ function App() {
           </Route>
           <Route path="/express-gratitude" element={<PrivateRoute />}>
             <Route path="/express-gratitude" element={<ExpressGratitude />} />
+          </Route>
+          <Route path="/create-testimony" element={<PrivateRoute />}>
+            <Route path="/create-testimony" element={<CreateGratitude />} />
           </Route>
           <Route path="/edit-profile" element={<PrivateRoute />}>
             <Route path="/edit-profile" element={<EditProfile />} />

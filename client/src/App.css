@@ -13,3 +13,13 @@ body {
   border: 0px solid #d1d1d1 !important;
   border-radius: 0px !important ;
 }
+
+.btn.comment-policy-refresh__button.publisher-background-color {
+  background-color: #f6430a !important;
+  border-radius: 0% I !important;
+}
+
+.publisher-background-color {
+  background-color: #f6430a !important;
+  border-radius: 0% I !important;
+}

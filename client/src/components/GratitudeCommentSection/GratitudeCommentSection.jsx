@@ -1,28 +1,15 @@
+import * as React from "react";
 import PropTypes from "prop-types";
-import {
-  Container,
-  Divider,
-  Grid,
-  Typography,
-  InputLabel,
-  FormControl,
-  NativeSelect,
-  TextField,
-  Box,
-  IconButton,
-} from "@mui/material";
+import { Container, Divider, Grid, IconButton } from "@mui/material";
 import { GrBox, GrItem, GrTypography } from "./GratitudeCommentSection.styles";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import MailIcon from "@mui/icons-material/Mail";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { shareOnFacebook, shareOnLinkedIn } from "../../utils/SocialShare";
 import DisqusThread from "../Disqus/DisqusThread";
 
 const GratitudeCommentSection = ({ gratitude, id }) => {
-  console.log(gratitude);
-  console.log(id);
   return (
     <section>
       <GrBox>
@@ -74,100 +61,12 @@ const GratitudeCommentSection = ({ gratitude, id }) => {
             justifyContent="space-between"
             alignItems="flex-start"
           >
-            <DisqusThread
-              id={id}
-              title="Testimony"
-              path={`/appreciation/${id}`}
-            />
-          </Grid>
-          <Grid
-            container
-            direction="row"
-            justifyContent="space-between"
-            alignItems="flex-start"
-          >
-            <Grid
-              container
-              item
-              md={8}
-              xs={8}
-              direction="column"
-              justifyContent="space-between"
-              alignItems="flex-start"
-            >
-              <Grid item md={12}>
-                <Typography component="p" gutterBottom>
-                  The Conversation (0)
-                </Typography>
-              </Grid>
-              <Grid item md={12}>
-                <Typography component="p" gutterBottom>
-                  Start a discussion, not a fire, Post with kindness
-                </Typography>
-              </Grid>
-            </Grid>
-            <Grid
-              item
-              xs={4}
-              md={4}
-              container
-              direction="row"
-              justifyContent="flex-end"
-              alignItems="flex-start"
-              columnGap={2}
-            >
-              <Grid item>Sort By</Grid>
-              <Grid item>
-                <FormControl>
-                  <InputLabel variant="standard" htmlFor="uncontrolled-native">
-                    Age
-                  </InputLabel>
-                  <NativeSelect
-                    defaultValue={30}
-                    inputProps={{
-                      name: "age",
-                      id: "uncontrolled-native",
-                    }}
-                  >
-                    <option value={10}>Latest</option>
-                    <option value={20}>Oldest</option>
-                    <option value={30}>Newest</option>
-                  </NativeSelect>
-                </FormControl>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Divider sx={{ bgcolor: "background.paper", mt: 6, mb: 3 }} />
-
-          <Grid
-            container
-            direction="row"
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Grid item xs={2} md={2}>
-              <AccountCircleIcon sx={{ fontSize: 60 }} />
-            </Grid>
-            <Grid
-              container
-              direction="row"
-              justifyContent="space-between"
-              alignItems="center"
-              item
-              xs={10}
-              md={10}
-            >
-              <Box sx={{ flexGrow: 1 }}>
-                <FormControl fullWidth variant="standard">
-                  <Grid item xs={10} md={10}>
-                    <TextField
-                      id="outlined-basic"
-                      label="Comment"
-                      variant="outlined"
-                    />
-                  </Grid>
-                </FormControl>
-              </Box>
+            <Grid item xs={12} md={12}>
+              <DisqusThread
+                id={id}
+                title={gratitude?.summary}
+                path={`/appreciation/${id}`}
+              />
             </Grid>
           </Grid>
         </Container>

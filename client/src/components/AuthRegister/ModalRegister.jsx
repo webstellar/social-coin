@@ -14,7 +14,7 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { login, register, reset } from "../../redux/auth/authSlice";
+import { register, reset } from "../../redux/auth/authSlice";
 import { googleSignUp } from "../../redux/auth/authGoogleSlice";
 import { linkedinSignIn } from "../../redux/auth/authLinkedInSlice";
 import jwt_decode from "jwt-decode";

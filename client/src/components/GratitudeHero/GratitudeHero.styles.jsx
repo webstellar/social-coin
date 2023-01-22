@@ -13,7 +13,7 @@ export const GrPaper = styled(Paper)({
 
 export const GrHeroImage = styled("img")(({ theme }) => ({
   maxWwidth: "100%",
-  height: "600px",
+  height: "400px",
   [theme.breakpoints.down("md")]: {
     width: 400,
     height: 280,
