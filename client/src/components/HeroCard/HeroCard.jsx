@@ -17,19 +17,26 @@ const HeroCard = ({ hero }) => {
       <Grid item xs={12} md={3}>
         <CardActionArea>
           <Card sx={{ display: "block" }}>
-            <CardMedia
-              component="img"
+            <Link
+              to={`/hero/${hero._id}`}
               sx={{
-                width: "100%",
-                height: 200,
-                filter: "grayscale(100%)",
-                "&:hover": {
-                  filter: "grayscale(0%)",
-                },
+                textDecoration: "none",
               }}
-              image={hero?.profilePicture?.url}
-              alt={hero?.hero}
-            />
+            >
+              <CardMedia
+                component="img"
+                sx={{
+                  width: "100%",
+                  height: 200,
+                  filter: "grayscale(100%)",
+                  "&:hover": {
+                    filter: "grayscale(0%)",
+                  },
+                }}
+                image={hero?.profilePicture?.url}
+                alt={hero?.hero}
+              />
+            </Link>
             <CardContent sx={{ flex: 1 }}>
               <GrGiverTypography variant="caption" color="grey.500">
                 written by {hero?.user?.name || "gratitude"}
@@ -50,7 +57,7 @@ const HeroCard = ({ hero }) => {
               >
                 <MenuIcon />
                 <Link
-                  to="/express-gratitude"
+                  to="/create-testimony"
                   style={{ textDecoration: "none", cursor: "pointer" }}
                 >
                   <Typography variant="subtitle1" color="grey.900">

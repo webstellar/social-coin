@@ -12,6 +12,8 @@ import {
   Button,
   Backdrop,
   CircularProgress,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material/";
 import {
   GrTypography,
@@ -54,15 +56,31 @@ const customStyles = {
   },
 };
 
+const customMobileStyles = {
+  content: {
+    top: "50%",
+    left: "57%",
+    right: "auto",
+    bottom: "auto",
+    width: "320px",
+    overflow: "unset",
+    WebkitOverflowScrolling: "touch",
+    transform: "translate(-50%, -50%)",
+  },
+};
+
 const TestimonyForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const data = location.state?.data._id;
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const [summary, setSummary] = React.useState("");
   const [story, setStory] = React.useState("");
   const [hero, setHero] = React.useState("");
+  const [fakeHero, setFakeHero] = React.useState("");
   const [image, setImage] = React.useState("");
   const [tags, setTags] = React.useState(["caring", "magnanimous"]);
   const [video, setVideo] = React.useState("");
@@ -111,6 +129,7 @@ const TestimonyForm = () => {
   const onSubmit = (e) => {
     e.preventDefault();
     setOpen(!open);
+
     const formData = {
       hero: data || hero,
       summary: summary,
@@ -153,11 +172,17 @@ const TestimonyForm = () => {
     }
   };
 
-  const tinymce = "0z5qmo7cx8rjieka6xxb9nz2y1b8k8rdyluiq9zv9r0t6du2";
+  const tinymce = process.env.REACT_APP_TINY_URL_KEY;
 
   const heroDisplay = heroes.filter((halo) =>
-    hero === halo._id ? halo : null
+    fakeHero === halo.name ? halo : null
   );
+
+  React.useEffect(() => {
+    if (heroDisplay.length > 0) {
+      setHero(heroDisplay[0]._id);
+    }
+  }, [setHero, heroDisplay]);
 
   return (
     <form onSubmit={onSubmit} style={{ position: "relative" }}>
@@ -216,14 +241,14 @@ const TestimonyForm = () => {
               alignItems="flex-start"
             >
               <Grid item xs={10} sm={10} md={10} lg={10}>
-                {hero ? (
+                {fakeHero ? (
                   <Typography
                     component="h3"
                     variant="h4"
                     align="center"
                     sx={{ color: "#000" }}
                   >
-                    {hero}
+                    {fakeHero}
                   </Typography>
                 ) : (
                   <>
@@ -258,7 +283,7 @@ const TestimonyForm = () => {
                     describedby: "full_description",
                   }}
                   ariaHideApp={false}
-                  style={customStyles}
+                  style={isMobile ? customMobileStyles : customStyles}
                   contentLabel="Hero"
                   shouldCloseOnOverlayClick={true}
                   shouldCloseOnEsc={true}
@@ -266,8 +291,8 @@ const TestimonyForm = () => {
                   <TestimonyFormHero
                     heroes={heroes}
                     setOpenHero={setOpenHero}
-                    hero={hero}
-                    setHero={setHero}
+                    hero={fakeHero}
+                    setHero={setFakeHero}
                   />
                 </Modal>
               </Grid>
@@ -319,18 +344,18 @@ const TestimonyForm = () => {
                   <EditIcon fontSize="medium" color="secondary" />
                 </IconButton>
                 <Modal
-                  id="hero"
+                  id="summary"
                   isOpen={openSummary}
                   onRequestClose={() => {
                     setOpenSummary(false);
                   }}
                   aria={{
-                    labelledby: "Hero",
+                    labelledby: "Summary",
                     describedby: "full_description",
                   }}
                   ariaHideApp={false}
-                  style={customStyles}
-                  contentLabel="Hero"
+                  style={isMobile ? customMobileStyles : customStyles}
+                  contentLabel="Summary"
                   shouldCloseOnOverlayClick={true}
                   shouldCloseOnEsc={true}
                 >
@@ -459,7 +484,7 @@ const TestimonyForm = () => {
                     describedby: "full_description",
                   }}
                   ariaHideApp={false}
-                  style={customStyles}
+                  style={isMobile ? customMobileStyles : customStyles}
                   contentLabel="Story"
                   shouldCloseOnOverlayClick={true}
                   shouldCloseOnEsc={true}
@@ -516,7 +541,7 @@ const TestimonyForm = () => {
                     describedby: "full_description",
                   }}
                   ariaHideApp={false}
-                  style={customStyles}
+                  style={isMobile ? customMobileStyles : customStyles}
                   contentLabel="Hero"
                   shouldCloseOnOverlayClick={true}
                   shouldCloseOnEsc={true}
@@ -587,7 +612,7 @@ const TestimonyForm = () => {
                     describedby: "full_description",
                   }}
                   ariaHideApp={false}
-                  style={customStyles}
+                  style={isMobile ? customMobileStyles : customStyles}
                   contentLabel="Hero"
                   shouldCloseOnOverlayClick={true}
                   shouldCloseOnEsc={true}

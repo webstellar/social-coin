@@ -94,8 +94,10 @@ const TestimonyFormHero = ({ heroes, setOpenHero, hero, setHero }) => {
                   }}
                 />
               )}
-              onChange={(e, value) => setHero(value?._id)}
-              isOptionEqualToValue={(option, value) => option === value}
+              onChange={(e, value) => setHero(value.name)}
+              isOptionEqualToValue={(option, value) =>
+                option.name === value.name
+              }
             />
           </Grid>
 

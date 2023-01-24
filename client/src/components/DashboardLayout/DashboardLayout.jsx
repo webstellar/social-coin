@@ -295,17 +295,17 @@ const DashboardLayout = ({ children }) => {
                   <ListItemIcon>
                     <VolunteerActivismIcon />
                   </ListItemIcon>
-                  <ListItemText primary="My Gratitudes" />
+                  <ListItemText primary="My Testimonies" />
                 </GrListItemButton>
                 <GrListItemButton
                   component={Link}
-                  to="/express-gratitude"
+                  to="/create-testimony"
                   sx={{ pl: 4 }}
                 >
                   <ListItemIcon>
                     <AddCommentIcon />
                   </ListItemIcon>
-                  <ListItemText primary="New Gratitude" />
+                  <ListItemText primary="New Testimony" />
                 </GrListItemButton>
               </List>
             </Collapse>

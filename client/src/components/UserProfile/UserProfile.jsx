@@ -119,8 +119,8 @@ const UserProfile = () => {
                   </GrLink>
                 </GrItem>
                 <GrItem elevation={0}>
-                  <GrLink to="/express-gratitude">
-                    <Typography variant="h6">Give Gratitude</Typography>
+                  <GrLink to="/create-testimony">
+                    <Typography variant="h6">Create Testimony</Typography>
                   </GrLink>
                 </GrItem>
               </Stack>
