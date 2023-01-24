@@ -2,6 +2,7 @@ import {
   Container,
   Stack,
   Grid,
+  Box,
   IconButton,
   Typography,
   Divider,
@@ -26,17 +27,9 @@ import { useSelector } from "react-redux";
 const UserProfile = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-
   const { user } = useSelector((state) => state.auth);
-
   const username = user?.user?.name;
   const firstname = username.split(" ")[0];
-
-  const handleInput = () => {
-    return (
-      <input hidden accept="image/*" type="file" style={{ zIndex: 100 }} />
-    );
-  };
 
   return (
     <Container maxWidth="lg">
@@ -49,17 +42,26 @@ const UserProfile = () => {
           spacing={2}
         >
           <Grid item xs={3} md={2}>
-            <GrAvatar>
+            <Box style={{ position: "relative" }}>
+              <GrAvatar
+                src={user?.user?.profilePicture?.url}
+                sx={{ position: "relative" }}
+              />
               <IconButton
                 color="primary"
                 aria-label="upload picture"
                 component="label"
-                sx={{ zIndex: 20 }}
+                sx={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  zIndex: 2,
+                }}
               >
                 <input hidden accept="image/*" type="file" />
                 <PhotoCamera />
               </IconButton>
-            </GrAvatar>
+            </Box>
           </Grid>
           <Grid item xs={3} md={2}>
             <GrImageButton focusRipple>
@@ -77,7 +79,7 @@ const UserProfile = () => {
                   hidden
                   accept="image/*"
                   type="file"
-                  style={{ zIndex: 100, position: "relative" }}
+                  style={{ zIndex: 2, position: "relative" }}
                 />
                 <PhotoCamera />
               </GrImage>

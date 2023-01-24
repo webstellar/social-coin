@@ -1,11 +1,6 @@
-import { Paper, Input, Typography, Box, Grid } from "@mui/material";
+import { Paper, Typography, Box, Grid } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { Link } from "react-router-dom";
-import PhotoCamera from "@mui/icons-material/PhotoCamera";
-
-export const GrFormInput = styled(Input)({
-  display: "none",
-});
 
 export const GrFormImage = styled("img")({
   width: "100%",
@@ -18,13 +13,7 @@ export const GrFormImage = styled("img")({
   borderRadius: "10px",
 });
 
-export const GrFormIcon = styled(PhotoCamera)(({ theme }) => ({
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  color: theme.palette.primary.main,
-}));
+export const GrFormModal = styled(Box)(({ theme }) => ({}));
 
 export const GrPaper = styled(Paper)({
   position: "relative",
@@ -51,7 +40,6 @@ export const GrItem = styled(Paper)(({ theme }) => ({
   textAlign: "center",
   color: "grey.900",
 }));
-
 
 export const GrBox = styled(Box)(({ theme }) => ({
   padding: theme.spacing(2, 0, 2),

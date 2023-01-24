@@ -6,30 +6,16 @@ import {
   Grid,
   IconButton,
   CssBaseline,
+  Button,
+  Divider,
 } from "@mui/material/";
 import ClearIcon from "@mui/icons-material/Clear";
-
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 600,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-  "& .MuiTextField-root": {
-    m: 1,
-    width: "25ch",
-  },
-};
 
 const TestimonyFormSummary = ({ summary, setOpenSummary, setSummary }) => {
   return (
     <>
       <CssBaseline />
-      <Box sx={style}>
+      <Box>
         <Grid
           container
           direction="column"
@@ -51,7 +37,16 @@ const TestimonyFormSummary = ({ summary, setOpenSummary, setSummary }) => {
                 Give your story a title
               </Typography>
             </Grid>
-            <Grid item xs={2} md={2} sm={2}>
+            <Grid
+              item
+              xs={2}
+              md={2}
+              sm={2}
+              container
+              direction="row"
+              justifyContent="flex-end"
+              alignItems="flex-start"
+            >
               <IconButton
                 disableRipple={true}
                 color="inherit"
@@ -63,6 +58,7 @@ const TestimonyFormSummary = ({ summary, setOpenSummary, setSummary }) => {
               </IconButton>
             </Grid>
           </Grid>
+          <Divider sx={{ bgcolor: "background.paper", mb: 2 }} />
 
           <Grid
             item
@@ -89,6 +85,25 @@ const TestimonyFormSummary = ({ summary, setOpenSummary, setSummary }) => {
                 setSummary(e.target.value);
               }}
             />
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            md={12}
+            container
+            direction="row"
+            justifyContent="flex-end"
+            alignItems="flex-end"
+          >
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={() => {
+                setOpenSummary(false);
+              }}
+            >
+              Save
+            </Button>
           </Grid>
         </Grid>
       </Box>

@@ -8,36 +8,23 @@ import {
   Avatar,
   IconButton,
   CssBaseline,
+  Button,
+  Divider,
 } from "@mui/material/";
 import ClearIcon from "@mui/icons-material/Clear";
-
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 600,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-  "& .MuiTextField-root": {
-    m: 1,
-    width: "25ch",
-  },
-};
+import { GrFormModal } from "./TestimonyForm.styles";
 
 const TestimonyFormHero = ({ heroes, setOpenHero, hero, setHero }) => {
   return (
     <>
       <CssBaseline />
-      <Box sx={style}>
+      <GrFormModal>
         <Grid
           container
           direction="column"
           justifyContent="flex-start"
           alignItems="stretch"
-          rowSpacing={1}
+          rowSpacing={3}
         >
           <Grid
             item
@@ -53,7 +40,16 @@ const TestimonyFormHero = ({ heroes, setOpenHero, hero, setHero }) => {
                 Select your Humble Hero
               </Typography>
             </Grid>
-            <Grid item xs={2} md={2} sm={2}>
+            <Grid
+              item
+              xs={2}
+              md={2}
+              sm={2}
+              container
+              direction="row"
+              justifyContent="flex-end"
+              alignItems="flex-start"
+            >
               <IconButton
                 disableRipple={true}
                 color="inherit"
@@ -65,19 +61,10 @@ const TestimonyFormHero = ({ heroes, setOpenHero, hero, setHero }) => {
               </IconButton>
             </Grid>
           </Grid>
-
-          <Grid
-            item
-            xs={12}
-            sm={12}
-            md={12}
-            lg={12}
-            container
-            direction="row"
-            justifyContent="space-between"
-            alignItems="center"
-          >
+          <Divider sx={{ bgcolor: "background.paper", mb: 2 }} />
+          <Grid item xs={12} sm={12} md={12} lg={12}>
             <Autocomplete
+              fullWidth
               options={heroes}
               autoHighlight
               getOptionLabel={(option) => option.name || option}
@@ -111,8 +98,28 @@ const TestimonyFormHero = ({ heroes, setOpenHero, hero, setHero }) => {
               isOptionEqualToValue={(option, value) => option === value}
             />
           </Grid>
+
+          <Grid
+            item
+            xs={12}
+            md={12}
+            container
+            direction="row"
+            justifyContent="flex-end"
+            alignItems="flex-end"
+          >
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={() => {
+                setOpenHero(false);
+              }}
+            >
+              Save
+            </Button>
+          </Grid>
         </Grid>
-      </Box>
+      </GrFormModal>
     </>
   );
 };

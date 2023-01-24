@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import {
   Box,
+  Button,
   TextField,
   Typography,
   Grid,
@@ -8,30 +9,15 @@ import {
   CssBaseline,
   InputLabel,
   Link,
+  Divider
 } from "@mui/material/";
 import ClearIcon from "@mui/icons-material/Clear";
-
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 600,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-  "& .MuiTextField-root": {
-    m: 1,
-    width: "25ch",
-  },
-};
 
 const TestimonyFormVideo = ({ setVideo, video, setOpenVideo }) => {
   return (
     <>
       <CssBaseline />
-      <Box sx={style}>
+      <Box>
         <Grid
           container
           direction="column"
@@ -50,10 +36,19 @@ const TestimonyFormVideo = ({ setVideo, video, setOpenVideo }) => {
           >
             <Grid item xs={10} md={10} sm={10}>
               <Typography gutterBottom={false}>
-                Give your story a title
+                Share youtube video id e.g. 75RjgtZ2tj0
               </Typography>
             </Grid>
-            <Grid item xs={2} md={2} sm={2}>
+            <Grid
+              item
+              xs={2}
+              md={2}
+              sm={2}
+              container
+              direction="row"
+              justifyContent="flex-end"
+              alignItems="flex-start"
+            >
               <IconButton
                 disableRipple={true}
                 color="inherit"
@@ -65,6 +60,7 @@ const TestimonyFormVideo = ({ setVideo, video, setOpenVideo }) => {
               </IconButton>
             </Grid>
           </Grid>
+          <Divider sx={{ bgcolor: "background.paper", mb: 2 }} />
 
           <Grid
             item
@@ -93,6 +89,26 @@ const TestimonyFormVideo = ({ setVideo, video, setOpenVideo }) => {
                 setVideo(e.target.value);
               }}
             />
+          </Grid>
+
+          <Grid
+            item
+            xs={12}
+            md={12}
+            container
+            direction="row"
+            justifyContent="flex-end"
+            alignItems="flex-end"
+          >
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={() => {
+                setOpenVideo(false);
+              }}
+            >
+              Save
+            </Button>
           </Grid>
         </Grid>
       </Box>

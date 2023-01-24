@@ -20,7 +20,6 @@ import {
   GrFormImage,
   GrItem,
 } from "./TestimonyForm.styles";
-import ChipInput from "material-ui-chip-input";
 import SendIcon from "@mui/icons-material/Send";
 import EditIcon from "@mui/icons-material/Edit";
 
@@ -36,7 +35,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { createGratitude } from "../../redux/gratitudes/createGratitudeSlice";
 import { getHeroes } from "../../redux/heroes/heroesSlice";
-import GratitudeFormCard from "../GratitudeFormCard/GratitudeFormCard";
 import YoutubeEmbedForm from "../YoutubeEmbed/YoutubeEmbedForm";
 
 import Modal from "react-modal";
@@ -49,7 +47,9 @@ const customStyles = {
     left: "50%",
     right: "auto",
     bottom: "auto",
+    width: "560px",
     overflow: "unset",
+    WebkitOverflowScrolling: "touch",
     transform: "translate(-50%, -50%)",
   },
 };
@@ -66,14 +66,12 @@ const TestimonyForm = () => {
   const [image, setImage] = React.useState("");
   const [tags, setTags] = React.useState(["caring", "magnanimous"]);
   const [video, setVideo] = React.useState("");
-  const [currentStep, setCurrentStep] = React.useState(1);
   const [open, setOpen] = React.useState(false);
 
   //Form Modal
   const [openSummary, setOpenSummary] = React.useState(false);
   const [openStory, setOpenStory] = React.useState(false);
   const [openHero, setOpenHero] = React.useState(false);
-  const [openImage, setOpenImage] = React.useState(false);
   const [openTags, setOpenTags] = React.useState(false);
   const [openVideo, setOpenVideo] = React.useState(false);
 
@@ -84,39 +82,17 @@ const TestimonyForm = () => {
     ...state.heroes,
   }));
 
-  const handleNext = () => {
-    setCurrentStep(currentStep + 1);
-  };
-
-  const handlePrev = () => {
-    setCurrentStep(currentStep - 1);
-  };
-
   React.useEffect(() => {
     window.history.replaceState({}, document.title);
     dispatch(getHeroes());
     error && toast.error(error);
   }, [dispatch, error]);
 
-  /*  React.useEffect(() => {
-    if (hero === "" && heroes && heroes.length > 0) {
-      setHero(heroes[0]._id);
-    }
-  }, [hero, heroes]); */
-
   //tinymce editor
   const storyChange = (story, editor) => {
     if (editor.getContent({ format: "text" }).length < 100000) {
       setStory(story);
     }
-  };
-
-  const handleAddTag = (tag) => {
-    setTags([...tags, tag]);
-  };
-
-  const handleDeleteTag = (deleteTag) => {
-    setTags(tags.filter((tag) => tag !== deleteTag));
   };
 
   const handleClear = () => {
@@ -184,7 +160,7 @@ const TestimonyForm = () => {
   );
 
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={onSubmit} style={{ position: "relative" }}>
       <GrPaper elevation={0}>
         <Container maxWidth="lg">
           <Grid
@@ -225,6 +201,8 @@ const TestimonyForm = () => {
                 </IconButton>
               </Grid>
             </Grid>
+
+            <Divider sx={{ bgcolor: "background.paper", mt: 1, mb: 1 }} />
 
             <Grid
               item
@@ -365,7 +343,7 @@ const TestimonyForm = () => {
               </Grid>
             </Grid>
 
-            <Divider sx={{ bgcolor: "background.paper", mt: 3, mb: 3 }} />
+            <Divider sx={{ bgcolor: "background.paper", mt: 1, mb: 1 }} />
 
             <Grid
               item
@@ -625,26 +603,27 @@ const TestimonyForm = () => {
             </Grid>
           </Container>
         </GrBox>
-        <Fab
-          component={Button}
-          variant="extended"
-          color="secondary"
-          type="submit"
-        >
-          <SendIcon sx={{ mr: 1 }} />
-          Publish
-        </Fab>
-        <Backdrop
-          sx={{
-            color: "#fff",
-            zIndex: (theme) => theme.zIndex.drawer + 1,
-          }}
-          open={open}
-          onClick={handleClose}
-        >
-          <CircularProgress color="inherit" />
-        </Backdrop>
       </section>
+      <Fab
+        component={Button}
+        variant="extended"
+        color="secondary"
+        type="submit"
+        sx={{ position: "absolute", bottom: 16, right: 16 }}
+      >
+        <SendIcon sx={{ mr: 1 }} />
+        Publish
+      </Fab>
+      <Backdrop
+        sx={{
+          color: "#fff",
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+        }}
+        open={open}
+        onClick={handleClose}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </form>
   );
 };

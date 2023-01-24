@@ -1,42 +1,22 @@
 import PropTypes from "prop-types";
 import {
   Box,
+  Button,
   TextField,
   Typography,
   Grid,
   IconButton,
   CssBaseline,
   Autocomplete,
+  Divider,
 } from "@mui/material/";
 import ClearIcon from "@mui/icons-material/Clear";
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 600,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-  "& .MuiTextField-root": {
-    m: 1,
-    width: "25ch",
-  },
-};
-
-const TestimonyFormTags = ({
-  tags,
-  topTags,
-  setOpenTags,
-  handleTagChange,
-  topTagWithSelectAll,
-}) => {
+const TestimonyFormTags = ({ tags, topTags, setOpenTags, handleTagChange }) => {
   return (
     <>
       <CssBaseline />
-      <Box sx={style}>
+      <Box>
         <Grid
           container
           direction="column"
@@ -55,10 +35,19 @@ const TestimonyFormTags = ({
           >
             <Grid item xs={10} md={10} sm={10}>
               <Typography gutterBottom={false}>
-                Give your story a title
+                Write out qualities of your hero
               </Typography>
             </Grid>
-            <Grid item xs={2} md={2} sm={2}>
+            <Grid
+              item
+              xs={2}
+              md={2}
+              sm={2}
+              container
+              direction="row"
+              justifyContent="flex-end"
+              alignItems="flex-start"
+            >
               <IconButton
                 disableRipple={true}
                 color="inherit"
@@ -70,6 +59,7 @@ const TestimonyFormTags = ({
               </IconButton>
             </Grid>
           </Grid>
+          <Divider sx={{ bgcolor: "background.paper", mb: 2 }} />
 
           <Grid
             item
@@ -80,11 +70,12 @@ const TestimonyFormTags = ({
             container
             direction="row"
             justifyContent="space-between"
-            alignItems="center"
+            alignItems="center" 
           >
             <Autocomplete
               freeSolo
               multiple
+              fullWidth
               limitTags={2}
               id="multiple-limit-tags"
               options={topTags}
@@ -95,6 +86,25 @@ const TestimonyFormTags = ({
               )}
               sx={{ width: "500px" }}
             />
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            md={12}
+            container
+            direction="row"
+            justifyContent="flex-end"
+            alignItems="flex-end"
+          >
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={() => {
+                setOpenTags(false);
+              }}
+            >
+              Save
+            </Button>
           </Grid>
         </Grid>
       </Box>
