@@ -10,7 +10,7 @@ const initialState = {
 
 export const createHero = createAsyncThunk(
   "hero/createHero",
-  async ({ formData, navigate, toast }, { rejectWithValue }) => {
+  async ({ formData, navigate, toast, hero }, { rejectWithValue }) => {
     try {
       const config = {
         headers: {
@@ -19,7 +19,7 @@ export const createHero = createAsyncThunk(
       };
       const response = await axios.post("/api/v1/hero/new", formData, config);
       toast.success("Your hero was successfully");
-      navigate("/create-testimony");
+      navigate("/create-testimony", { state: { data: hero } });
       return response.data;
     } catch (err) {
       toast.error(err.response.data.errMessage);
@@ -39,7 +39,7 @@ export const createHeroSlice = createSlice({
     builder.addCase(createHero.fulfilled, (state, action) => {
       state.loading = false;
       localStorage.setItem("heroes", JSON.stringify({ ...action.payload }));
-      state.hero = action.payload;
+      state.hero = action.payload.hero;
       state.success = true;
     });
     builder.addCase(createHero.rejected, (state, action) => {

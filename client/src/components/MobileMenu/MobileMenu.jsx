@@ -2,6 +2,7 @@ import { useState } from "react";
 import {
   IconButton,
   Drawer,
+  Button,
   Box,
   Typography,
   Divider,
@@ -19,13 +20,16 @@ import {
   StyledInputBase,
 } from "./MobileMenu.styles";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { getHeroes } from "../../redux/heroes/heroesSlice";
+import { setLogout } from "../../redux/auth/authSlice";
 
 const drawerWidth = 240;
 const navItems = [
   {
     id: 1,
     name: "Give",
-    link: "/express-gratitude",
+    link: "/create-testimony",
   },
   {
     id: 2,
@@ -37,44 +41,63 @@ const navItems = [
     name: "Profile",
     link: "/my-profile",
   },
-  {
-    id: 4,
-    name: "My account",
-    link: "/my-dashboard",
-  },
 ];
 
 const MobileMenu = (props) => {
   const { window } = props;
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [searchText, setSearchText] = useState("");
+
+  const handleLogout = () => {
+    dispatch(setLogout());
+    setMobileOpen(!mobileOpen);
+  };
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
+  const searchHandler = (e) => {
+    e.preventDefault();
+    if (searchText.trim()) {
+      dispatch(getHeroes(searchText));
+      navigate(`/search/${searchText}`);
+    } else {
+      navigate("/search");
+    }
+  };
+
   const drawer = (
     <Box sx={{ textAlign: "center" }}>
       <Typography variant="h6" sx={{ my: 2 }}>
-        Gratitude
+        Testimony
       </Typography>
       <Divider />
       <List>
         <ListItem>
-          <Search>
-            <SearchIconWrapper onClick={() => navigate("/search")}>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ "aria-label": "search" }}
-            />
-          </Search>
+          <form onSubmit={searchHandler}>
+            <Search>
+              <SearchIconWrapper type="submit" aria-label="search">
+                <SearchIcon />
+              </SearchIconWrapper>
+              <StyledInputBase
+                placeholder="Search…"
+                inputProps={{ "aria-label": "search" }}
+                value={searchText}
+                onChange={(e) => {
+                  setSearchText(e.target.value);
+                }}
+              />
+            </Search>
+          </form>
         </ListItem>
+
         {navItems.map((item) => (
           <ListItem key={item.id} disablePadding>
             <ListItemButton
-              sx={{ textAlign: "center" }}
+              sx={{ textAlign: "left" }}
               component={Link}
               to={item.link}
             >
@@ -82,6 +105,16 @@ const MobileMenu = (props) => {
             </ListItemButton>
           </ListItem>
         ))}
+
+        <ListItem disablePadding>
+          <ListItemButton
+            sx={{ textAlign: "left", textTransform: "capitalize" }}
+            component={Button}
+            onClick={handleLogout}
+          >
+            <ListItemText primary="Logout" />
+          </ListItemButton>
+        </ListItem>
       </List>
     </Box>
   );

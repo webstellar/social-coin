@@ -10,6 +10,8 @@ import {
   MenuItem,
   FormControl,
   Select,
+  Backdrop,
+  CircularProgress,
 } from "@mui/material/";
 import { GrTypography, GrBox } from "./HeroForm.styles";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
@@ -40,6 +42,11 @@ const HeroForm = () => {
   });
   const [currentStep, setCurrentStep] = React.useState(1);
 
+  const [open, setOpen] = React.useState(false);
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const handleNext = () => {
     setCurrentStep(currentStep + 1);
   };
@@ -51,7 +58,7 @@ const HeroForm = () => {
   const { name, description, gender, country, email, profilePicture } =
     formData;
 
-  const { error } = useSelector((state) => ({ ...state.newhero }));
+  const { error, hero } = useSelector((state) => ({ ...state.newhero }));
 
   const onChange = (e) => {
     setFormData((prevState) => ({
@@ -62,17 +69,12 @@ const HeroForm = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-
-    if (
-      name &&
-      email &&
-      description &&
-      gender &&
-      country &&
-      email &&
-      profilePicture
-    ) {
-      dispatch(createHero({ formData, navigate, toast }));
+    setOpen(!open);
+    if (name && description && gender && country && profilePicture) {
+      dispatch(createHero({ formData, navigate, toast, hero }));
+      setTimeout(() => {
+        setOpen(open);
+      }, 10000);
     }
   };
 
@@ -381,6 +383,16 @@ const HeroForm = () => {
                           </GrTypography>
                         </Button>
                       </ButtonGroup>
+                      <Backdrop
+                        sx={{
+                          color: "#fff",
+                          zIndex: (theme) => theme.zIndex.drawer + 1,
+                        }}
+                        open={open}
+                        onClick={handleClose}
+                      >
+                        <CircularProgress color="inherit" />
+                      </Backdrop>
                     </Grid>
                   </>
                 )}

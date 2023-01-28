@@ -1,18 +1,12 @@
 import PropTypes from "prop-types";
-import TestimonyModalLayout from "./TestimonyModalLayout";
-import {
-  Button,
-  TextField,
-  Typography,
-  Grid,
-  IconButton,
-  InputLabel,
-  Link,
-  Divider,
-} from "@mui/material/";
+import { Typography, Grid, IconButton, Button, Divider } from "@mui/material/";
 import ClearIcon from "@mui/icons-material/Clear";
+import TestimonyModalLayout from "./../TestimonyForm/TestimonyModalLayout";
+import { FileUploader } from "react-drag-drop-files";
 
-const TestimonyFormVideo = ({ setVideo, video, setOpenVideo }) => {
+const fileTypes = ["JPEG", "PNG", "GIF", "WEBP"];
+
+const UserProfileImage = ({ profilePicture, setOpenImage, handleChange }) => {
   return (
     <TestimonyModalLayout>
       <Grid
@@ -26,7 +20,7 @@ const TestimonyFormVideo = ({ setVideo, video, setOpenVideo }) => {
       >
         <Grid item xs={10} md={10} sm={10}>
           <Typography gutterBottom={false}>
-            Share youtube video id e.g. 75RjgtZ2tj0
+            Upload an image to change profile
           </Typography>
         </Grid>
         <Grid
@@ -43,7 +37,7 @@ const TestimonyFormVideo = ({ setVideo, video, setOpenVideo }) => {
             disableRipple={true}
             color="inherit"
             onClick={() => {
-              setOpenVideo(false);
+              setOpenImage(false);
             }}
           >
             <ClearIcon sx={{ fontSize: "2.0rem" }} />
@@ -63,24 +57,18 @@ const TestimonyFormVideo = ({ setVideo, video, setOpenVideo }) => {
         justifyContent="space-between"
         alignItems="center"
       >
-        <InputLabel>
-          <Link href="https://youtu.be/UjXTdZ45evs">Tutorial</Link>: How to get
-          your Youtube Video Id
-        </InputLabel>
-        <TextField
-          name="video"
-          value={video}
-          type="text"
-          allowDuplicates={false}
-          fullWidth
-          variant="standard"
-          label="Share youtube video id e.g. 75RjgtZ2tj0"
-          onChange={(e) => {
-            setVideo(e.target.value);
-          }}
+        <FileUploader
+          multiple={false}
+          handleChange={handleChange}
+          name="profilePicture"
+          types={fileTypes}
         />
+        <Typography component="p" variant="p">
+          {profilePicture
+            ? `File name: ${profilePicture.name}`
+            : "no files uploaded yet"}
+        </Typography>
       </Grid>
-
       <Grid
         item
         xs={12}
@@ -89,14 +77,14 @@ const TestimonyFormVideo = ({ setVideo, video, setOpenVideo }) => {
         direction="row"
         justifyContent="flex-end"
         alignItems="flex-end"
-        sx={{ mt: 3 }}
       >
         <Button
           variant="contained"
           color="secondary"
           onClick={() => {
-            setOpenVideo(false);
+            setOpenImage(false);
           }}
+          sx={{ mt: 3 }}
         >
           Save
         </Button>
@@ -105,10 +93,10 @@ const TestimonyFormVideo = ({ setVideo, video, setOpenVideo }) => {
   );
 };
 
-TestimonyFormVideo.propTypes = {
-  setOpenVideo: PropTypes.any,
-  video: PropTypes.string,
-  setVideo: PropTypes.any,
+UserProfileImage.propTypes = {
+  handleChange: PropTypes.any,
+  setOpenImage: PropTypes.any,
+  profilePicture: PropTypes.string,
 };
 
-export default TestimonyFormVideo;
+export default UserProfileImage;

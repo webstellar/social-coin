@@ -22,7 +22,7 @@ import { getHeroes } from "../../actions/heroActions";
 import { NEW_APPRECIATION_RESET } from "../../constants/appreciationConstant";
 import { toast, ToastContainer } from "react-toastify";
 
-const NewUserAppreciation = () => {
+const NewUserAppreciation   () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();

@@ -1,5 +1,12 @@
 import { styled } from "@mui/material/styles";
-import { Box, Paper, Avatar, Typography, ButtonBase } from "@mui/material";
+import {
+  Box,
+  Paper,
+  Avatar,
+  Typography,
+  ButtonBase,
+  IconButton,
+} from "@mui/material";
 import { Link } from "react-router-dom";
 
 export const GrBox = styled(Box)(({ theme }) => ({
@@ -94,6 +101,18 @@ export const GrImage = styled("span")(({ theme }) => ({
   alignItems: "center",
   justifyContent: "center",
   color: theme.palette.common.white,
+}));
+
+export const GrIconButton = styled(IconButton)(({ theme }) => ({
+  position: "absolute",
+  top: "35%",
+  left: "25%",
+  zIndex: 2,
+  color: "#fff",
+  [theme.breakpoints.down("md")]: {
+    top: "27%",
+    left: "20%",
+  },
 }));
 
 export const GrImageMarked = styled("span")(({ theme }) => ({

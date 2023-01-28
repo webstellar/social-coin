@@ -72,10 +72,19 @@ const customMobileStyles = {
 const TestimonyForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const { error } = useSelector((state) => ({
+    ...state.newgratitude,
+  }));
+  const { heroes } = useSelector((state) => ({
+    ...state.heroes,
+  }));
+
   const location = useLocation();
-  const data = location.state?.data._id;
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const data = location.state?.data;
+  console.log(data);
 
   const [summary, setSummary] = React.useState("");
   const [story, setStory] = React.useState("");
@@ -92,13 +101,6 @@ const TestimonyForm = () => {
   const [openHero, setOpenHero] = React.useState(false);
   const [openTags, setOpenTags] = React.useState(false);
   const [openVideo, setOpenVideo] = React.useState(false);
-
-  const { error } = useSelector((state) => ({
-    ...state.newgratitude,
-  }));
-  const { heroes } = useSelector((state) => ({
-    ...state.heroes,
-  }));
 
   React.useEffect(() => {
     window.history.replaceState({}, document.title);
@@ -179,6 +181,12 @@ const TestimonyForm = () => {
   );
 
   React.useEffect(() => {
+    if (hero === "" && heroes && heroes.length > 0) {
+      setHero(heroes[0]._id);
+    }
+  }, [heroes, hero]);
+
+  React.useEffect(() => {
     if (heroDisplay.length > 0) {
       setHero(heroDisplay[0]._id);
     }
@@ -241,14 +249,14 @@ const TestimonyForm = () => {
               alignItems="flex-start"
             >
               <Grid item xs={10} sm={10} md={10} lg={10}>
-                {fakeHero ? (
+                {data ? (
                   <Typography
                     component="h3"
                     variant="h4"
                     align="center"
                     sx={{ color: "#000" }}
                   >
-                    {fakeHero}
+                    {hero}
                   </Typography>
                 ) : (
                   <>
@@ -257,9 +265,8 @@ const TestimonyForm = () => {
                       variant="h4"
                       align="center"
                       sx={{ color: "#000" }}
-                      noWrap
                     >
-                      Jane John Doe
+                      {fakeHero || "John Doe"}
                     </Typography>
                   </>
                 )}
@@ -269,6 +276,7 @@ const TestimonyForm = () => {
                   onClick={() => {
                     setOpenHero(true);
                   }}
+                  disabled={data ? true : false}
                 >
                   <EditIcon fontSize="medium" color="secondary" />
                 </IconButton>
@@ -634,7 +642,7 @@ const TestimonyForm = () => {
         variant="extended"
         color="secondary"
         type="submit"
-        sx={{ position: "absolute", bottom: 16, right: 16 }}
+        sx={{ position: "absolute", bottom: 16, right: 32 }}
       >
         <SendIcon sx={{ mr: 1 }} />
         Publish

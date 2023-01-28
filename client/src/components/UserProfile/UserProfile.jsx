@@ -1,9 +1,9 @@
+import * as React from "react";
 import {
   Container,
   Stack,
   Grid,
   Box,
-  IconButton,
   Typography,
   Divider,
   useMediaQuery,
@@ -12,17 +12,46 @@ import {
 import {
   GrBox,
   GrItem,
+  GrIconButton,
   GrAvatar,
   GrBigTypography,
   GrLink,
-  GrImageBackdrop,
   GrImageButton,
-  GrImageSrc,
   GrImage,
+  GrImageSrc,
+  GrImageBackdrop,
 } from "./UserProfile.styles";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
+import Modal from "react-modal";
+import UserProfileImage from "./UserProfileImage";
 
 import { useSelector } from "react-redux";
+
+const customStyles = {
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    width: "560px",
+    overflow: "unset",
+    WebkitOverflowScrolling: "touch",
+    transform: "translate(-50%, -50%)",
+  },
+};
+
+const customMobileStyles = {
+  content: {
+    top: "50%",
+    left: "57%",
+    right: "auto",
+    bottom: "auto",
+    width: "320px",
+    overflow: "unset",
+    WebkitOverflowScrolling: "touch",
+    transform: "translate(-50%, -50%)",
+  },
+};
 
 const UserProfile = () => {
   const theme = useTheme();
@@ -30,6 +59,15 @@ const UserProfile = () => {
   const { user } = useSelector((state) => state.auth);
   const username = user?.user?.name;
   const firstname = username.split(" ")[0];
+
+  const [profilePicture, setProfilePicture] = React.useState("");
+  const [openImage, setOpenImage] = React.useState(false);
+
+  const handleChange = (profilePicture) => {
+    setProfilePicture(profilePicture);
+  };
+
+  const handleProfilePicture = () => {};
 
   return (
     <Container maxWidth="lg">
@@ -41,50 +79,51 @@ const UserProfile = () => {
           alignItems="center"
           spacing={2}
         >
-          <Grid item xs={3} md={2}>
-            <Box style={{ position: "relative" }}>
-              <GrAvatar
-                src={user?.user?.profilePicture?.url}
-                sx={{ position: "relative" }}
-              />
-              <IconButton
-                color="primary"
-                aria-label="upload picture"
-                component="label"
-                sx={{
-                  position: "absolute",
-                  top: "50%",
-                  left: "50%",
-                  zIndex: 2,
-                }}
-              >
-                <input hidden accept="image/*" type="file" />
-                <PhotoCamera />
-              </IconButton>
-            </Box>
-          </Grid>
-          <Grid item xs={3} md={2}>
-            <GrImageButton focusRipple>
-              <GrImageSrc
-                style={{
-                  backgroundImage:
-                    `url(${user?.user?.profilePicture?.url})` ||
-                    "https://source.unsplash.com/random",
-                }}
-              />
-
-              <GrImageBackdrop className="MuiImageBackdrop-root" />
-              <GrImage>
-                <input
-                  hidden
-                  accept="image/*"
-                  type="file"
-                  style={{ zIndex: 2, position: "relative" }}
+          <form onSubmit={handleProfilePicture}>
+            <Grid item xs={3} md={2}>
+              <GrImageButton focusRipple>
+                <GrImageSrc
+                  style={{
+                    backgroundImage:
+                      `url(${user?.user?.profilePicture?.url})` ||
+                      "https://source.unsplash.com/random",
+                  }}
                 />
-                <PhotoCamera />
-              </GrImage>
-            </GrImageButton>
-          </Grid>
+                <GrImageBackdrop className="MuiImageBackdrop-root" />
+                <GrImage
+                  aria-label="upload picture"
+                  component="label"
+                  onClick={() => {
+                    setOpenImage(true);
+                  }}
+                >
+                  <PhotoCamera />
+                </GrImage>
+                <Modal
+                  id="image"
+                  isOpen={openImage}
+                  onRequestClose={() => {
+                    setOpenImage(false);
+                  }}
+                  aria={{
+                    labelledby: "Hero",
+                    describedby: "full_description",
+                  }}
+                  ariaHideApp={false}
+                  style={isMobile ? customMobileStyles : customStyles}
+                  contentLabel="Hero"
+                  shouldCloseOnOverlayClick={true}
+                  shouldCloseOnEsc={true}
+                >
+                  <UserProfileImage
+                    profilePicture={profilePicture}
+                    setOpenImage={setOpenImage}
+                    handleChange={handleChange}
+                  />
+                </Modal>
+              </GrImageButton>
+            </Grid>
+          </form>
           <Grid
             item
             xs={9}

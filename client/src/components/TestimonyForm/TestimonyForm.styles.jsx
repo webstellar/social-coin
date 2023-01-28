@@ -64,6 +64,12 @@ export const GrBigTypography = styled(Typography)(({ theme }) => ({
   },
 }));
 
+export const GrSmallTypography = styled(Typography)(({ theme }) => ({
+  [theme.breakpoints.down("md")]: {
+    fontSize: "1.2rem",
+  },
+}));
+
 export const GrTypography = styled(Typography)(({ theme }) => ({
   color: "grey.900",
   fontWeight: "600",

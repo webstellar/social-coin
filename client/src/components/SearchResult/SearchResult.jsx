@@ -23,11 +23,9 @@ const SearchResult = () => {
   const navigate = useNavigate();
   const [keyword, setKeyword] = React.useState("");
   const { heroes, loading } = useSelector((state) => state.heroes);
-  console.log(heroes);
 
   const searchHandler = (e) => {
     e.preventDefault();
-    console.log(keyword);
     if (keyword.trim()) {
       dispatch(getHeroes(keyword));
       navigate(`/search/${keyword}`);
