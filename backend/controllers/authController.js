@@ -163,19 +163,6 @@ exports.authenticateViaGoogle = catchAsyncErrors(async (req, res, next) => {
 
 //Register  user => /api/v1/register
 exports.registerUser = catchAsyncErrors(async (req, res, next) => {
-  /*
-  const result = await cloudinary.v2.uploader.upload(req.body.profilePicture, {
-    folder: "social-coin/user_avatar",
-    width: 150,
-    crop: "scale",
-  } 
-  
-  profilePicture: {
-      public_id: result.public_id,
-      url: result.secure_url,
-    },
-  */
-
   const { name, email, password } = req.body;
 
   console.log(req.body);
@@ -234,11 +221,6 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
   const resetToken = user.getResetPasswordToken();
 
   await user.save({ validateBeforeSave: false });
-
-  // Create reset password url
-  /* const resetUrl = `${req.protocol}://${req.get(
-    "host"
-  )}/api/v1/password/reset/${resetToken}`; */
 
   const resetUrl = `${process.env.FRONTEND_URL}/password/reset/${resetToken}`;
 
@@ -344,10 +326,8 @@ exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
   // Update avatar
   if (req.body.profilePicture !== "") {
     const user = await User.findById(req.user.id);
-
     const image_id = user.profilePicture.public_id;
     const res = await cloudinary.v2.uploader.destroy(image_id);
-
     const result = await cloudinary.v2.uploader.upload(
       req.body.profilePicture,
       {
@@ -366,8 +346,47 @@ exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
   const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
     new: true,
     runValidators: true,
-    //useFindAndModify: false,
   });
+
+  res.status(200).json({
+    success: true,
+  });
+});
+
+// Update user profile   =>   /api/v1/me/update
+exports.updateProfileImage = catchAsyncErrors(async (req, res, next) => {
+  // Update avatar
+
+  if (req.body.profilePicture !== "") {
+    const user = await User.findById(req.user.id);
+    const image_id = user.profilePicture.public_id;
+    const res = await cloudinary.v2.uploader.destroy(image_id);
+    const result = await cloudinary.v2.uploader.upload(
+      req.body.profilePicture,
+      {
+        folder: "social-coin/user_avatar",
+        width: 150,
+        crop: "scale",
+      }
+    );
+
+    req.body.profilePicture = result;
+
+    newUserData.profilePicture = {
+      public_id: result.public_id,
+      url: result.secure_url,
+    };
+  }
+  console.log(newUserData);
+
+  const user = await User.findByIdAndUpdate(
+    req.user.id,
+    req.body.profilePicture,
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
 
   res.status(200).json({
     success: true,

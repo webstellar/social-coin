@@ -17,6 +17,7 @@ import {
 } from "@mui/material/";
 import {
   GrTypography,
+  GrTagTypography,
   GrBox,
   GrPaper,
   GrFormImage,
@@ -41,7 +42,7 @@ import YoutubeEmbedForm from "../YoutubeEmbed/YoutubeEmbedForm";
 
 import Modal from "react-modal";
 import { topTagWithSelectAll, topTags } from "../../data/tags";
-import defaultImage from "../../images/formbackground.jpg";
+import defaultImage from "../../images/testimonybanner.png";
 
 const customStyles = {
   content: {
@@ -72,14 +73,6 @@ const customMobileStyles = {
 const TestimonyForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const { error } = useSelector((state) => ({
-    ...state.newgratitude,
-  }));
-  const { heroes } = useSelector((state) => ({
-    ...state.heroes,
-  }));
-
   const location = useLocation();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -90,6 +83,7 @@ const TestimonyForm = () => {
   const [story, setStory] = React.useState("");
   const [hero, setHero] = React.useState("");
   const [fakeHero, setFakeHero] = React.useState("");
+  const [fakeName, setFakeName] = React.useState("");
   const [image, setImage] = React.useState("");
   const [tags, setTags] = React.useState(["caring", "magnanimous"]);
   const [video, setVideo] = React.useState("");
@@ -102,8 +96,15 @@ const TestimonyForm = () => {
   const [openTags, setOpenTags] = React.useState(false);
   const [openVideo, setOpenVideo] = React.useState(false);
 
+  const { error } = useSelector((state) => ({
+    ...state.newgratitude,
+  }));
+
+  const { heroes } = useSelector((state) => ({
+    ...state.heroes,
+  }));
+
   React.useEffect(() => {
-    window.history.replaceState({}, document.title);
     dispatch(getHeroes());
     error && toast.error(error);
   }, [dispatch, error]);
@@ -141,11 +142,16 @@ const TestimonyForm = () => {
       tags: tags,
     };
 
-    dispatch(createGratitude({ formData, toast, navigate }));
-    setTimeout(() => {
-      handleClear();
-      setOpen(open);
-    }, 10000);
+    if (hero && summary && story && image) {
+      dispatch(createGratitude({ formData, toast, navigate }));
+      setTimeout(() => {
+        handleClear();
+        setOpen(open);
+      }, 10000);
+    } else {
+      toast.error("Fill all required fields");
+      setOpen(!open);
+    }
   };
 
   //images
@@ -176,21 +182,21 @@ const TestimonyForm = () => {
 
   const tinymce = process.env.REACT_APP_TINY_URL_KEY;
 
-  const heroDisplay = heroes.filter((halo) =>
-    fakeHero === halo.name ? halo : null
+  const heroNameDisplay = heroes.filter((halo) =>
+    data === halo._id ? halo : null
   );
 
   React.useEffect(() => {
-    if (hero === "" && heroes && heroes.length > 0) {
-      setHero(heroes[0]._id);
+    if (data) {
+      setHero(data);
     }
-  }, [heroes, hero]);
+  }, [data, fakeHero]);
 
   React.useEffect(() => {
-    if (heroDisplay.length > 0) {
-      setHero(heroDisplay[0]._id);
+    if (heroNameDisplay.length > 0) {
+      setFakeName(heroNameDisplay[0].name);
     }
-  }, [setHero, heroDisplay]);
+  }, [heroNameDisplay]);
 
   return (
     <form onSubmit={onSubmit} style={{ position: "relative" }}>
@@ -248,17 +254,8 @@ const TestimonyForm = () => {
               justifyContent="space-evenly"
               alignItems="flex-start"
             >
-              <Grid item xs={10} sm={10} md={10} lg={10}>
+              <Grid item xs={10} sm={10} md={10} lg={10} sx={{ mb: 3 }}>
                 {data ? (
-                  <Typography
-                    component="h3"
-                    variant="h4"
-                    align="center"
-                    sx={{ color: "#000" }}
-                  >
-                    {hero}
-                  </Typography>
-                ) : (
                   <>
                     <Typography
                       component="h3"
@@ -266,43 +263,36 @@ const TestimonyForm = () => {
                       align="center"
                       sx={{ color: "#000" }}
                     >
-                      {fakeHero || "John Doe"}
+                      {fakeName}
                     </Typography>
+                    <Link href="/create-hero" style={{ textAlign: "center" }}>
+                      <Typography align="center">
+                        Not your hero? click here to go back
+                      </Typography>
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <Typography
+                      component="h3"
+                      variant="h4"
+                      align="center"
+                      sx={{ color: "#b71c1c" }}
+                    >
+                      No Hero selected
+                    </Typography>
+                    <Link href="/create-hero" style={{ textAlign: "center" }}>
+                      <Typography align="center">
+                        Click here to create your hero
+                      </Typography>
+                    </Link>
                   </>
                 )}
               </Grid>
               <Grid item xs={2} sm={2} md={2} lg={2}>
-                <IconButton
-                  onClick={() => {
-                    setOpenHero(true);
-                  }}
-                  disabled={data ? true : false}
-                >
-                  <EditIcon fontSize="medium" color="secondary" />
+                <IconButton disabled={data ? true : false}>
+                  <EditIcon fontSize="medium" sx={{ color: "#e0e0e0" }} />
                 </IconButton>
-                <Modal
-                  id="hero"
-                  isOpen={openHero}
-                  onRequestClose={() => {
-                    setOpenHero(false);
-                  }}
-                  aria={{
-                    labelledby: "Hero",
-                    describedby: "full_description",
-                  }}
-                  ariaHideApp={false}
-                  style={isMobile ? customMobileStyles : customStyles}
-                  contentLabel="Hero"
-                  shouldCloseOnOverlayClick={true}
-                  shouldCloseOnEsc={true}
-                >
-                  <TestimonyFormHero
-                    heroes={heroes}
-                    setOpenHero={setOpenHero}
-                    hero={fakeHero}
-                    setHero={setFakeHero}
-                  />
-                </Modal>
               </Grid>
             </Grid>
 
@@ -337,8 +327,8 @@ const TestimonyForm = () => {
                       align="center"
                       gutterBottom
                     >
-                      Passionate testimony to him who was a hero and at the same
-                      time humble
+                      Write a title about your testimony...{" "}
+                      <span style={{ color: "#f44336" }}>*</span>
                     </GrTypography>
                   </>
                 )}
@@ -404,34 +394,13 @@ const TestimonyForm = () => {
                     alignItems="center"
                     spacing={2}
                   >
-                    {tags ? (
-                      tags.map((tag) => (
-                        <GrItem elevation={0}>
-                          <Typography
-                            variant="subtitle1"
-                            component="p"
-                            sx={{
-                              color: "#000",
-                              textDecoration: "none",
-                              "&:hover": {
-                                color: "#F6430A",
-                              },
-                            }}
-                          >
-                            {tag}
-                          </Typography>
-                        </GrItem>
-                      ))
-                    ) : (
-                      <>
-                        <GrItem elevation={0}>
-                          <Link
-                            href="#video"
-                            color="inherit"
-                            variant="body2"
-                            underline="hover"
-                          >
-                            <Typography
+                    <span style={{ color: "#000", fontSize: "1.2rem" }}>
+                      tag:{" "}
+                    </span>
+                    {tags
+                      ? tags.map((tag) => (
+                          <GrItem elevation={0} key={tag}>
+                            <GrTagTypography
                               variant="subtitle1"
                               component="p"
                               sx={{
@@ -442,34 +411,11 @@ const TestimonyForm = () => {
                                 },
                               }}
                             >
-                              Video
-                            </Typography>
-                          </Link>
-                        </GrItem>
-                        <GrItem elevation={0}>
-                          <Link
-                            href="#testimony"
-                            color="inherit"
-                            variant="body2"
-                            underline="hover"
-                          >
-                            <Typography
-                              variant="subtitle1"
-                              component="p"
-                              sx={{
-                                color: "#000",
-                                textDecoration: "none",
-                                "&:hover": {
-                                  color: "#F6430A",
-                                },
-                              }}
-                            >
-                              Testimony
-                            </Typography>
-                          </Link>
-                        </GrItem>
-                      </>
-                    )}
+                              {tag}
+                            </GrTagTypography>
+                          </GrItem>
+                        ))
+                      : null}
                   </Stack>
                 </Box>
               </Grid>
@@ -589,15 +535,8 @@ const TestimonyForm = () => {
                   />
                 ) : (
                   <div style={{ fontSize: "20px", fontWeight: "400" }}>
-                    It all started in the year January 2019 when I applied for
-                    the role of a wordpress web designer, I was amazed to do an
-                    interview with a foreigner and technically didn't know how
-                    to handle the whole process, but I did to my best knowledge.
-                    An experience I really don't relate to it a lot mostly
-                    because the second meeting was the most heart-to-heart I
-                    have ever had between a boss and an employee. I might add
-                    that even though I hadn't accepted the offer yet, I already
-                    saw John Jane Doe as my new boss...
+                    Write the testimony about your hero here, make it as long as
+                    you want...<span style={{ color: "#f44336" }}>*</span>
                   </div>
                 )}
               </Grid>

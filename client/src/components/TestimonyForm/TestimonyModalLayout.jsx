@@ -12,7 +12,6 @@ const TestimonyModalLayout = ({ children }) => {
           direction="column"
           justifyContent="flex-start"
           alignItems="stretch"
-          Spacing={3}
         >
           <main style={{ mt: 2, mb: 2 }}>{children}</main>
         </Grid>

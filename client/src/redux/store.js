@@ -25,7 +25,7 @@ export default configureStore({
     heroes: heroesSlice.reducer,
     hero: heroSlice.reducer,
     auth: authSlice.reducer,
-    user: myAuthSlice.reducer,
+    me: myAuthSlice.reducer,
     users: allUserSlice.reducer,
     authGoogle: googleSlice.reducer,
     authLinkedin: linkedinSlice.reducer,

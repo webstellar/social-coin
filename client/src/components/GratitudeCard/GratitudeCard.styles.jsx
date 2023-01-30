@@ -19,7 +19,7 @@ export const GrItem = styled(Paper)(({ theme }) => ({
 }));
 
 export const GrCardMedia = styled(CardMedia)(({ theme }) => ({
-  width: 160,
+  width: 120,
   height: 240,
   objectFit: "cover",
   display: {

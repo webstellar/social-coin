@@ -21,9 +21,9 @@ export const forgotPassword = createAsyncThunk(
       const { data } = await axios.post(`/api/v1/${authVia}`, formData, config);
       navigate("/");
       return data;
-    } catch (err) {
-      toast.error(err.response.data.errMessage);
-      return rejectWithValue(err.response.data);
+    } catch (error) {
+      toast.error(error.response.data.message);
+      return rejectWithValue(error.response.data);
     }
   }
 );
@@ -38,7 +38,7 @@ export const resetPassword = createAsyncThunk(
         },
       };
 
-      const { data } = await axios.post(
+      const { data } = await axios.put(
         `/api/v1/password/reset/${token}`,
         formData,
         config

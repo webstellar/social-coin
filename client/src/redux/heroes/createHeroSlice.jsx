@@ -10,7 +10,7 @@ const initialState = {
 
 export const createHero = createAsyncThunk(
   "hero/createHero",
-  async ({ formData, navigate, toast, hero }, { rejectWithValue }) => {
+  async ({ formData, navigate, toast }, { rejectWithValue }) => {
     try {
       const config = {
         headers: {
@@ -19,7 +19,9 @@ export const createHero = createAsyncThunk(
       };
       const response = await axios.post("/api/v1/hero/new", formData, config);
       toast.success("Your hero was successfully");
-      navigate("/create-testimony", { state: { data: hero } });
+      navigate("/create-testimony", {
+        state: { data: response.data?.hero?._id },
+      });
       return response.data;
     } catch (err) {
       toast.error(err.response.data.errMessage);

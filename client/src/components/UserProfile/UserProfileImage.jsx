@@ -6,7 +6,12 @@ import { FileUploader } from "react-drag-drop-files";
 
 const fileTypes = ["JPEG", "PNG", "GIF", "WEBP"];
 
-const UserProfileImage = ({ profilePicture, setOpenImage, handleChange }) => {
+const UserProfileImage = ({
+  profilePicture,
+  setOpenImage,
+  handleChange,
+  handleProfilePicture,
+}) => {
   return (
     <TestimonyModalLayout>
       <Grid
@@ -81,9 +86,8 @@ const UserProfileImage = ({ profilePicture, setOpenImage, handleChange }) => {
         <Button
           variant="contained"
           color="secondary"
-          onClick={() => {
-            setOpenImage(false);
-          }}
+          type="submit"
+          onClick={handleProfilePicture}
           sx={{ mt: 3 }}
         >
           Save
@@ -97,6 +101,7 @@ UserProfileImage.propTypes = {
   handleChange: PropTypes.any,
   setOpenImage: PropTypes.any,
   profilePicture: PropTypes.string,
+  handleProfilePicture: PropTypes.func,
 };
 
 export default UserProfileImage;

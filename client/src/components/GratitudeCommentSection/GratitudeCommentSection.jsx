@@ -6,7 +6,12 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import MailIcon from "@mui/icons-material/Mail";
-import { shareOnFacebook, shareOnLinkedIn } from "../../utils/SocialShare";
+import {
+  shareOnFacebook,
+  shareOnLinkedIn,
+  shareOnTwitter,
+  shareOnEmail,
+} from "../../utils/SocialShare";
 import DisqusThread from "../Disqus/DisqusThread";
 
 const GratitudeCommentSection = ({ gratitude, id }) => {
@@ -32,14 +37,14 @@ const GratitudeCommentSection = ({ gratitude, id }) => {
             <Grid item xs={3} md={3}>
               <GrItem>
                 <GrTypography>Share on Twitter</GrTypography>
-                <IconButton sx={{ cursor: "pointer" }}>
+                <IconButton onClick={shareOnTwitter} sx={{ cursor: "pointer" }}>
                   <TwitterIcon fontSize="large" />
                 </IconButton>
               </GrItem>
             </Grid>
             <Grid item xs={3} md={3}>
               <GrItem>
-                <GrTypography>Share on LinkedIn</GrTypography>{" "}
+                <GrTypography>Share on LinkedIn</GrTypography>
                 <IconButton onClick={shareOnLinkedIn}>
                   <LinkedInIcon fontSize="large" />
                 </IconButton>
@@ -47,8 +52,13 @@ const GratitudeCommentSection = ({ gratitude, id }) => {
             </Grid>
             <Grid item xs={3} md={3}>
               <GrItem>
-                <GrTypography>Share on Mail</GrTypography>{" "}
-                <IconButton sx={{ cursor: "pointer" }}>
+                <GrTypography>Share on Mail</GrTypography>
+                <IconButton
+                  onClick={(gratitude) => {
+                    shareOnEmail(gratitude);
+                  }}
+                  sx={{ cursor: "pointer" }}
+                >
                   <MailIcon fontSize="large" />
                 </IconButton>
               </GrItem>

@@ -1,8 +1,22 @@
-import { GrPaper, GrTypography, GrBox } from "./GratitudeHero.styles";
+import {
+  GrPaper,
+  GrTypography,
+  GrBox,
+  GrItem,
+  GrTagTypography,
+} from "./GratitudeHero.styles";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { Typography, Grid, CardMedia, Card, Container } from "@mui/material";
-import defaultImage from "../../images/dummy_post.webp";
+import {
+  Typography,
+  Grid,
+  CardMedia,
+  Card,
+  Container,
+  Box,
+  Stack,
+} from "@mui/material";
+import defaultImage from "../../images/testimonybanner.png";
 
 const GratitudeHero = ({ gratitude }) => {
   return (
@@ -70,6 +84,101 @@ const GratitudeHero = ({ gratitude }) => {
                   </Typography>
                 </Link>
               </GrBox>
+            </Grid>
+
+            <Grid item xs={10} sm={10} md={10} lg={10}>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  textAlign: "center",
+                  mt: 2,
+                  mb: 2,
+                }}
+              >
+                <Stack
+                  direction="row"
+                  justifyContent="center"
+                  alignItems="center"
+                  spacing={2}
+                >
+                  <span style={{ color: "#000", fontSize: "1.2rem" }}>
+                    tag:
+                  </span>
+                  {gratitude?.tags ? (
+                    gratitude?.tags.map((tag) => (
+                      <GrItem elevation={0} key={tag}>
+                        <Link
+                          to={`/appreciation/tag/${tag}`}
+                          sx={{ textDecoration: "none" }}
+                        >
+                          <GrTagTypography
+                            variant="subtitle1"
+                            component="p"
+                            sx={{
+                              color: "#000",
+                              textDecoration: "none",
+                              "&:hover": {
+                                color: "#F6430A",
+                              },
+                            }}
+                          >
+                            {tag}
+                          </GrTagTypography>
+                        </Link>
+                      </GrItem>
+                    ))
+                  ) : (
+                    <>
+                      <GrItem elevation={0}>
+                        <Link
+                          to="#video"
+                          color="inherit"
+                          variant="body2"
+                          underline="hover"
+                        >
+                          <Typography
+                            variant="subtitle1"
+                            component="p"
+                            sx={{
+                              color: "#000",
+                              textDecoration: "none",
+                              "&:hover": {
+                                color: "#F6430A",
+                              },
+                            }}
+                          >
+                            Video
+                          </Typography>
+                        </Link>
+                      </GrItem>
+                      <GrItem elevation={0}>
+                        <Link
+                          to="#testimony"
+                          color="inherit"
+                          variant="body2"
+                          underline="hover"
+                        >
+                          <Typography
+                            variant="subtitle1"
+                            component="p"
+                            sx={{
+                              color: "#000",
+                              textDecoration: "none",
+                              "&:hover": {
+                                color: "#F6430A",
+                              },
+                            }}
+                          >
+                            Testimony
+                          </Typography>
+                        </Link>
+                      </GrItem>
+                    </>
+                  )}
+                </Stack>
+              </Box>
             </Grid>
           </Grid>
         </Container>

@@ -3,7 +3,6 @@ import {
   Container,
   Stack,
   Grid,
-  Box,
   Typography,
   Divider,
   useMediaQuery,
@@ -12,8 +11,6 @@ import {
 import {
   GrBox,
   GrItem,
-  GrIconButton,
-  GrAvatar,
   GrBigTypography,
   GrLink,
   GrImageButton,
@@ -25,7 +22,10 @@ import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import Modal from "react-modal";
 import UserProfileImage from "./UserProfileImage";
 
-import { useSelector } from "react-redux";
+import { updateProfile, loadUser } from "../../redux/auth/myAuthSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const customStyles = {
   content: {
@@ -46,7 +46,6 @@ const customMobileStyles = {
     left: "57%",
     right: "auto",
     bottom: "auto",
-    width: "320px",
     overflow: "unset",
     WebkitOverflowScrolling: "touch",
     transform: "translate(-50%, -50%)",
@@ -55,8 +54,11 @@ const customMobileStyles = {
 
 const UserProfile = () => {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const { user } = useSelector((state) => state.auth);
+  const { error } = useSelector((state) => state.me);
   const username = user?.user?.name;
   const firstname = username.split(" ")[0];
 
@@ -67,7 +69,19 @@ const UserProfile = () => {
     setProfilePicture(profilePicture);
   };
 
-  const handleProfilePicture = () => {};
+  React.useEffect(() => {
+    dispatch(loadUser());
+    error && toast.error(error);
+  }, [dispatch, error]);
+
+  const handleProfilePicture = (e) => {
+    e.preventDefault();
+    setOpenImage(false);
+    const formData = {
+      profilePicture: profilePicture,
+    };
+    dispatch(updateProfile({ formData, toast, navigate }));
+  };
 
   return (
     <Container maxWidth="lg">
@@ -119,6 +133,8 @@ const UserProfile = () => {
                     profilePicture={profilePicture}
                     setOpenImage={setOpenImage}
                     handleChange={handleChange}
+                    handleProfilePicture={handleProfilePicture}
+                    setProfilePicture={setProfilePicture}
                   />
                 </Modal>
               </GrImageButton>

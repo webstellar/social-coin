@@ -253,7 +253,7 @@ const Header = () => {
                           color="secondary"
                           sx={{ mr: 1 }}
                         />
-                        My Gratitudes
+                        My Testimonies
                       </MenuItem>
                       <MenuItem onClick={() => navigate("/my-profile")}>
                         <AccountCircleIcon color="secondary" sx={{ mr: 1 }} />

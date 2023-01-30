@@ -6,9 +6,9 @@ export const GrFormImage = styled("img")({
   width: "100%",
   height: "auto",
   objectFit: "cover",
-  filter: "grayscale(100%)",
+  filter: "grayscale(0%)",
   "&:hover": {
-    filter: "grayscale(0%)",
+    filter: "grayscale(100%)",
   },
   borderRadius: "10px",
 });
@@ -119,3 +119,10 @@ export const GrGrid = styled(Grid)(({ theme }) => ({
     padding: theme.spacing(2, 0, 2),
   },
 }));
+
+export const GrTagTypography = styled(Typography)({
+  border: 0,
+  backgroundColor: "#C5C5C5",
+  padding: "8px",
+  borderRadius: "20px",
+});

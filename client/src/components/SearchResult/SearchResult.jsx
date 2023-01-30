@@ -38,7 +38,7 @@ const SearchResult = () => {
     <>
       <CssBaseline />
       <GrBox sx={{ flexGrow: 1 }}>
-        <Container maxWidth="xl">
+        <Container maxWidth="lg">
           <form onSubmit={searchHandler}>
             <FormControl fullWidth sx={{ m: 1 }} variant="standard">
               <InputLabel htmlFor="standard-adornment-seach">SEARCH</InputLabel>

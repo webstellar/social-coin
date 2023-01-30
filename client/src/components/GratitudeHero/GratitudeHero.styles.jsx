@@ -1,6 +1,19 @@
 import { styled } from "@mui/material/styles";
 import { Paper, Typography, Box, Grid } from "@mui/material";
 
+export const GrItem = styled(Paper)(({ theme }) => ({
+  backgroundColor: "rgba(255, 255, 255, 0)",
+  textAlign: "center",
+  color: "grey.900",
+}));
+
+export const GrTagTypography = styled(Typography)({
+  border: 0,
+  backgroundColor: "#C5C5C5",
+  padding: "8px",
+  borderRadius: "20px",
+});
+
 export const GrPaper = styled(Paper)({
   position: "relative",
   backgroundColor: "grey.800",

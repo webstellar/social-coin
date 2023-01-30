@@ -13,7 +13,7 @@ export const createGratitude = createAsyncThunk(
   async ({ formData, toast, navigate }, { rejectWithValue }) => {
     try {
       const response = await axios.post("/api/v1/appreciation/new", formData);
-      toast.success("Your gratitude was created successfully");
+      toast.success("Your testimony was created successfully");
       navigate(`/appreciation/${response.data?.appreciation?._id}`);
       return response.data;
     } catch (err) {

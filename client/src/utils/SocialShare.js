@@ -18,3 +18,21 @@ export const shareOnFacebook = () => {
     "location=yes,height=570,width=520,scrollbars=yes,status=yes"
   );
 };
+
+export const shareOnTwitter = () => {
+  const URL = `https://www.twitter.com/intent/tweet?url=${document.URL}`;
+  window.open(
+    URL,
+    "_blank",
+    "location=yes,height=570,width=520,scrollbars=yes,status=yes"
+  );
+};
+
+export const shareOnEmail = (gratitude) => {
+  const URL = `mailto:?subject=${gratitude.summary}&body=Im%20sharing%20this%20testimony%20with%20you%20from${document.URL}`;
+  window.open(
+    URL,
+    "_blank",
+    "location=yes,height=570,width=520,scrollbars=yes,status=yes"
+  );
+};
