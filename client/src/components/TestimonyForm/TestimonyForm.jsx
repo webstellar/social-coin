@@ -4,7 +4,6 @@ import {
   Grid,
   Container,
   IconButton,
-  Link,
   Divider,
   Fab,
   Typography,
@@ -27,13 +26,12 @@ import SendIcon from "@mui/icons-material/Send";
 import EditIcon from "@mui/icons-material/Edit";
 
 //Modals
-import TestimonyFormHero from "./TestimonyFormHero";
 import TestimonyFormSummary from "./TestimonyFormSummary";
 import TestimonyFormStory from "./TestimonyFormStory";
 import TestimonyFormTags from "./TestimonyFormTags";
 import TestimonyFormVideo from "./TestimonyFormVideo";
 
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { createGratitude } from "../../redux/gratitudes/createGratitudeSlice";
@@ -77,12 +75,10 @@ const TestimonyForm = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const data = location.state?.data;
-  console.log(data);
 
   const [summary, setSummary] = React.useState("");
   const [story, setStory] = React.useState("");
   const [hero, setHero] = React.useState("");
-  const [fakeHero, setFakeHero] = React.useState("");
   const [fakeName, setFakeName] = React.useState("");
   const [image, setImage] = React.useState("");
   const [tags, setTags] = React.useState(["caring", "magnanimous"]);
@@ -92,7 +88,6 @@ const TestimonyForm = () => {
   //Form Modal
   const [openSummary, setOpenSummary] = React.useState(false);
   const [openStory, setOpenStory] = React.useState(false);
-  const [openHero, setOpenHero] = React.useState(false);
   const [openTags, setOpenTags] = React.useState(false);
   const [openVideo, setOpenVideo] = React.useState(false);
 
@@ -108,6 +103,12 @@ const TestimonyForm = () => {
     dispatch(getHeroes());
     error && toast.error(error);
   }, [dispatch, error]);
+
+  React.useEffect(() => {
+    if (data) {
+      setHero(data);
+    }
+  }, [data]);
 
   //tinymce editor
   const storyChange = (story, editor) => {
@@ -186,17 +187,11 @@ const TestimonyForm = () => {
     data === halo._id ? halo : null
   );
 
-  React.useEffect(() => {
-    if (data) {
-      setHero(data);
-    }
-  }, [data, fakeHero]);
+  const { current: myArray } = React.useRef(heroNameDisplay);
 
   React.useEffect(() => {
-    if (heroNameDisplay.length > 0) {
-      setFakeName(heroNameDisplay[0].name);
-    }
-  }, [heroNameDisplay]);
+    setFakeName(myArray[0]?.name);
+  }, [myArray]);
 
   return (
     <form onSubmit={onSubmit} style={{ position: "relative" }}>
@@ -255,7 +250,7 @@ const TestimonyForm = () => {
               alignItems="flex-start"
             >
               <Grid item xs={10} sm={10} md={10} lg={10} sx={{ mb: 3 }}>
-                {data ? (
+                {fakeName ? (
                   <>
                     <Typography
                       component="h3"
@@ -265,7 +260,7 @@ const TestimonyForm = () => {
                     >
                       {fakeName}
                     </Typography>
-                    <Link href="/create-hero" style={{ textAlign: "center" }}>
+                    <Link to="/create-hero" style={{ textAlign: "center" }}>
                       <Typography align="center">
                         Not your hero? click here to go back
                       </Typography>
@@ -277,11 +272,11 @@ const TestimonyForm = () => {
                       component="h3"
                       variant="h4"
                       align="center"
-                      sx={{ color: "#b71c1c" }}
+                      sx={{ color: "#f44336" }}
                     >
                       No Hero selected
                     </Typography>
-                    <Link href="/create-hero" style={{ textAlign: "center" }}>
+                    <Link to="/create-hero" style={{ textAlign: "center" }}>
                       <Typography align="center">
                         Click here to create your hero
                       </Typography>
