@@ -23,6 +23,24 @@ export const createGratitude = createAsyncThunk(
   }
 );
 
+export const editGratitude = createAsyncThunk(
+  "gratitude/editGratitude",
+  async ({ id, formData, toast, navigate }, { rejectWithValue }) => {
+    try {
+      const response = await axios.patch(
+        `/api/v1/me/appreciation/${id}`,
+        formData
+      );
+      toast.success("Your testimony was updated successfully");
+      navigate(`/appreciation/${id}`);
+      return response.data;
+    } catch (err) {
+      toast.error(err.response.data.errMessage);
+      return rejectWithValue(err.response.data.errMessage);
+    }
+  }
+);
+
 export const createGratitudeSlice = createSlice({
   name: "newgratitude",
   initialState,
@@ -40,9 +58,22 @@ export const createGratitudeSlice = createSlice({
       localStorage.setItem("gratitudes", JSON.stringify({ ...action.payload }));
       state.appreciation = action.payload.appreciation;
       state.success = true;
-      console.log(state.appreciation);
     });
     builder.addCase(createGratitude.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.errMessage;
+      state.appreciation = null;
+      state.success = false;
+    });
+    builder.addCase(editGratitude.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(editGratitude.fulfilled, (state, action) => {
+      state.loading = false;
+      state.appreciation = action.payload.appreciation;
+      state.success = true;
+    });
+    builder.addCase(editGratitude.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload.errMessage;
       state.appreciation = null;

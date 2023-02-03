@@ -15,8 +15,8 @@ import {
   useTheme,
 } from "@mui/material/";
 import {
-  GrTypography,
   GrTagTypography,
+  GrTypography,
   GrBox,
   GrPaper,
   GrFormImage,
@@ -26,21 +26,20 @@ import SendIcon from "@mui/icons-material/Send";
 import EditIcon from "@mui/icons-material/Edit";
 
 //Modals
-import TestimonyFormSummary from "./TestimonyFormSummary";
-import TestimonyFormStory from "./TestimonyFormStory";
-import TestimonyFormTags from "./TestimonyFormTags";
-import TestimonyFormVideo from "./TestimonyFormVideo";
+import TestimonyFormSummary from "../TestimonyForm/TestimonyFormSummary";
+import TestimonyFormStory from "../TestimonyForm/TestimonyFormStory";
+import TestimonyFormTags from "../TestimonyForm/TestimonyFormTags";
+import TestimonyFormVideo from "../TestimonyForm/TestimonyFormVideo";
 
-import { useLocation, useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-import { createGratitude } from "../../redux/gratitudes/createGratitudeSlice";
-import { getHeroes } from "../../redux/heroes/heroesSlice";
+import { getGratitude } from "../../redux/gratitudes/gratitudeSlice";
+import { editGratitude } from "../../redux/gratitudes/createGratitudeSlice";
 import YoutubeEmbedForm from "../YoutubeEmbed/YoutubeEmbedForm";
 
 import Modal from "react-modal";
 import { topTagWithSelectAll, topTags } from "../../data/tags";
-import defaultImage from "../../images/testimonybanner.png";
 
 const customStyles = {
   content: {
@@ -68,20 +67,18 @@ const customMobileStyles = {
   },
 };
 
-const TestimonyForm = () => {
+const TestimonyFormEdit = () => {
+  const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const data = location.state?.data;
 
   const [summary, setSummary] = React.useState("");
   const [story, setStory] = React.useState("");
   const [hero, setHero] = React.useState("");
-  const [fakeName, setFakeName] = React.useState("");
   const [image, setImage] = React.useState("");
-  const [tags, setTags] = React.useState(["caring", "magnanimous"]);
+  const [tags, setTags] = React.useState([""]);
   const [video, setVideo] = React.useState("");
   const [open, setOpen] = React.useState(false);
 
@@ -91,39 +88,33 @@ const TestimonyForm = () => {
   const [openTags, setOpenTags] = React.useState(false);
   const [openVideo, setOpenVideo] = React.useState(false);
 
-  const { error } = useSelector((state) => ({
-    ...state.newgratitude,
-  }));
-
-  const { heroes } = useSelector((state) => ({
-    ...state.heroes,
+  const { error, appreciation } = useSelector((state) => ({
+    ...state.gratitude,
   }));
 
   React.useEffect(() => {
-    dispatch(getHeroes());
-    error && toast.error(error);
-  }, [dispatch, error]);
-
-  React.useEffect(() => {
-    if (data) {
-      setHero(data);
+    if (id) {
+      dispatch(getGratitude(id));
     }
-  }, [data]);
+    error && toast.error(error);
+  }, [dispatch, id, error]);
+
+  React.useEffect(() => {
+    if (appreciation) {
+      setHero(appreciation?.hero?.name);
+      setSummary(appreciation?.summary);
+      setStory(appreciation?.story);
+      setImage(appreciation?.image?.url);
+      setTags(appreciation?.tags);
+      setVideo(appreciation?.video);
+    }
+  }, [appreciation]);
 
   //tinymce editor
   const storyChange = (story, editor) => {
     if (editor.getContent({ format: "text" }).length < 100000) {
       setStory(story);
     }
-  };
-
-  const handleClear = () => {
-    setSummary("");
-    setStory("");
-    setHero("");
-    setImage("");
-    setTags([]);
-    setVideo("");
   };
 
   const handleClose = () => {
@@ -135,7 +126,6 @@ const TestimonyForm = () => {
     setOpen(!open);
 
     const formData = {
-      hero: data || hero,
       summary: summary,
       story: story,
       image: image,
@@ -143,10 +133,9 @@ const TestimonyForm = () => {
       tags: tags,
     };
 
-    if (hero && summary && story && image) {
-      dispatch(createGratitude({ formData, toast, navigate }));
+    if (summary && story) {
+      dispatch(editGratitude({ id, formData, toast, navigate }));
       setTimeout(() => {
-        handleClear();
         setOpen(open);
       }, 10000);
     } else {
@@ -183,16 +172,6 @@ const TestimonyForm = () => {
 
   const tinymce = process.env.REACT_APP_TINY_URL_KEY;
 
-  const heroNameDisplay = heroes.filter((halo) =>
-    data === halo._id ? halo : null
-  );
-
-  const { current: myArray } = React.useRef(heroNameDisplay);
-
-  React.useEffect(() => {
-    setFakeName(myArray[0]?.name);
-  }, [myArray]);
-
   return (
     <form onSubmit={onSubmit} style={{ position: "relative" }}>
       <GrPaper elevation={0}>
@@ -215,7 +194,7 @@ const TestimonyForm = () => {
               alignItems="flex-start"
             >
               <Grid item xs={10} sm={10} md={10} lg={10}>
-                <GrFormImage src={image || defaultImage} alt={summary} />
+                <GrFormImage src={image} alt={summary} />
               </Grid>
               <Grid item xs={2} sm={2} md={2} lg={2}>
                 <IconButton
@@ -250,42 +229,17 @@ const TestimonyForm = () => {
               alignItems="flex-start"
             >
               <Grid item xs={10} sm={10} md={10} lg={10} sx={{ mb: 3 }}>
-                {fakeName ? (
-                  <>
-                    <Typography
-                      component="h3"
-                      variant="h4"
-                      align="center"
-                      sx={{ color: "#000" }}
-                    >
-                      {fakeName}
-                    </Typography>
-                    <Link to="/create-hero" style={{ textAlign: "center" }}>
-                      <Typography align="center">
-                        Not your hero? click here to go back
-                      </Typography>
-                    </Link>
-                  </>
-                ) : (
-                  <>
-                    <Typography
-                      component="h3"
-                      variant="h4"
-                      align="center"
-                      sx={{ color: "#f44336" }}
-                    >
-                      No Hero selected
-                    </Typography>
-                    <Link to="/create-hero" style={{ textAlign: "center" }}>
-                      <Typography align="center">
-                        Click here to create your hero
-                      </Typography>
-                    </Link>
-                  </>
-                )}
+                <Typography
+                  component="h3"
+                  variant="h4"
+                  align="center"
+                  sx={{ color: "#000" }}
+                >
+                  {hero}
+                </Typography>
               </Grid>
               <Grid item xs={2} sm={2} md={2} lg={2}>
-                <IconButton disabled={data ? true : false}>
+                <IconButton disabled>
                   <EditIcon fontSize="medium" sx={{ color: "#e0e0e0" }} />
                 </IconButton>
               </Grid>
@@ -303,30 +257,15 @@ const TestimonyForm = () => {
               alignItems="flex-start"
             >
               <Grid item xs={10} sm={10} md={10} lg={10}>
-                {summary ? (
-                  <GrTypography
-                    component="h1"
-                    variant="h2"
-                    color="grey.900"
-                    align="center"
-                    gutterBottom
-                  >
-                    {summary}
-                  </GrTypography>
-                ) : (
-                  <>
-                    <GrTypography
-                      component="h1"
-                      variant="h2"
-                      color="grey.900"
-                      align="center"
-                      gutterBottom
-                    >
-                      Write a title about your testimony...
-                      <span style={{ color: "#f44336" }}>*</span>
-                    </GrTypography>
-                  </>
-                )}
+                <GrTypography
+                  component="h1"
+                  variant="h2"
+                  color="grey.900"
+                  align="center"
+                  gutterBottom
+                >
+                  {summary}
+                </GrTypography>
               </Grid>
               <Grid item xs={2} sm={2} md={2} lg={2}>
                 <IconButton
@@ -517,23 +456,16 @@ const TestimonyForm = () => {
               sx={{ mt: 4, mb: 4 }}
             >
               <Grid item xs={10} md={10} sm={10}>
-                {story ? (
-                  <div
-                    id="testimony"
-                    style={{
-                      fontSize: "20px",
-                      fontWeight: "400",
-                      marginTop: "10px",
-                      marginBottom: "10px",
-                    }}
-                    dangerouslySetInnerHTML={{ __html: story }}
-                  />
-                ) : (
-                  <div style={{ fontSize: "20px", fontWeight: "400" }}>
-                    Write the testimony about your hero here, make it as long as
-                    you want...<span style={{ color: "#f44336" }}>*</span>
-                  </div>
-                )}
+                <div
+                  id="testimony"
+                  style={{
+                    fontSize: "20px",
+                    fontWeight: "400",
+                    marginTop: "10px",
+                    marginBottom: "10px",
+                  }}
+                  dangerouslySetInnerHTML={{ __html: story }}
+                />
               </Grid>
               <Grid item xs={2} md={2} sm={2}>
                 <IconButton
@@ -595,4 +527,4 @@ const TestimonyForm = () => {
   );
 };
 
-export default TestimonyForm;
+export default TestimonyFormEdit;

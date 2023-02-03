@@ -54,7 +54,6 @@ const TagCategoryHero = () => {
               backgroundColor: "rgba(0,0,0,.3)",
             }}
           />
-
           <Grid
             container
             direction="column"

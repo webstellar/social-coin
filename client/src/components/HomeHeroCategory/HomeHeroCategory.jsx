@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getGratitudes } from "../../redux/gratitudes/gratitudesSlice";
 import { getHeroes } from "../../redux/heroes/heroesSlice";
 import { getMyGratitudes } from "../../redux/gratitudes/myGratitudeSlice";
 
@@ -30,6 +29,9 @@ const HomeHeroCategory = () => {
 
   useEffect(() => {
     dispatch(getHeroes());
+  }, [dispatch]);
+
+  useEffect(() => {
     dispatch(getMyGratitudes());
   }, [dispatch]);
 
@@ -69,7 +71,7 @@ const HomeHeroCategory = () => {
             </Grid>
 
             <GrDiv>
-              {myappreciations > 0 ? (
+              {myappreciations ? (
                 <Grid container spacing={4}>
                   {myappreciations
                     .map((appreciation) => (

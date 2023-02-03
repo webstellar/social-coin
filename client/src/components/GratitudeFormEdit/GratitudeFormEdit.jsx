@@ -8,9 +8,7 @@ import {
   Container,
   InputLabel,
   Link,
-  FormControl,
-  Select,
-  MenuItem,
+  Typography,
 } from "@mui/material/";
 import { GrTypography, GrBox } from "./GratitudeFormEdit.styles";
 import { Editor } from "@tinymce/tinymce-react";
@@ -18,11 +16,8 @@ import ChipInput from "material-ui-chip-input";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-import {
-  updateGratitude,
-  getGratitude,
-} from "../../redux/gratitudes/gratitudeSlice";
-import { getHeroes } from "../../redux/heroes/heroesSlice";
+import { getGratitude } from "../../redux/gratitudes/gratitudeSlice";
+import { editGratitude } from "../../redux/gratitudes/createGratitudeSlice";
 
 const GratitudeFormEdit = () => {
   const { id } = useParams();
@@ -31,7 +26,6 @@ const GratitudeFormEdit = () => {
 
   const [summary, setSummary] = React.useState("");
   const [story, setStory] = React.useState("");
-  const [hero, setHero] = React.useState("");
   const [image, setImage] = React.useState("");
   const [tags, setTags] = React.useState();
   const [video, setVideo] = React.useState("");
@@ -40,17 +34,22 @@ const GratitudeFormEdit = () => {
     ...state.gratitude,
   }));
 
-  const { heroes } = useSelector((state) => ({
-    ...state.heroes,
-  })); //get heroes for the form
-
   React.useEffect(() => {
     if (id) {
       dispatch(getGratitude(id));
     }
-    dispatch(getHeroes());
     error && toast.error(error);
   }, [dispatch, id, error]);
+
+  React.useEffect(() => {
+    if (appreciation) {
+      setSummary(appreciation?.summary);
+      setStory(appreciation?.story);
+      setImage(appreciation?.image);
+      setTags(appreciation?.tags);
+      setVideo(appreciation?.video);
+    }
+  }, [appreciation]);
 
   //tinymce editor
   const storyChange = (story, editor) => {
@@ -70,7 +69,6 @@ const GratitudeFormEdit = () => {
   const handleClear = () => {
     setSummary("");
     setStory("");
-    setHero("");
     setImage("");
     setTags([]);
     setVideo("");
@@ -80,15 +78,13 @@ const GratitudeFormEdit = () => {
     e.preventDefault();
 
     const formData = {
-      hero: hero,
       summary: summary,
       story: story,
       image: image,
       video: video,
       tags: tags,
     };
-    console.log(formData);
-    dispatch(updateGratitude({ formData, id, toast, navigate }));
+    dispatch(editGratitude({ id, formData, toast, navigate }));
     setTimeout(handleClear(), 5000);
   };
 
@@ -108,12 +104,6 @@ const GratitudeFormEdit = () => {
       reader.readAsDataURL(file);
     }
   };
-
-  React.useEffect(() => {
-    if (appreciation) {
-      setHero(appreciation?.hero?._id);
-    }
-  }, [heroes]);
 
   const tinymce = "0z5qmo7cx8rjieka6xxb9nz2y1b8k8rdyluiq9zv9r0t6du2";
 
@@ -143,29 +133,15 @@ const GratitudeFormEdit = () => {
                 rowSpacing={4}
               >
                 <Grid item xs={12} md={12}>
-                  <FormControl fullWidth>
-                    <InputLabel>Select your hero</InputLabel>
-                    <Select
-                      name="hero"
-                      type="text"
-                      required
-                      value={hero}
-                      label="Select your hero"
-                      onChange={(e) => {
-                        setHero(e.target.value);
-                      }}
-                    >
-                      <MenuItem value={appreciation?.hero?._id}>
-                        {appreciation?.hero?.name}
-                      </MenuItem>
-                    </Select>
-                  </FormControl>
+                  <Typography sx={{ color: "#000" }}>
+                    {appreciation?.hero?.name}
+                  </Typography>
                 </Grid>
                 <Grid item xs={12} md={12}>
                   <InputLabel>Edit your summary</InputLabel>
                   <TextField
                     name="summary"
-                    value={appreciation?.summary}
+                    value={summary}
                     type="text"
                     required
                     multiline
@@ -180,7 +156,7 @@ const GratitudeFormEdit = () => {
                   <InputLabel>Express your appreciation here</InputLabel>
                   <Editor
                     apiKey={tinymce}
-                    value={appreciation?.story}
+                    value={story}
                     plugins="wordcount fullscreen"
                     init={{
                       height: 500,
@@ -192,7 +168,7 @@ const GratitudeFormEdit = () => {
 
                 <Grid item xs={12} md={12}>
                   <ChipInput
-                    value={appreciation?.tags}
+                    value={tags}
                     name="tags"
                     variant="outlined"
                     placeholder="Write out qualities of your hero"
@@ -209,7 +185,7 @@ const GratitudeFormEdit = () => {
                   </InputLabel>
                   <TextField
                     name="video"
-                    value={appreciation?.video}
+                    value={video}
                     type="text"
                     allowDuplicates={false}
                     fullWidth
