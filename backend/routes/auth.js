@@ -35,8 +35,10 @@ router.route("/updateToken").post(isAuthenticatedUser, updateFCMToken);
 
 router.route("/me").get(isAuthenticatedUser, getUserProfile);
 router.route("/me/heroes").get(isAuthenticatedUser, getUserProfile);
-router.route("/me/update").patch(isAuthenticatedUser, updateProfile);
-router.route("/me/updateImage").patch(isAuthenticatedUser, updateProfileImage);
+router.route("/me/update/:id").patch(isAuthenticatedUser, updateProfile);
+router
+  .route("/me/updateImage/:id")
+  .patch(isAuthenticatedUser, updateProfileImage);
 router.route("/password/update").put(isAuthenticatedUser, updatePassword);
 router.route("/logout").post(isAuthenticatedUser, logout);
 

@@ -35,9 +35,12 @@ export const loadUser = createAsyncThunk(
 
 export const updateProfile = createAsyncThunk(
   "me/updateProfile",
-  async ({ formData, toast, navigate }, { rejectWithValue }) => {
+  async ({ id, formData, toast, navigate }, { rejectWithValue }) => {
     try {
-      const { data } = await axios.patch(`/api/v1/me/updateImage`, formData);
+      const { data } = await axios.patch(
+        `/api/v1/me/updateImage/${id}`,
+        formData
+      );
       toast.success("Your profile picture was update successfully");
       navigate(`/my-profile`);
       return data;

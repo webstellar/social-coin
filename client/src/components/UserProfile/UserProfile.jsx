@@ -24,7 +24,7 @@ import UserProfileImage from "./UserProfileImage";
 
 import { updateProfile, loadUser } from "../../redux/auth/myAuthSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const customStyles = {
@@ -53,6 +53,7 @@ const customMobileStyles = {
 };
 
 const UserProfile = () => {
+  const { id } = useParams();
   const theme = useTheme();
   const dispatch = useDispatch();
   const navigate = useNavigate();

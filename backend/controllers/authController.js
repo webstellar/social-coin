@@ -357,14 +357,14 @@ exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
 exports.updateProfileImage = catchAsyncErrors(async (req, res, next) => {
   // Update avatar only
 
-  let user = await User.findById(req.user.id);
+  let user = await User.findById(req.params.id);
 
   if (!user) {
     return next(new ErrorHandler("User not found", 404));
   }
 
   if (req.body.profilePicture) {
-    const user = await User.findById(req.user.id);
+    const user = await User.findById(req.params.id);
     if (user.profilePicture && user.profilePicture.public_id) {
       const image_id = user.profilePicture.public_id;
       const res = await cloudinary.v2.uploader.destroy(image_id);
@@ -379,7 +379,7 @@ exports.updateProfileImage = catchAsyncErrors(async (req, res, next) => {
     req.body.profilePicture = result;
   }
 
-  user = await User.findByIdAndUpdate(req.user.id, req.body.profilePicture, {
+  user = await User.findByIdAndUpdate(req.params.id, req.body.profilePicture, {
     new: true,
     runValidators: true,
   });
