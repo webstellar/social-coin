@@ -11,8 +11,6 @@ const { sendGeneralNotifiation } = require("../microservices/email.service");
 exports.newHero = catchAsyncErrors(async (req, res, next) => {
   const result = await cloudinary.v2.uploader.upload(req.body.profilePicture, {
     folder: "social-coin/hero_avatars",
-    width: 240,
-    crop: "scale",
   });
 
   req.body.profilePicture = result;
@@ -146,6 +144,42 @@ exports.updateHero = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
+//Update logged in user heros => /api/v1/me/hero/:id
+exports.updateMyHero = catchAsyncErrors(async (req, res, next) => {
+  let hero = await Hero.findById(req.params.id);
+
+  if (!hero) {
+    return next(new ErrorHandler("Unable to Update Hero", 404));
+  }
+
+  if (req.body.profilePicture) {
+    const hero = await Hero.findById(req.params.id);
+    if (hero.profilePicture && hero.profilePicture.public_id) {
+      const res = await cloudinary.v2.uploader.destroy(
+        hero.profilePicture.public_id
+      );
+    }
+    const result = await cloudinary.v2.uploader.upload(
+      req.body.profilePicture,
+      {
+        folder: "social-coin/hero_avatars",
+      }
+    );
+
+    req.body.profilePicture = result;
+  }
+
+  hero = await Hero.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+  });
+
+  res.status(200).json({
+    success: true,
+    hero,
+  });
+});
+
 //Delete Hero
 exports.deleteHero = catchAsyncErrors(async (req, res, next) => {
   const hero = await Hero.findById(req.params.id);
@@ -171,27 +205,6 @@ exports.myHeroes = catchAsyncErrors(async (req, res, next) => {
   res.status(200).json({
     success: true,
     heroes,
-  });
-});
-
-//Update logged in user heros => /api/v1/me/hero/:id
-exports.updateMyHero = catchAsyncErrors(async (req, res, next) => {
-  let hero = await Hero.findById(req.params.id).populate({
-    user: req.user.id,
-  });
-
-  if (!hero) {
-    return next(new ErrorHandler("Unable to Update Hero", 404));
-  }
-
-  hero = await Hero.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true,
-  });
-
-  res.status(200).json({
-    success: true,
-    hero,
   });
 });
 

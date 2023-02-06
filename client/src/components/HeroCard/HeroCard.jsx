@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import {
   Grid,
   Card,
+  Button,
   CardActionArea,
   CardContent,
   CardMedia,
@@ -9,9 +10,10 @@ import {
 } from "@mui/material";
 import { GrHeroTypography, GrGiverTypography, GrLink } from "./HeroCard.styles";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const HeroCard = ({ hero }) => {
+  const navigate = useNavigate();
   return (
     <>
       <Grid item xs={12} md={3}>
@@ -56,14 +58,18 @@ const HeroCard = ({ hero }) => {
                 }}
               >
                 <MenuIcon />
-                <Link
-                  to="/create-testimony"
-                  style={{ textDecoration: "none", cursor: "pointer" }}
+
+                <Button
+                  onClick={() => {
+                    navigate("/create-testimony", {
+                      state: { data: hero?._id },
+                    });
+                  }}
                 >
                   <Typography variant="subtitle1" color="grey.900">
                     EXPRESS
                   </Typography>
-                </Link>
+                </Button>
               </div>
             </CardContent>
           </Card>

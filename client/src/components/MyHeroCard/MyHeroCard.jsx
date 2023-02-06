@@ -21,7 +21,7 @@ const MyHeroCard = ({ hero, handleDelete }) => {
   return (
     <>
       <Grid item xs={12} md={3}>
-        <CardActionArea>
+        <CardActionArea component={GrLink} to={`/hero/${hero?._id}`}>
           <Card sx={{ display: "block" }}>
             <CardMedia
               component="img"
@@ -41,11 +41,9 @@ const MyHeroCard = ({ hero, handleDelete }) => {
                 written by {hero?.user?.name || "gratitude"}
               </GrGiverTypography>
 
-              <GrLink to={`/hero/${hero?._id}`}>
-                <GrHeroTypography variant="h6" component="h6" gutterBottom>
-                  for {hero?.name}
-                </GrHeroTypography>
-              </GrLink>
+              <GrHeroTypography variant="h6" component="h6" gutterBottom>
+                for {hero?.name}
+              </GrHeroTypography>
             </CardContent>
             <CardActions disableSpacing>
               <IconButton

@@ -37,17 +37,8 @@ export const updateProfile = createAsyncThunk(
   "me/updateProfile",
   async ({ formData, toast, navigate }, { rejectWithValue }) => {
     try {
-      const config = {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      };
-      const { data } = await axios.patch(
-        "/api/v1/me/updateImage",
-        formData,
-        config
-      );
-      toast.success("Your profile was update successfully");
+      const { data } = await axios.patch(`/api/v1/me/updateImage`, formData);
+      toast.success("Your profile picture was update successfully");
       navigate(`/my-profile`);
       return data;
     } catch (error) {

@@ -65,8 +65,21 @@ const UserProfile = () => {
   const [profilePicture, setProfilePicture] = React.useState("");
   const [openImage, setOpenImage] = React.useState(false);
 
-  const handleChange = (profilePicture) => {
-    setProfilePicture(profilePicture);
+  //images
+  const onChange = (e) => {
+    if (e.target.name === "image") {
+      const reader = new FileReader();
+      const file = e.target.files[0];
+      if (file > 8e6) {
+        alert("Max Limit is: 8mb");
+        return;
+      }
+      reader.onload = () => {
+        setProfilePicture(reader.result);
+      };
+
+      reader.readAsDataURL(file);
+    }
   };
 
   React.useEffect(() => {
@@ -130,11 +143,9 @@ const UserProfile = () => {
                   shouldCloseOnEsc={true}
                 >
                   <UserProfileImage
-                    profilePicture={profilePicture}
                     setOpenImage={setOpenImage}
-                    handleChange={handleChange}
+                    onChange={onChange}
                     handleProfilePicture={handleProfilePicture}
-                    setProfilePicture={setProfilePicture}
                   />
                 </Modal>
               </GrImageButton>

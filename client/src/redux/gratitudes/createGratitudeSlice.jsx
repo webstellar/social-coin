@@ -35,7 +35,7 @@ export const editGratitude = createAsyncThunk(
       navigate(`/appreciation/${id}`);
       return response.data;
     } catch (err) {
-      toast.error(err.response.data.errMessage);
+      toast.error("Sorry, something went wrong");
       return rejectWithValue(err.response.data.errMessage);
     }
   }

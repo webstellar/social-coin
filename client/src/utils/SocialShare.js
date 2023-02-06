@@ -29,7 +29,7 @@ export const shareOnTwitter = () => {
 };
 
 export const shareOnEmail = (gratitude) => {
-  const URL = `mailto:?subject=${gratitude.summary}&body=Im%20sharing%20this%20testimony%20with%20you%20from${document.URL}`;
+  const URL = `mailto:%85?subject=To%20the%20one%20who%20did%20so%20much%20for%20me&body=I'm%20sharing%20this%20testimony%20with%20you%20from%20${document.URL}`;
   window.open(
     URL,
     "_blank",

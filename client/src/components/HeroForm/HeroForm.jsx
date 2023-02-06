@@ -72,7 +72,7 @@ const HeroForm = () => {
   const onSubmit = (e) => {
     e.preventDefault();
     setOpen(!open);
-    if (name && description && gender && country && profilePicture) {
+    if (name && description && profilePicture) {
       dispatch(createHero({ formData, navigate, toast, hero }));
       setTimeout(() => {
         setOpen(open);

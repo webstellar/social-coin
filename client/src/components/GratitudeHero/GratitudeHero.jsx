@@ -51,7 +51,7 @@ const GratitudeHero = ({ gratitude }) => {
             <Grid item xs={12} sm={12} md={12}>
               <GrBox>
                 <Link
-                  to={`/hero/${gratitude?.hero?._id}`}
+                  to={`/hero/${gratitude?.hero?.id}`}
                   style={{ color: "#f6430a", textDecoration: "none" }}
                 >
                   <Typography

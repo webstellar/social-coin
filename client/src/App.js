@@ -26,7 +26,6 @@ import EditProfile from "./pages/EditProfile";
 import ForgottenPassword from "./pages/ForgottenPassword";
 import Search from "./pages/Search";
 import EditHero from "./pages/EditHero";
-import EditGratitude from "./pages/EditGratitude";
 import MyGratitudesList from "./pages/MyGratitudesList";
 import MyHeroesList from "./pages/MyHeroesList";
 import AppreciationTag from "./pages/AppreciationTag";

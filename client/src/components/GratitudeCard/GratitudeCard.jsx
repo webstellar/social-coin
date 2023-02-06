@@ -15,7 +15,7 @@ import {
 } from "./GratitudeCard.styles";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Link } from "react-router-dom";
-import defaultImage from "../../images/dummy_post.webp";
+import defaultImage from "../../images/gratitude_card_noimage.png";
 
 const GratitudeCard = ({ gratitude }) => {
   return (

@@ -39,7 +39,7 @@ const Gratitude = () => {
         <GratitudeSubSection gratitude={appreciation} />
         <GratitudeMainSection gratitude={appreciation} />
         <GratitudeCommentSection gratitude={appreciation} id={id} />
-        {user ? (
+        {user && user?.user?._id === appreciation?.user?.id ? (
           <Link to={`/edit/appreciation/${id}`}>
             <Fab
               sx={{ position: "fixed", bottom: "5%", right: "5%" }}

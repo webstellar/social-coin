@@ -21,7 +21,7 @@ import {
   GrPaper,
   GrFormImage,
   GrItem,
-} from "./TestimonyForm.styles";
+} from "./TestimonyFormEdit.styles";
 import SendIcon from "@mui/icons-material/Send";
 import EditIcon from "@mui/icons-material/Edit";
 
@@ -91,6 +91,7 @@ const TestimonyFormEdit = () => {
   const { error, appreciation } = useSelector((state) => ({
     ...state.gratitude,
   }));
+  const { user } = useSelector((state) => state.auth);
 
   React.useEffect(() => {
     if (id) {
@@ -133,13 +134,13 @@ const TestimonyFormEdit = () => {
       tags: tags,
     };
 
-    if (summary && story) {
+    if (user?.user?._id === appreciation?.user?.id) {
       dispatch(editGratitude({ id, formData, toast, navigate }));
       setTimeout(() => {
         setOpen(open);
       }, 10000);
     } else {
-      toast.error("Fill all required fields");
+      toast.error("Sorry you do not have permission to edit this testimony");
       setOpen(!open);
     }
   };
@@ -174,6 +175,24 @@ const TestimonyFormEdit = () => {
 
   return (
     <form onSubmit={onSubmit} style={{ position: "relative" }}>
+      {user?.user?._id !== appreciation?.user?.id ? (
+        <Container maxWidth="lg">
+          <Typography
+            align="center"
+            variant="h6"
+            component="h6"
+            sx={{
+              color: "#fff",
+              backgroundColor: "#f54242",
+              padding: 2,
+              marginBottom: 5,
+            }}
+          >
+            Sorry you do not have permission to edit this testimony
+          </Typography>
+        </Container>
+      ) : null}
+
       <GrPaper elevation={0}>
         <Container maxWidth="lg">
           <Grid
@@ -209,6 +228,9 @@ const TestimonyFormEdit = () => {
                     type="file"
                     name="image"
                     onChange={onChange}
+                    disabled={
+                      user?.user?._id !== appreciation?.user?.id ? true : false
+                    }
                   />
                   <EditIcon />
                 </IconButton>
@@ -269,6 +291,9 @@ const TestimonyFormEdit = () => {
               </Grid>
               <Grid item xs={2} sm={2} md={2} lg={2}>
                 <IconButton
+                  disabled={
+                    user?.user?._id !== appreciation?.user?.id ? true : false
+                  }
                   onClick={() => {
                     setOpenSummary(true);
                   }}
@@ -355,6 +380,9 @@ const TestimonyFormEdit = () => {
               </Grid>
               <Grid item xs={2} sm={2} md={2} lg={2}>
                 <IconButton
+                  disabled={
+                    user?.user?._id !== appreciation?.user?.id ? true : false
+                  }
                   onClick={() => {
                     setOpenTags(true);
                   }}
@@ -411,6 +439,9 @@ const TestimonyFormEdit = () => {
 
               <Grid item xs={2} md={2} sm={2}>
                 <IconButton
+                  disabled={
+                    user?.user?._id !== appreciation?.user?.id ? true : false
+                  }
                   onClick={() => {
                     setOpenVideo(true);
                   }}
@@ -469,6 +500,9 @@ const TestimonyFormEdit = () => {
               </Grid>
               <Grid item xs={2} md={2} sm={2}>
                 <IconButton
+                  disabled={
+                    user?.user?._id !== appreciation?.user?.id ? true : false
+                  }
                   onClick={() => {
                     setOpenStory(true);
                   }}
@@ -503,16 +537,34 @@ const TestimonyFormEdit = () => {
           </Container>
         </GrBox>
       </section>
-      <Fab
-        component={Button}
-        variant="extended"
-        color="secondary"
-        type="submit"
-        sx={{ position: "absolute", bottom: 16, right: 32 }}
-      >
-        <SendIcon sx={{ mr: 1 }} />
-        Publish
-      </Fab>
+      {user?.user?._id === appreciation?.user?.id ? (
+        <Fab
+          component={Button}
+          variant="extended"
+          color="secondary"
+          type="submit"
+          sx={{ position: "absolute", bottom: 16, right: 32 }}
+        >
+          <SendIcon sx={{ mr: 1 }} />
+          Publish
+        </Fab>
+      ) : (
+        <Container maxWidth="lg">
+          <Typography
+            align="center"
+            variant="h6"
+            component="h6"
+            sx={{
+              color: "#fff",
+              backgroundColor: "#f54242",
+              padding: 2,
+            }}
+          >
+            Sorry you do not have permission to edit this testimony
+          </Typography>
+        </Container>
+      )}
+
       <Backdrop
         sx={{
           color: "#fff",

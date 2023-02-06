@@ -175,6 +175,15 @@ exports.updateAppreciation = catchAsyncErrors(async (req, res, next) => {
   }
   //if successful,
   //next we get it and update it's content
+
+  if (req.body.image) {
+    const result = await cloudinary.v2.uploader.upload(req.body.image, {
+      folder: "social-coin/appreciations/images",
+    });
+
+    req.body.image = result;
+  }
+
   appreciation = await Appreciation.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
@@ -252,6 +261,20 @@ exports.updateMyAppreciation = catchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHandler("Appreciation not found", 404));
   }
 
+  if (req.body.image) {
+    const appreciation = await Appreciation.findById(req.params.id);
+    if (appreciation.image && appreciation.image.public_id) {
+      const res = await cloudinary.v2.uploader.destroy(
+        appreciation.image.public_id
+      );
+    }
+    const result = await cloudinary.v2.uploader.upload(req.body.image, {
+      folder: "social-coin/appreciations/images",
+    });
+
+    req.body.image = result;
+  }
+
   appreciation = await Appreciation.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
@@ -273,9 +296,6 @@ exports.deleteMyAppreciation = catchAsyncErrors(async (req, res, next) => {
   //Deleting image associated with the appreciation
   if (appreciation.image && appreciation.image.public_id)
     await cloudinary.v2.uploader.destroy(appreciation.image.public_id);
-
-  if (appreciation.video && appreciation.video.public_id)
-    await cloudinary.v2.uploader.destroy(appreciation.video.public_id);
 
   try {
     await Appreciation.deleteOne({ _id: ObjectId(req.params.id) });
@@ -309,6 +329,7 @@ exports.deleteComment = catchAsyncErrors(async (req, res, next) => {
     message: "Comment has been deleted",
   });
 });
+
 exports.addCommentToAppreciation = catchAsyncErrors(async (req, res, next) => {
   const appreciation = await Appreciation.findById(req.body.appreciationId);
   const user = await User.findById(appreciation.user.id);

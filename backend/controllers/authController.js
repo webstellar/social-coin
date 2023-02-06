@@ -355,38 +355,34 @@ exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
 
 // Update user profile   =>   /api/v1/me/update
 exports.updateProfileImage = catchAsyncErrors(async (req, res, next) => {
-  // Update avatar
+  // Update avatar only
 
-  if (req.body.profilePicture !== "") {
+  let user = await User.findById(req.user.id);
+
+  if (!user) {
+    return next(new ErrorHandler("User not found", 404));
+  }
+
+  if (req.body.profilePicture) {
     const user = await User.findById(req.user.id);
-    const image_id = user.profilePicture.public_id;
-    const res = await cloudinary.v2.uploader.destroy(image_id);
+    if (user.profilePicture && user.profilePicture.public_id) {
+      const image_id = user.profilePicture.public_id;
+      const res = await cloudinary.v2.uploader.destroy(image_id);
+    }
     const result = await cloudinary.v2.uploader.upload(
       req.body.profilePicture,
       {
         folder: "social-coin/user_avatar",
-        width: 150,
-        crop: "scale",
       }
     );
 
     req.body.profilePicture = result;
-
-    newUserData.profilePicture = {
-      public_id: result.public_id,
-      url: result.secure_url,
-    };
   }
-  console.log(newUserData);
 
-  const user = await User.findByIdAndUpdate(
-    req.user.id,
-    req.body.profilePicture,
-    {
-      new: true,
-      runValidators: true,
-    }
-  );
+  user = await User.findByIdAndUpdate(req.user.id, req.body.profilePicture, {
+    new: true,
+    runValidators: true,
+  });
 
   res.status(200).json({
     success: true,

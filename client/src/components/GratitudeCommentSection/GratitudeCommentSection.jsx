@@ -15,6 +15,8 @@ import {
 import DisqusThread from "../Disqus/DisqusThread";
 
 const GratitudeCommentSection = ({ gratitude, id }) => {
+  const subject = gratitude?.summary;
+
   return (
     <section>
       <GrBox>
@@ -54,8 +56,8 @@ const GratitudeCommentSection = ({ gratitude, id }) => {
               <GrItem>
                 <GrTypography>Share on Mail</GrTypography>
                 <IconButton
-                  onClick={(gratitude) => {
-                    shareOnEmail(gratitude);
+                  onClick={(subject) => {
+                    shareOnEmail(subject);
                   }}
                   sx={{ cursor: "pointer" }}
                 >
