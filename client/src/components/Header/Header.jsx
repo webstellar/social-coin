@@ -13,7 +13,7 @@ import {
   Container,
   CssBaseline,
 } from "@mui/material";
-import BrandLogo from "../../images/black-gratitude.svg";
+import BrandLogo from "../../images/hhero.svg";
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import GroupsIcon from "@mui/icons-material/Groups";

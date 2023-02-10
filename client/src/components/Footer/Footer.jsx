@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { GrImg, GrBox } from "./Footer.styles";
 import { Link } from "react-router-dom";
-import BrandLogo from "../../images/white-gratitude.svg";
+import BrandLogo from "../../images/hhero-white.svg";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import TwitterIcon from "@mui/icons-material/Twitter";
@@ -87,8 +87,8 @@ const Footer = () => {
                   component="p"
                   sx={{ fontWeight: "light" }}
                 >
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                  Let's show gratitude for the ones who did so much for us,
+                  Humble hero
                 </Typography>
               </Grid>
             </Grid>

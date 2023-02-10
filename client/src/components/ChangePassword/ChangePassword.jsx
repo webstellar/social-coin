@@ -1,6 +1,6 @@
 import * as React from "react";
-import { TextField, Button, Grid, Container } from "@mui/material/";
-import { GrTypography, GrBox } from "./ChangePassword.styles";
+import { TextField, Button, Box, Grid, CssBaseline } from "@mui/material/";
+import { GrTypography, GrContainer } from "./ChangePassword.styles";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { resetPassword } from "../../redux/auth/authPasswordSlice";
@@ -43,80 +43,83 @@ const ChangePassword = () => {
   };
 
   return (
-    <Container maxWidth="xl">
-      <GrBox>
-        <Grid
-          container
-          direction="row"
-          justifyContent="flex-start"
-          alignItems="flex-start"
-        >
-          <Grid item xs={12} md={4}>
-            <GrTypography component="h2" variant="h5" gutterBottom>
-              Change your Password
-            </GrTypography>
-            <form onSubmit={onSubmit}>
-              <Grid
-                item
-                container
-                direction="column"
-                justifyContent="flex-end"
-                alignItems="stretch"
-                rowSpacing={4}
+    <>
+      <CssBaseline />
+      <GrContainer maxWidth="xs">
+        <Box component="form" noValidate autoComplete="off" onSubmit={onSubmit}>
+          <Grid
+            container
+            direction="column"
+            justifyContent="flex-end"
+            alignItems="stretch"
+            rowSpacing={3}
+          >
+            <Grid
+              item
+              xs={12}
+              md={12}
+              container
+              direction="row"
+              justifyContent="center"
+              alignItems="center"
+            >
+              <GrTypography
+                variant="h6"
+                component="p"
+                color="grey.900"
+                gutterBottom
               >
-                <Grid
-                  item
-                  xs={12}
-                  md={12}
-                  container
-                  direction="row"
-                  justifyContent="flex-start"
-                >
-                  <TextField
-                    required
-                    id="password"
-                    type="password"
-                    name="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    label="ENTER YOUR PASSWORD"
-                    style={{ width: "100%" }}
-                  />
-                </Grid>
+                RESET YOUR PASSWORD
+              </GrTypography>
+            </Grid>
 
-                <Grid item xs={12} md={12}>
-                  <TextField
-                    required
-                    id="confirmpassword"
-                    type="password"
-                    name="confirmPassword"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    label="CONFIRM YOUR PASSWORD"
-                    style={{ width: "100%" }}
-                  />
-                </Grid>
+            <Grid item xs={12} md={12}>
+              <TextField
+                required
+                id="password"
+                type="password"
+                name="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                label="ENTER YOUR PASSWORD"
+                style={{ width: "100%" }}
+              />
+            </Grid>
 
-                <Grid item xs={12} md={12}>
-                  <Button
-                    variant="contained"
-                    size="large"
-                    color="secondary"
-                    type="submit"
-                    fullWidth
-                  >
-                    <GrTypography variant="h5" component="p" color="grey.900">
-                      RESET PASSWORD
-                    </GrTypography>
-                  </Button>
-                </Grid>
-              </Grid>
-            </form>
+            <Grid item xs={12} md={12}>
+              <TextField
+                required
+                id="confirmpassword"
+                type="password"
+                name="confirmPassword"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                label="CONFIRM YOUR PASSWORD"
+                style={{ width: "100%" }}
+              />
+            </Grid>
+
+            <Grid item xs={12} md={12}>
+              <Button
+                variant="contained"
+                size="large"
+                color="secondary"
+                type="submit"
+                sx={{
+                  borderRadius: 0,
+                }}
+                fullWidth
+              >
+                <GrTypography variant="h5" component="p" color="grey.900">
+                  RESET PASSWORD
+                </GrTypography>
+              </Button>
+            </Grid>
+            <Grid item xs={12} md={12}></Grid>
           </Grid>
-          <Grid item xs={12} md={6}></Grid>
-        </Grid>
-      </GrBox>
-    </Container>
+        </Box>
+      </GrContainer>
+    </>
   );
 };
 

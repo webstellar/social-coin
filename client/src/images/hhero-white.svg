@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1056" height="244" viewBox="0 0 1056 244">
+  <defs>
+    <style>
+      .cls-1 {
+        font-size: 200px;
+        fill: #fff;
+        font-family: "Josefin Sans";
+        font-weight: 700;
+      }
+
+      .cls-2 {
+        fill: #f75620;
+        font-size: 375px;
+        font-weight: 600;
+      }
+    </style>
+  </defs>
+  <text id="HHeRO" class="cls-1" transform="translate(-24 226.243) scale(1.512)">HH<tspan class="cls-2">e</tspan>RO</text>
+</svg>

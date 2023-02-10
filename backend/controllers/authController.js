@@ -120,8 +120,6 @@ exports.authenticateViaGoogle = catchAsyncErrors(async (req, res, next) => {
         req.body.profilePicture,
         {
           folder: "social-coin/user_avatar",
-          width: 150,
-          crop: "scale",
         }
       );
       user.profilePicture = {
@@ -318,32 +316,30 @@ exports.updatePassword = catchAsyncErrors(async (req, res, next) => {
 
 // Update user profile   =>   /api/v1/me/update
 exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
-  const newUserData = {
-    name: req.body.name,
-    email: req.body.email,
-  };
-
+  let user = await User.findById(req.user.id);
+  console.log(user);
   // Update avatar
-  if (req.body.profilePicture !== "") {
+  if (req.body.profilePicture) {
     const user = await User.findById(req.user.id);
-    const image_id = user.profilePicture.public_id;
-    const res = await cloudinary.v2.uploader.destroy(image_id);
+    if (user.profilePicture && user.profilePicture.public_id) {
+      const res = await cloudinary.v2.uploader.destroy(
+        user.profilePicture.public_id
+      );
+    }
+
     const result = await cloudinary.v2.uploader.upload(
       req.body.profilePicture,
       {
-        folder: "social-coin/user_avatar",
-        width: 150,
-        crop: "scale",
+        invalidate: true,
+        public_id: user.profilePicture.public_id,
+        folder: "social-coin/user_avatar/test",
       }
     );
 
-    newUserData.profilePicture = {
-      public_id: result.public_id,
-      url: result.secure_url,
-    };
+    req.body.profilePicture = result;
   }
 
-  const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
+  user = await User.findByIdAndUpdate(req.user.id, req.body, {
     new: true,
     runValidators: true,
   });
@@ -353,21 +349,65 @@ exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
+exports.editProfile = catchAsyncErrors(async (req, res, next) => {
+  const { id } = req.params;
+  const { name, email, profilePicture } = req.body;
+
+  const updatedProfile = {
+    _id: id,
+    name,
+    email,
+    profilePicture,
+  };
+
+  console.log({ updatedProfile });
+
+  if (req.body.profilePicture) {
+    const user = await User.findById(id);
+    if (user.profilePicture && user.profilePicture.public_id) {
+      const res = await cloudinary.v2.uploader.destroy(
+        user.profilePicture.public_id
+      );
+    }
+
+    const result = await cloudinary.v2.uploader.upload(
+      req.body.profilePicture,
+      {
+        folder: "social-coin/user_avatar",
+      }
+    );
+
+    updatedProfile.profilePicture = {
+      public_id: result.public_id,
+      url: result.secure_url,
+    };
+  }
+
+  const user = await User.findByIdAndUpdate(id, updatedProfile, { new: true });
+
+  res.status(200).json({
+    user,
+    success: true,
+  });
+});
+
 // Update user profile   =>   /api/v1/me/update
 exports.updateProfileImage = catchAsyncErrors(async (req, res, next) => {
   // Update avatar only
 
-  let user = await User.findById(req.params.id);
+  const user = await User.findOne({ email: req.body.email });
 
   if (!user) {
     return next(new ErrorHandler("User not found", 404));
   }
 
   if (req.body.profilePicture) {
-    const user = await User.findById(req.params.id);
+    const user = await User.findOne({ email: req.body.email });
+
     if (user.profilePicture && user.profilePicture.public_id) {
-      const image_id = user.profilePicture.public_id;
-      const res = await cloudinary.v2.uploader.destroy(image_id);
+      const res = await cloudinary.v2.uploader.destroy(
+        user.profilePicture.public_id
+      );
     }
     const result = await cloudinary.v2.uploader.upload(
       req.body.profilePicture,
@@ -376,13 +416,20 @@ exports.updateProfileImage = catchAsyncErrors(async (req, res, next) => {
       }
     );
 
-    req.body.profilePicture = result;
+    user.profilePicture = {
+      public_id: result.public_id,
+      url: result.secure_url,
+    };
   }
 
-  user = await User.findByIdAndUpdate(req.params.id, req.body.profilePicture, {
-    new: true,
-    runValidators: true,
-  });
+  user = await User.findOneAndUpdate(
+    { email: req.body.email },
+    { profilePicture: req.body.profilePicture },
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
 
   res.status(200).json({
     success: true,

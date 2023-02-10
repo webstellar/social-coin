@@ -2,9 +2,7 @@ import PropTypes from "prop-types";
 import { Typography, Grid, IconButton, Button, Divider } from "@mui/material/";
 import ClearIcon from "@mui/icons-material/Clear";
 import TestimonyModalLayout from "./../TestimonyForm/TestimonyModalLayout";
-import { FileUploader } from "react-drag-drop-files";
-
-const fileTypes = ["JPEG", "PNG", "GIF", "WEBP"];
+import FileBase from "react-file-base64";
 
 const UserProfileImage = ({ setOpenImage, onChange, handleProfilePicture }) => {
   return (
@@ -57,25 +55,7 @@ const UserProfileImage = ({ setOpenImage, onChange, handleProfilePicture }) => {
         justifyContent="space-between"
         alignItems="center"
       >
-        {/*<FileUploader
-          multiple={false}
-          handleChange={handleChange}
-          name="profilePicture"
-          types={fileTypes}
-        />
-        <Typography component="p" variant="p">
-          {profilePicture
-            ? `File name: ${profilePicture.name}`
-            : "no files uploaded yet"}
-          </Typography>*/}
-
-        <input
-          accept="image/*"
-          multiple
-          type="file"
-          name="profilePicture"
-          onChange={onChange}
-        />
+        <FileBase type="file" multiple={false} onDone={onChange} />
       </Grid>
       <Grid
         item

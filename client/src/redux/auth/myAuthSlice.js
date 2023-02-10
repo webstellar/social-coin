@@ -35,15 +35,41 @@ export const loadUser = createAsyncThunk(
 
 export const updateProfile = createAsyncThunk(
   "me/updateProfile",
+  async ({ formData, toast, navigate }, { rejectWithValue }) => {
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      };
+      const response = await axios.patch(`/api/v1/me/update`, formData, config);
+      toast.success("Your profile picture was update successfully");
+      navigate(`/my-profile`);
+      return response.data;
+    } catch (error) {
+      if (error.response && error.response.data.message) {
+        toast.error(error.response.data.message);
+        return rejectWithValue(error.response.data.message);
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
+  }
+);
+
+export const editProfile = createAsyncThunk(
+  "me/editProfile",
   async ({ id, formData, toast, navigate }, { rejectWithValue }) => {
     try {
-      const { data } = await axios.patch(
-        `/api/v1/me/updateImage/${id}`,
-        formData
+   
+      const response = await axios.patch(
+        `/api/v1/me/edit/${id}`,
+        formData,
+     
       );
       toast.success("Your profile picture was update successfully");
       navigate(`/my-profile`);
-      return data;
+      return response.data;
     } catch (error) {
       if (error.response && error.response.data.message) {
         toast.error(error.response.data.message);
@@ -65,7 +91,7 @@ export const myAuthSlice = createSlice({
     });
     builder.addCase(loadUser.fulfilled, (state, action) => {
       state.loading = false;
-      state.me = action.payload;
+      state.me = action.payload.user;
       state.isAuthenticated = true;
     });
     builder.addCase(loadUser.rejected, (state, action) => {
@@ -78,7 +104,7 @@ export const myAuthSlice = createSlice({
     });
     builder.addCase(updateProfile.fulfilled, (state, action) => {
       state.loading = false;
-      state.me = action.payload;
+      state.me = action.payload.user;
       state.isAuthenticated = true;
     });
     builder.addCase(updateProfile.rejected, (state, action) => {

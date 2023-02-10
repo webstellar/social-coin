@@ -22,7 +22,7 @@ import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import Modal from "react-modal";
 import UserProfileImage from "./UserProfileImage";
 
-import { updateProfile, loadUser } from "../../redux/auth/myAuthSlice";
+import { updateProfile } from "../../redux/auth/myAuthSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -53,47 +53,41 @@ const customMobileStyles = {
 };
 
 const UserProfile = () => {
-  const { id } = useParams();
   const theme = useTheme();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const { user } = useSelector((state) => state.auth);
-  const { error } = useSelector((state) => state.me);
   const username = user?.user?.name;
   const firstname = username.split(" ")[0];
 
+  const [email, setEmail] = React.useState("");
+  const [name, setName] = React.useState("");
   const [profilePicture, setProfilePicture] = React.useState("");
   const [openImage, setOpenImage] = React.useState(false);
 
   //images
-  const onChange = (e) => {
-    if (e.target.name === "image") {
-      const reader = new FileReader();
-      const file = e.target.files[0];
-      if (file > 8e6) {
-        alert("Max Limit is: 8mb");
-        return;
-      }
-      reader.onload = () => {
-        setProfilePicture(reader.result);
-      };
-
-      reader.readAsDataURL(file);
-    }
+  const onChange = ({ base64 }) => {
+    setProfilePicture({ profilePicture: base64 });
   };
 
   React.useEffect(() => {
-    dispatch(loadUser());
-    error && toast.error(error);
-  }, [dispatch, error]);
+    if (user) {
+      setEmail(user?.user?.email);
+      setName(user?.user?.name);
+    }
+  }, [user]);
 
   const handleProfilePicture = (e) => {
     e.preventDefault();
     setOpenImage(false);
     const formData = {
       profilePicture: profilePicture,
+      email: email,
+      name: name,
     };
+
+    console.log(formData);
     dispatch(updateProfile({ formData, toast, navigate }));
   };
 
