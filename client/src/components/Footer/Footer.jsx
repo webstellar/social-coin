@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { GrImg, GrBox } from "./Footer.styles";
 import { Link } from "react-router-dom";
-import BrandLogo from "../../images/hhero-white.svg";
+import BrandLogo from "../../images/hhero-white.png";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import TwitterIcon from "@mui/icons-material/Twitter";

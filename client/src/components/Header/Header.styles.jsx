@@ -20,11 +20,11 @@ export const GrHamburger = styled(MenuIcon)({});
 export const GrSearch = styled(SearchIcon)({});
 
 export const GrImg = styled("img")(({ theme }) => ({
-  width: "220px",
-  height: "75px",
+  width: "150px",
+  height: "35px",
   [theme.breakpoints.down("md")]: {
-    width: "165px",
-    height: "57px",
+    width: "100px",
+    height: "23px",
   },
 }));
 

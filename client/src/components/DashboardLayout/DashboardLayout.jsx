@@ -35,7 +35,7 @@ import {
 } from "react-icons/tb";
 import { GrItem, GrImg, GrListItemButton } from "./DashboardLayout.styles";
 import { DrawerHeader, AppBar, Drawer } from "../../config/dashboardConfig";
-import BrandLogo from "../../images/black-gratitude.svg";
+import BrandLogo from "../../images/hhero.png";
 
 import { setLogout } from "../../redux/auth/authSlice";
 import { toast } from "react-toastify";

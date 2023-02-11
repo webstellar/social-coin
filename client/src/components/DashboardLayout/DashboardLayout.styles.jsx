@@ -25,11 +25,11 @@ export const GrLink = styled(Link)({
 });
 
 export const GrImg = styled("img")(({ theme }) => ({
-  width: "120px",
-  height: "45px",
+  width: "100px",
+  height: "23px",
   [theme.breakpoints.down("md")]: {
-    width: "120px",
-    height: "30px",
+    width: "90px",
+    height: "21px",
   },
 }));
 
