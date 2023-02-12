@@ -20,7 +20,7 @@ import defaultImage from "../../images/gratitude_card_noimage.png";
 const GratitudeCard = ({ gratitude }) => {
   return (
     <>
-      <Grid item xs={12} md={4}>
+      <Grid item xs={12} md={4} sx={{ flex: "0 0  auto", mb: 5 }}>
         <CardActionArea component={Link} to={`/appreciation/${gratitude?._id}`}>
           <Card sx={{ display: "flex" }}>
             <GrCardMedia
@@ -30,11 +30,19 @@ const GratitudeCard = ({ gratitude }) => {
             />
             <Box sx={{ display: "flex", flexDirection: "column" }}>
               <CardContent sx={{ flex: 1 }}>
-                <Typography variant="subtitle1">
-                  {gratitude?.tags[0]}
-                </Typography>
-                <GrStoriesTypography variant="h6" component="h6" gutterBottom>
-                  {gratitude.summary.substring(0, 40)}...
+                {gratitude.tags
+                  .map((tag) => (
+                    <Typography variant="subtitle1">{tag},</Typography>
+                  ))
+                  .slice(1, 3)}
+
+                <GrStoriesTypography
+                  variant="h6"
+                  component="h6"
+                  gutterBottom
+                  noWrap
+                >
+                  {gratitude.summary.substring(0, 30)}...
                 </GrStoriesTypography>
 
                 <Stack

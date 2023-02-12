@@ -72,7 +72,16 @@ const HomeHeroCategory = () => {
 
             <GrDiv>
               {myappreciations ? (
-                <Grid container spacing={4}>
+                <Grid
+                  container
+                  spacing={4}
+                  sx={{
+                    display: "flex",
+                    flexWrap: "nowrap",
+                    overflowX: "auto",
+                    WebkitOverflowScrolling: "touch",
+                  }}
+                >
                   {myappreciations
                     .map((appreciation) => (
                       <GratitudeCard
@@ -80,8 +89,7 @@ const HomeHeroCategory = () => {
                         gratitude={appreciation}
                       />
                     ))
-                    .reverse()
-                    .slice(1, 4)}
+                    .reverse()}
                 </Grid>
               ) : (
                 <Typography
