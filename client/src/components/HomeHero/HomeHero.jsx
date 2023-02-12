@@ -43,7 +43,7 @@ const PageHero = () => {
                   color="inherit"
                   gutterBottom
                 >
-                  Mother's love
+                  EXPRESSING GRATITUDE
                 </Typography>
 
                 <GrTypography
@@ -70,7 +70,7 @@ const PageHero = () => {
                       style={{ color: "#fff", textDecoration: "none" }}
                     >
                       <Typography variant="h6" component="h6">
-                        READ
+                        ABOUT
                       </Typography>
                     </Link>
                   </GrItem>

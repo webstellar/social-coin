@@ -78,7 +78,7 @@ const Footer = () => {
               columnSpacing={2}
               sx={{ mt: 2 }}
             >
-              <Grid item md={3}>
+              <Grid item md={5}>
                 <GrImg src={BrandLogo} alt="brand logo" />
               </Grid>
               <Grid item md={5}>

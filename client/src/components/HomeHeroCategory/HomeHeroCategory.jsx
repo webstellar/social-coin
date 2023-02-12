@@ -112,7 +112,7 @@ const HomeHeroCategory = () => {
                 color="inherit"
                 gutterBottom
               >
-                Our Time Favorites
+                Latest Heroes
               </GrTypography>
             </Grid>
             <Grid item md={4}>
@@ -162,7 +162,7 @@ const HomeHeroCategory = () => {
                   color="inherit"
                   gutterBottom
                 >
-                  My collection
+                  All collections
                 </GrCTypography>
               </GrLink>
             </Grid>

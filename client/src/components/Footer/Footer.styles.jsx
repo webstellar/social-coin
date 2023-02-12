@@ -12,10 +12,10 @@ export const GrBox = styled(Box)(({ theme }) => ({
 }));
 
 export const GrImg = styled("img")(({ theme }) => ({
-  width: "190px",
-  height: "44px",
+  width: "270px",
+  height: "29px",
   [theme.breakpoints.down("md")]: {
     width: "150px",
-    height: "35px",
+    height: "16px",
   },
 }));

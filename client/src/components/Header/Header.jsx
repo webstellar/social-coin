@@ -19,7 +19,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import GroupsIcon from "@mui/icons-material/Groups";
 import LogoutIcon from "@mui/icons-material/Logout";
 import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import Modal from "react-modal";
 
 import MobileMenu from "../MobileMenu/MobileMenu";
@@ -33,7 +33,7 @@ import { setLogout } from "../../redux/auth/authSlice";
 const navItems = [
   {
     id: 1,
-    name: "Heroes",
+    name: "Explore",
     link: "/heroeslist",
     type: "text",
     variant: "h6",
@@ -116,38 +116,14 @@ const Header = () => {
         >
           <Container maxWidth="lg">
             <GrToolBar sx={{ p: 0 }} disableGutters>
-              <Box sx={{ flexGrow: 1 }} component="a" href="/">
-                <GrImg src={BrandLogo} alt="gratitude logo" />
+              <Box sx={{ flexGrow: 1 }}>
+                <Link to="/" style={{ cursor: "pointer" }}>
+                  <GrImg src={BrandLogo} alt="gratitude logo" />
+                </Link>
               </Box>
 
               <div>
                 {/* Login Modal */}
-                {!user ? (
-                  <IconButton
-                    size="large"
-                    disableRipple={true}
-                    color="inherit"
-                    onClick={handleOpen}
-                  >
-                    <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-                      LOGIN
-                    </Typography>
-                  </IconButton>
-                ) : (
-                  <GrBadge
-                    anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-                    overlap="circular"
-                    variant="dot"
-                    sx={{ mr: 2, cursor: "pointer" }}
-                    components={Button}
-                    onClick={() => navigate("/my-profile")}
-                  >
-                    <Avatar
-                      alt={user?.user?.name}
-                      src={user?.user?.profilePicture?.url}
-                    />
-                  </GrBadge>
-                )}
 
                 <Modal
                   id="login"
@@ -176,7 +152,7 @@ const Header = () => {
                     onClick={user ? handleLoggedUser : handleSecondOpen}
                   >
                     <Typography variant="h6" sx={{ fontWeight: "regular" }}>
-                      Give
+                      Write A Testimony
                     </Typography>
                   </IconButton>
                 )}
@@ -220,7 +196,34 @@ const Header = () => {
                       </GrLink>
                     </IconButton>
                   ))}
-                {!isMobile && (
+
+                {!user ? (
+                  <IconButton
+                    size="large"
+                    disableRipple={true}
+                    color="inherit"
+                    onClick={handleOpen}
+                  >
+                    <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                      LOGIN
+                    </Typography>
+                  </IconButton>
+                ) : (
+                  <GrBadge
+                    anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                    overlap="circular"
+                    variant="dot"
+                    sx={{ mr: 2, cursor: "pointer" }}
+                    components={Button}
+                    onClick={() => navigate("/my-profile")}
+                  >
+                    <Avatar
+                      alt={user?.user?.name}
+                      src={user?.user?.profilePicture?.url}
+                    />
+                  </GrBadge>
+                )}
+                {!isMobile && user?.user ? (
                   <>
                     <IconButton
                       size="large"
@@ -259,15 +262,13 @@ const Header = () => {
                         <AccountCircleIcon color="secondary" sx={{ mr: 1 }} />
                         My account
                       </MenuItem>
-                      {user?.user ? (
-                        <MenuItem onClick={handleLogout}>
-                          <LogoutIcon color="secondary" sx={{ mr: 1 }} />
-                          Logout
-                        </MenuItem>
-                      ) : null}
+                      <MenuItem onClick={handleLogout}>
+                        <LogoutIcon color="secondary" sx={{ mr: 1 }} />
+                        Logout
+                      </MenuItem>
                     </Menu>
                   </>
-                )}
+                ) : null}
                 <MobileMenu />
               </div>
             </GrToolBar>
