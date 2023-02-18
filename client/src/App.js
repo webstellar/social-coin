@@ -33,6 +33,7 @@ import AppreciationCategory from "./pages/AppreciationCategory";
 import HeroTag from "./pages/HeroTag";
 import HeroCategory from "./pages/HeroCategory";
 import EditTestimony from "./pages/EditTestimony";
+import About from "./pages/About";
 
 import { useDispatch } from "react-redux";
 import { setUser } from "./redux/auth/authSlice";
@@ -61,6 +62,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
           <Route path="/search" element={<Search />} />
           <Route path="/search/:keyword" element={<Search />} />
           <Route path="/appreciation/tag/:tag" element={<AppreciationTag />} />

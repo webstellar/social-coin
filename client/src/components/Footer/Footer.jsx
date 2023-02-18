@@ -34,19 +34,19 @@ const navItem1 = [
   {
     id: 4,
     name: "contact",
-    link: "/contact-us",
+    link: "/contact",
   },
 ];
 const navItem2 = [
   {
     id: 1,
-    name: "discover",
-    link: "/discover",
+    name: "explore",
+    link: "/heroeslist",
   },
   {
     id: 2,
     name: "our story",
-    link: "/our-story",
+    link: "/about",
   },
   {
     id: 3,

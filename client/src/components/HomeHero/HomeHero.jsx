@@ -66,7 +66,7 @@ const PageHero = () => {
                   </GrItem>
                   <GrItem elevation={0}>
                     <Link
-                      to="/"
+                      to="/about"
                       style={{ color: "#fff", textDecoration: "none" }}
                     >
                       <Typography variant="h6" component="h6">
