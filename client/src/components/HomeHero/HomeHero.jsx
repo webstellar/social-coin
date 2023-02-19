@@ -52,7 +52,12 @@ const PageHero = () => {
                   color="inherit"
                   gutterBottom
                 >
-                  Say something to the ones who changed your life immensely.
+                  <Link
+                    to="/about"
+                    style={{ color: "#fff", textDecoration: "none" }}
+                  >
+                    Say something to the ones who changed your life immensely.
+                  </Link>
                 </GrTypography>
 
                 <Stack

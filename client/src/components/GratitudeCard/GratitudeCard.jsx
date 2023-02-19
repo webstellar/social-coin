@@ -36,12 +36,7 @@ const GratitudeCard = ({ gratitude }) => {
                   ))
                   .slice(1, 3)}
 
-                <GrStoriesTypography
-                  variant="h6"
-                  component="h6"
-                  gutterBottom
-                  noWrap
-                >
+                <GrStoriesTypography variant="h6" component="h6" gutterBottom>
                   {gratitude.summary.substring(0, 30)}...
                 </GrStoriesTypography>
 
@@ -52,13 +47,18 @@ const GratitudeCard = ({ gratitude }) => {
                   spacing={0}
                 >
                   <GrItem elevation={0}>
-                    <MenuIcon sx={{ color: "#000" }} />
+                    <MenuIcon sx={{ color: "#000", fontSize: "1.5rem" }} />
                   </GrItem>
                   <GrItem elevation={0}>
                     <Typography
                       variant="h6"
                       component="h6"
-                      sx={{ color: "#000", textDecoration: "none" }}
+                      sx={{
+                        color: "#000",
+                        textDecoration: "none",
+                        fontSize: "1.2rem",
+                      }}
+                      gutterBottom={0}
                     >
                       READ
                     </Typography>

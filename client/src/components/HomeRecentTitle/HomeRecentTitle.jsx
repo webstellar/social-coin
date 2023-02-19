@@ -1,9 +1,9 @@
-import { useEffect } from "react";
+import { useEffect, useTransition } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getGratitudes } from "../../redux/gratitudes/gratitudesSlice";
 import { getMyGratitudes } from "../../redux/gratitudes/myGratitudeSlice";
 
-import { Container, Grid } from "@mui/material";
+import { Container, Grid, Typography } from "@mui/material";
 import {
   GrBox,
   GrTypography,
@@ -19,10 +19,12 @@ const HomeRecentTitle = () => {
   const dispatch = useDispatch();
 
   const { appreciations } = useSelector((state) => ({ ...state.gratitudes }));
-  
+
   const { myappreciations } = useSelector((state) => ({
     ...state.mygratitudes,
   }));
+
+  const [isPending] = useTransition(myappreciations);
 
   const { user } = useSelector((state) => state.auth);
 
@@ -67,18 +69,35 @@ const HomeRecentTitle = () => {
             </Grid>
 
             <GrDiv>
-              <Grid container spacing={4}>
-                {myappreciations &&
-                  myappreciations
+              {isPending ? (
+                <Typography
+                  color="secondary"
+                  variant="h5"
+                  sx={{ fontWeight: "300" }}
+                >
+                  You have no gratitudes to show
+                </Typography>
+              ) : (
+                <Grid
+                  container
+                  spacing={4}
+                  sx={{
+                    display: "flex",
+                    flexWrap: "nowrap",
+                    overflowX: "auto",
+                    WebkitOverflowScrolling: "touch",
+                  }}
+                >
+                  {myappreciations
                     .map((appreciation) => (
                       <GratitudeCard
                         key={appreciation._id}
                         gratitude={appreciation}
                       />
                     ))
-                    .reverse()
-                    .slice(1, 4)}
-              </Grid>
+                    .reverse()}
+                </Grid>
+              )}
             </GrDiv>
           </Container>
         </GrBox>

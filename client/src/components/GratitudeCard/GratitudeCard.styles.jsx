@@ -5,6 +5,7 @@ export const GrStoriesTypography = styled(Typography)(({ theme }) => ({
   lineHeight: "normal",
   marginTop: "1rem",
   marginBottom: "1rem",
+  fontSize: "1.0rem",
   [theme.breakpoints.down("md")]: {
     marginTop: "0.5rem",
     marginBottom: "0.5rem",
@@ -19,8 +20,8 @@ export const GrItem = styled(Paper)(({ theme }) => ({
 }));
 
 export const GrCardMedia = styled(CardMedia)(({ theme }) => ({
-  width: 120,
-  height: 240,
+  width: 140,
+  height: 200,
   objectFit: "cover",
   display: {
     xs: "block",

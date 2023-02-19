@@ -51,15 +51,15 @@ const AboutProfile = () => {
           >
             {teams &&
               teams.map((team, i) => (
-                <>
-                  <Grid xs={12} sm={12} md={3} lg={3}>
+                <React.Fragment key={i}>
+                  <Grid item xs={12} sm={12} md={3} lg={3}>
                     <img
                       src={team.picture}
                       alt={team.name}
                       style={{ height: "270px", width: "270px" }}
                     />
                   </Grid>
-                  <Grid xs={12} sm={12} md={9} lg={9}>
+                  <Grid item xs={12} sm={12} md={9} lg={9}>
                     <Typography variant="h4" component="h4" gutterBottom>
                       {team.name}
                     </Typography>
@@ -67,7 +67,7 @@ const AboutProfile = () => {
                       {team.profile}
                     </Typography>
                   </Grid>
-                </>
+                </React.Fragment>
               ))}
           </Grid>
         </GrBox>

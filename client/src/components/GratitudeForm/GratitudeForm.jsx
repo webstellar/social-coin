@@ -33,6 +33,7 @@ const GratitudeForm = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const data = location.state?.data._id;
+  console.log(data);
 
   const [summary, setSummary] = React.useState("");
   const [story, setStory] = React.useState("");
@@ -140,6 +141,8 @@ const GratitudeForm = () => {
   const heroDisplay = heroes.filter((halo) =>
     hero === halo._id ? halo : null
   );
+
+  console.log(data);
 
   return (
     <Container maxWidth="md">

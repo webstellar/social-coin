@@ -3,12 +3,18 @@ import {
   Grid,
   Card,
   Button,
+  Stack,
   CardActionArea,
   CardContent,
   CardMedia,
   Typography,
 } from "@mui/material";
-import { GrHeroTypography, GrGiverTypography, GrLink } from "./HeroCard.styles";
+import {
+  GrHeroTypography,
+  GrGiverTypography,
+  GrLink,
+  GrItem,
+} from "./HeroCard.styles";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -50,27 +56,39 @@ const HeroCard = ({ hero }) => {
                 </GrHeroTypography>
               </GrLink>
 
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  flexWrap: "wrap",
+              <Stack
+                direction="row"
+                justifyContent="flex-start"
+                alignItems="center"
+                spacing={0}
+                onClick={() => {
+                  navigate("/create-testimony", {
+                    state: { data: hero?._id },
+                  });
+                }}
+                sx={{
+                  textDecoration: "none",
                 }}
               >
-                <MenuIcon />
-
-                <Button
-                  onClick={() => {
-                    navigate("/create-testimony", {
-                      state: { data: hero?._id },
-                    });
-                  }}
-                >
-                  <Typography variant="subtitle1" color="grey.900">
+                <GrItem elevation={0}>
+                  <MenuIcon sx={{ color: "#000" }} />
+                </GrItem>
+                <GrItem elevation={0}>
+                  <Typography
+                    variant="subtitle1"
+                    component="p"
+                    sx={{
+                      color: "#000",
+                      textDecoration: "none",
+                      "&:hover": {
+                        color: "#F6430A",
+                      },
+                    }}
+                  >
                     EXPRESS
                   </Typography>
-                </Button>
-              </div>
+                </GrItem>
+              </Stack>
             </CardContent>
           </Card>
         </CardActionArea>

@@ -35,7 +35,7 @@ import {
 } from "react-icons/tb";
 import { GrItem, GrImg, GrListItemButton } from "./DashboardLayout.styles";
 import { DrawerHeader, AppBar, Drawer } from "../../config/dashboardConfig";
-import BrandLogo from "../../images/hhero.png";
+import BrandLogo from "../../images/h.png";
 
 import { setLogout } from "../../redux/auth/authSlice";
 import { toast } from "react-toastify";
@@ -45,7 +45,7 @@ import { useNavigate, Link } from "react-router-dom";
 const DashboardLayout = ({ children }) => {
   const navigate = useNavigate();
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [openHero, setOpenHero] = React.useState(false);
   const [openGratitude, setOpenGratitude] = React.useState(false);

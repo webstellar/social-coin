@@ -8,7 +8,7 @@ const AboutHero = () => {
       <GrPaper
         elevation={0}
         sx={{
-          backgroundImage: `linear-gradient(to right, rgb(0 0 0 /0.5aa), rgb(0  0 0  /0)), url(${HeroImage})`,
+          backgroundImage: `url(${HeroImage})`,
         }}
       >
         {

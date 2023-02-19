@@ -1,14 +1,12 @@
 import { useState, useEffect } from "react";
-import { GrAppBar, GrToolBar, GrImg, GrLink, GrBadge } from "./Header.styles";
+import { GrAppBar, GrToolBar, GrImg, GrLink } from "./Header.styles";
 import {
   Box,
-  Button,
   Typography,
   IconButton,
   useMediaQuery,
   useTheme,
   Menu,
-  Avatar,
   MenuItem,
   Container,
   CssBaseline,
@@ -142,8 +140,6 @@ const Header = () => {
                   <ModalLogin handleClose={handleClose} />
                 </Modal>
 
-                {!isMobile && <SearchBar />}
-
                 {!isMobile && (
                   <IconButton
                     size="large"
@@ -208,21 +204,9 @@ const Header = () => {
                       LOGIN
                     </Typography>
                   </IconButton>
-                ) : (
-                  <GrBadge
-                    anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-                    overlap="circular"
-                    variant="dot"
-                    sx={{ mr: 2, cursor: "pointer" }}
-                    components={Button}
-                    onClick={() => navigate("/my-profile")}
-                  >
-                    <Avatar
-                      alt={user?.user?.name}
-                      src={user?.user?.profilePicture?.url}
-                    />
-                  </GrBadge>
-                )}
+                ) : null}
+
+                {!isMobile && <SearchBar />}
                 {!isMobile && user?.user ? (
                   <>
                     <IconButton

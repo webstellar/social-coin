@@ -24,7 +24,7 @@ import UserProfileImage from "./UserProfileImage";
 
 import { updateProfile } from "../../redux/auth/myAuthSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const customStyles = {

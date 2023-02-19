@@ -13,9 +13,9 @@ export const GrBox = styled(Box)(({ theme }) => ({
 
 export const GrImg = styled("img")(({ theme }) => ({
   width: "270px",
-  height: "29px",
+  height: "56px",
   [theme.breakpoints.down("md")]: {
     width: "150px",
-    height: "16px",
+    height: "31px",
   },
 }));

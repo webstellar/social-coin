@@ -21,10 +21,10 @@ export const GrSearch = styled(SearchIcon)({});
 
 export const GrImg = styled("img")(({ theme }) => ({
   width: "270px",
-  height: "29px",
+  height: "56px",
   [theme.breakpoints.down("md")]: {
     width: "200px",
-    height: "21px",
+    height: "42px",
   },
 }));
 

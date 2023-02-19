@@ -39,6 +39,8 @@ import { getHeroes } from "../../redux/heroes/heroesSlice";
 import YoutubeEmbedForm from "../YoutubeEmbed/YoutubeEmbedForm";
 
 import Modal from "react-modal";
+import { FileUploader } from "react-drag-drop-files";
+
 import { topTagWithSelectAll, topTags } from "../../data/tags";
 import defaultImage from "../../images/testimonybanner.png";
 
@@ -68,6 +70,8 @@ const customMobileStyles = {
   },
 };
 
+const fileTypes = ["JPG", "PNG", "WEBP", "GIF"];
+
 const TestimonyForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -75,6 +79,7 @@ const TestimonyForm = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const data = location.state?.data;
+  console.log(data);
 
   const [summary, setSummary] = React.useState("");
   const [story, setStory] = React.useState("");
@@ -99,10 +104,9 @@ const TestimonyForm = () => {
     ...state.heroes,
   }));
 
-  React.useEffect(() => {
-    dispatch(getHeroes());
-    error && toast.error(error);
-  }, [dispatch, error]);
+  const handleChange = (image) => {
+    setImage(image);
+  };
 
   React.useEffect(() => {
     if (data) {
@@ -183,6 +187,11 @@ const TestimonyForm = () => {
 
   const tinymce = process.env.REACT_APP_TINY_URL_KEY;
 
+  React.useEffect(() => {
+    dispatch(getHeroes());
+    error && toast.error(error);
+  }, [dispatch, error]);
+
   const heroNameDisplay = heroes.filter((halo) =>
     data === halo._id ? halo : null
   );
@@ -195,6 +204,16 @@ const TestimonyForm = () => {
 
   return (
     <form onSubmit={onSubmit} style={{ position: "relative" }}>
+      <Box sx={{ my: 4, mb: 5 }}>
+        <GrTypography
+          variant="h6"
+          component="p"
+          color="grey.900"
+          sx={{ textAlign: "center" }}
+        >
+          STEP 2: WRITE YOUR TESTIMONY
+        </GrTypography>
+      </Box>
       <GrPaper elevation={0}>
         <Container maxWidth="lg">
           <Grid
@@ -214,7 +233,25 @@ const TestimonyForm = () => {
               justifyContent="space-evenly"
               alignItems="flex-start"
             >
-              <Grid item xs={10} sm={10} md={10} lg={10}>
+              <Grid
+                item
+                xs={10}
+                sm={10}
+                md={10}
+                lg={10}
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  flexDirection: "column",
+                }}
+              >
+                <FileUploader
+                  multiple={false}
+                  handleChange={handleChange}
+                  name="image"
+                  types={fileTypes}
+                />
                 <GrFormImage src={image || defaultImage} alt={summary} />
               </Grid>
               <Grid item xs={2} sm={2} md={2} lg={2}>
@@ -322,7 +359,7 @@ const TestimonyForm = () => {
                       align="center"
                       gutterBottom
                     >
-                      Write a title about your testimony...
+                      Write the title of your testimony...
                       <span style={{ color: "#f44336" }}>*</span>
                     </GrTypography>
                   </>
@@ -529,9 +566,9 @@ const TestimonyForm = () => {
                     dangerouslySetInnerHTML={{ __html: story }}
                   />
                 ) : (
-                  <div style={{ fontSize: "20px", fontWeight: "400" }}>
-                    Write the testimony about your hero here, make it as long as
-                    you want...<span style={{ color: "#f44336" }}>*</span>
+                  <div style={{ fontSize: "3rem", fontWeight: "400" }}>
+                    Write your testimony hero here...
+                    <span style={{ color: "#f44336" }}>*</span>
                   </div>
                 )}
               </Grid>

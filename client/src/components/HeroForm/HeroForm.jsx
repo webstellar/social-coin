@@ -28,7 +28,7 @@ import { createHero } from "../../redux/heroes/createHeroSlice";
 
 import data from "../../data/countries.json";
 
-const genders = ["Male", "Female", "Binary", "Non-Binary"];
+const genders = ["Male", "Female", "Others"];
 const countries = data;
 
 const HeroForm = () => {
@@ -39,7 +39,7 @@ const HeroForm = () => {
     description: "",
     gender: "",
     country: "",
-    email: "",
+    email: null,
     profilePicture: "",
   });
   const [currentStep, setCurrentStep] = React.useState(1);
@@ -94,7 +94,7 @@ const HeroForm = () => {
             color="grey.900"
             sx={{ textAlign: "center" }}
           >
-            LET'S HELP YOU CREATE YOUR HERO
+            STEP 1: SELECT YOUR HERO
           </GrTypography>
         </Box>
         <Grid
@@ -165,6 +165,7 @@ const HeroForm = () => {
                             color="secondary"
                             type="button"
                             onClick={handleNext}
+                            onKeyPress={(e) => e.key === 13 && handleNext()}
                             fullWidth
                             endIcon={
                               <ArrowForwardIosIcon sx={{ fontSize: 10 }} />
@@ -222,6 +223,7 @@ const HeroForm = () => {
                             color="secondary"
                             type="button"
                             onClick={handleNext}
+                            onKeyPress={(e) => e.key === 13 && handleNext()}
                             fullWidth
                             endIcon={
                               <ArrowForwardIosIcon sx={{ fontSize: 10 }} />
@@ -291,7 +293,7 @@ const HeroForm = () => {
                         </InputLabel>
                         <TextField
                           name="email"
-                          value={email}
+                          value={email || ""}
                           type="email"
                           fullWidth
                           label="Add your hero’s email address"
