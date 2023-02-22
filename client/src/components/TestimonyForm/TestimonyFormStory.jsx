@@ -57,15 +57,11 @@ const TestimonyFormStory = ({ story, setOpenStory, tinymce, storyChange }) => {
       >
         <Editor
           apiKey={tinymce}
-          initialValue={
-            story === " "
-              ? "<p><i>My story about my humble hero...</i></p>"
-              : story
-          }
+          initialValue={"<p><i>My story about my humble hero...</i></p>"}
           value={story}
           plugins="wordcount fullscreen"
           init={{
-            height: 400,
+            height: 600,
             width: "100%",
             menubar: false,
           }}

@@ -309,6 +309,37 @@ exports.deleteMyAppreciation = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
+exports.likeMyAppreciation = catchAsyncErrors(async (req, res) => {
+  const { id } = req.params;
+  if (!req.user.id) {
+    return res.json({ message: "User is not authenicated" });
+  }
+
+  const appreciation = await Appreciation.findById(id);
+  const index = appreciation.likes.findIndex(
+    (id) => id === String(req.user.id)
+  );
+
+  if (index === -1) {
+    appreciation.likes.push(req.user.id);
+  } else {
+    appreciation.likes = appreciation.likes.filter(
+      (id) => id !== String(req.user.id)
+    );
+  }
+
+  const updatedAppreciation = await Appreciation.findByIdAndUpdate(
+    id,
+    appreciation,
+    { new: true }
+  );
+
+  res.status(200).json({
+    success: true,
+    updatedAppreciation,
+  });
+});
+
 exports.deleteComment = catchAsyncErrors(async (req, res, next) => {
   try {
     console.log(req.body, req.params.id);

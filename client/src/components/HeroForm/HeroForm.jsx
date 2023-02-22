@@ -359,10 +359,7 @@ const HeroForm = () => {
 
                         <Box>
                           <img
-                            src={
-                              formData.profilePicture ||
-                              "https://source.unsplash.com/random"
-                            }
+                            src={formData.profilePicture}
                             alt=""
                             style={{
                               width: 250,

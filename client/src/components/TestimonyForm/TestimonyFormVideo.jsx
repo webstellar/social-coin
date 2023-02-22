@@ -26,7 +26,7 @@ const TestimonyFormVideo = ({ setVideo, video, setOpenVideo }) => {
       >
         <Grid item xs={10} md={10} sm={10}>
           <Typography gutterBottom={false}>
-            Share youtube video id e.g. 75RjgtZ2tj0
+            Share your youtube video
           </Typography>
         </Grid>
         <Grid
@@ -63,18 +63,15 @@ const TestimonyFormVideo = ({ setVideo, video, setOpenVideo }) => {
         justifyContent="space-between"
         alignItems="center"
       >
-        <InputLabel>
-          <Link href="https://youtu.be/UjXTdZ45evs">Tutorial</Link>: How to get
-          your Youtube Video Id
-        </InputLabel>
+      
         <TextField
           name="video"
           value={video}
           type="text"
-          allowDuplicates={false}
+          allowduplicates={false}
           fullWidth
           variant="standard"
-          label="Share youtube video id e.g. 75RjgtZ2tj0"
+          label="Drop youtube video"
           onChange={(e) => {
             setVideo(e.target.value);
           }}

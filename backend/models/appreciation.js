@@ -96,9 +96,9 @@ const appreciationSchema = new mongoose.Schema(
       },
       default: { participants: [], conversation: [] },
     },
-    likeCount: {
-      type: Number,
-      default: 0,
+    likes: {
+      type: [String],
+      default: [],
     },
     yearOfAppreciation: Date,
     createdAt: {

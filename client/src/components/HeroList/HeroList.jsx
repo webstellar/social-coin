@@ -76,11 +76,22 @@ const HeroList = () => {
                 </Tabs>
               </Box>
               <TabPanel value={value} index={0}>
-                <Grid item container md={12} spacing={4}>
-                  {heroes &&
-                    heroes.map((hero) => (
-                      <HeroCard key={hero._id} hero={hero} />
-                    ))}
+                <Grid
+                  item
+                  container
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  md={12}
+                  spacing={12}
+                >
+                  <Grid item md={4} lg={4}></Grid>
+                  <Grid item md={8} lg={8}>
+                    {heroes &&
+                      heroes.map((hero) => (
+                        <HeroCard key={hero._id} hero={hero} />
+                      ))}
+                  </Grid>
                 </Grid>
               </TabPanel>
               <TabPanel value={value} index={1}>

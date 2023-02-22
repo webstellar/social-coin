@@ -8,6 +8,7 @@ const {
   myAppreciations,
   getAppreciations,
   updateAppreciation,
+  likeMyAppreciation,
   deleteAppreciation,
   updateMyAppreciation,
   getAppreciationByTag,
@@ -57,5 +58,7 @@ router
 router
   .route("/admin/delete/comment/:id")
   .post(isAuthenticatedUser, authorizeRoles("admin"), deleteComment);
+
+router.route("/like/:id").patch(isAuthenticatedUser, likeMyAppreciation);
 
 module.exports = router;

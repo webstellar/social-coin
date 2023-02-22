@@ -34,6 +34,7 @@ import HeroTag from "./pages/HeroTag";
 import HeroCategory from "./pages/HeroCategory";
 import EditTestimony from "./pages/EditTestimony";
 import About from "./pages/About";
+import InstaHeroList from "./pages/InstaHeroList";
 
 import { useDispatch } from "react-redux";
 import { setUser } from "./redux/auth/authSlice";
@@ -82,6 +83,7 @@ function App() {
           />
           <Route path="/appreciation/:id" element={<Gratitude />} />
           <Route path="/heroeslist" element={<HeroesList />} />
+          <Route path="/heroes" element={<InstaHeroList />} />
           <Route path="/hero/:id" element={<Hero />} />
           <Route path="/writer/:id" element={<Writer />} />
           <Route path="/forgot-password" element={<ForgottenPassword />} />

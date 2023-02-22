@@ -2,12 +2,12 @@ import PropTypes from "prop-types";
 import {
   Grid,
   Card,
-  Button,
   Stack,
   CardActionArea,
   CardContent,
   CardMedia,
   Typography,
+  Badge,
 } from "@mui/material";
 import {
   GrHeroTypography,
@@ -15,15 +15,26 @@ import {
   GrLink,
   GrItem,
 } from "./HeroCard.styles";
-import MenuIcon from "@mui/icons-material/Menu";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import { Link, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { likeGratitude } from "../../redux/gratitudes/gratitudesSlice";
 
 const HeroCard = ({ hero }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const { user } = useSelector((state) => state.auth);
+  const userId = user?.user?._id;
+
+  const handleLikes = () => {
+    dispatch(likeGratitude({ userId }));
+  };
+
   return (
     <>
-      <Grid item xs={12} md={3}>
-        <CardActionArea>
+      <Grid item xs={12} md={12}>
+        <CardActionArea sx={{ mb: 4 }}>
           <Card sx={{ display: "block" }}>
             <Link
               to={`/hero/${hero._id}`}
@@ -35,7 +46,7 @@ const HeroCard = ({ hero }) => {
                 component="img"
                 sx={{
                   width: "100%",
-                  height: 200,
+                  height: 500,
                   filter: "grayscale(100%)",
                   "&:hover": {
                     filter: "grayscale(0%)",
@@ -45,7 +56,7 @@ const HeroCard = ({ hero }) => {
                 alt={hero?.hero}
               />
             </Link>
-            <CardContent sx={{ flex: 1 }}>
+            <CardContent sx={{ flex: 1, paddingLeft: 4, paddingRight: 4 }}>
               <GrGiverTypography variant="caption" color="grey.500">
                 written by {hero?.user?.name || "gratitude"}
               </GrGiverTypography>
@@ -58,22 +69,21 @@ const HeroCard = ({ hero }) => {
 
               <Stack
                 direction="row"
-                justifyContent="flex-start"
-                alignItems="center"
+                justifyContent="space-between"
+                alignItems="space-between"
                 spacing={0}
-                onClick={() => {
-                  navigate("/create-testimony", {
-                    state: { data: hero?._id },
-                  });
-                }}
-                sx={{
-                  textDecoration: "none",
-                }}
               >
-                <GrItem elevation={0}>
-                  <MenuIcon sx={{ color: "#000" }} />
-                </GrItem>
-                <GrItem elevation={0}>
+                <GrItem
+                  elevation={0}
+                  onClick={() => {
+                    navigate("/create-testimony", {
+                      state: { data: hero?._id },
+                    });
+                  }}
+                  sx={{
+                    textDecoration: "none",
+                  }}
+                >
                   <Typography
                     variant="subtitle1"
                     component="p"
@@ -88,7 +98,27 @@ const HeroCard = ({ hero }) => {
                     EXPRESS
                   </Typography>
                 </GrItem>
+                <GrItem elevation={0}>
+                  <Badge
+                    color="secondary"
+                    badgeContent={10}
+                    anchorOrigin={{
+                      vertical: "top",
+                      horizontal: "right",
+                    }}
+                    onClick={handleLikes}
+                  >
+                    <FavoriteIcon />
+                  </Badge>
+                </GrItem>
               </Stack>
+              <Typography sx={{ mt: 3 }}>
+                <strong>
+                  {hero?.name}
+                  {"  "}
+                </strong>
+                {hero?.description}
+              </Typography>
             </CardContent>
           </Card>
         </CardActionArea>

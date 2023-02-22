@@ -39,10 +39,12 @@ import { getHeroes } from "../../redux/heroes/heroesSlice";
 import YoutubeEmbedForm from "../YoutubeEmbed/YoutubeEmbedForm";
 
 import Modal from "react-modal";
-import { FileUploader } from "react-drag-drop-files";
+
+import { useDropzone } from "react-dropzone";
 
 import { topTagWithSelectAll, topTags } from "../../data/tags";
 import defaultImage from "../../images/testimonybanner.png";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 
 const customStyles = {
   content: {
@@ -70,8 +72,6 @@ const customMobileStyles = {
   },
 };
 
-const fileTypes = ["JPG", "PNG", "WEBP", "GIF"];
-
 const TestimonyForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -96,6 +96,27 @@ const TestimonyForm = () => {
   const [openTags, setOpenTags] = React.useState(false);
   const [openVideo, setOpenVideo] = React.useState(false);
 
+  const onDrop = React.useCallback((acceptedFiles) => {
+    const reader = new FileReader();
+    const file = acceptedFiles[0];
+    if (file > 8e6) {
+      alert("Max Limit is: 8mb");
+      return;
+    }
+    reader.onload = () => {
+      setImage(reader.result);
+    };
+
+    reader.readAsDataURL(file);
+  }, []);
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    maxFiles: 1,
+    multiple: false,
+    accept: "image/*",
+  });
+
   const { error } = useSelector((state) => ({
     ...state.newgratitude,
   }));
@@ -103,10 +124,6 @@ const TestimonyForm = () => {
   const { heroes } = useSelector((state) => ({
     ...state.heroes,
   }));
-
-  const handleChange = (image) => {
-    setImage(image);
-  };
 
   React.useEffect(() => {
     if (data) {
@@ -246,13 +263,45 @@ const TestimonyForm = () => {
                   flexDirection: "column",
                 }}
               >
-                <FileUploader
-                  multiple={false}
-                  handleChange={handleChange}
-                  name="image"
-                  types={fileTypes}
-                />
-                <GrFormImage src={image || defaultImage} alt={summary} />
+                <Typography
+                  variant="p"
+                  component="p"
+                  gutterBottom
+                  color="secondary"
+                >
+                  Upload File
+                </Typography>
+                <div
+                  {...getRootProps()}
+                  style={{
+                    border: "5px dotted black",
+                    padding: "60px 40px 60px 40px",
+                    backgroundColor: "#dcdcdc",
+                    color: "#000",
+                    marginBottom: "4rem",
+                  }}
+                >
+                  <input {...getInputProps()} />
+                  {isDragActive ? (
+                    <p>Drop the files here ...</p>
+                  ) : (
+                    <>
+                      <p>
+                        Drag 'n' drop some files here, or click to select files
+                      </p>
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <CloudUploadIcon sx={{ fontSize: "3rem" }} />
+                      </div>
+                    </>
+                  )}
+                </div>
+                <GrFormImage src={image} alt={summary} />
               </Grid>
               <Grid item xs={2} sm={2} md={2} lg={2}>
                 <IconButton

@@ -3,25 +3,31 @@ import PropTypes from "prop-types";
 import { GrIframe, GrLink } from "./YoutubeEmbed.styles";
 
 const YoutubeEmbedForm = ({ video, summary }) => {
-  React.useState(() => {
-    return () => handleVideoConversion();
+  const [youtubeId, setYoutubeId] = React.useState("");
+
+  React.useEffect(() => {
+    if (video) {
+      let videoUrl = video.toString();
+
+      console.log(videoUrl);
+      if (videoUrl.includes("https://www.youtube.com/watch?v=")) {
+        var yID = videoUrl.split("https://www.youtube.com/watch?v=");
+        yID = yID[1].split("&");
+        console.log(yID);
+
+        setYoutubeId(yID[0]);
+      }
+    }
   }, [video]);
 
-  const handleVideoConversion = () => {
-    const videoUrl = video;
-
-    if (videoUrl.includes("https://www.youtube.com/watch?v=")) {
-      const newVideoUrl = videoUrl.split("https://www.youtube.com/watch?v=")[1];
-      console.log({ newVideoUrl });
-    }
-  };
+  console.log(youtubeId);
 
   return (
     <GrLink className="video-responsive">
       <GrIframe
         width="400"
         height="250"
-        src={`https://www.youtube.com/embed/${video}` || null}
+        src={`https://www.youtube.com/embed/${youtubeId}` || null}
         frameBorder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowFullScreen
