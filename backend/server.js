@@ -16,7 +16,7 @@ if (process.env.NODE_ENV !== "PRODUCTION")
 
 // Dotenv.config({ path: 'backend/config/config.env' })
 // Connecting to database
-connectDatabase(); 
+connectDatabase();
 
 // Setting up cloudinary configuration
 cloudinary.config({

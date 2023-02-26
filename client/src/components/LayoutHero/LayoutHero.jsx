@@ -19,11 +19,11 @@ const LayoutHero = ({ children }) => {
             justifyContent="space-between"
             alignItems="flex-start"
           >
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} sm={4} md={4}>
               <ListMenu />
             </Grid>
-            <Grid item xs={12} md={8}>
-              <main>{children}</main>
+            <Grid item xs={12} sm={8} md={8}>
+              <div>{children}</div>
             </Grid>
           </Grid>
         </GrParaBox>

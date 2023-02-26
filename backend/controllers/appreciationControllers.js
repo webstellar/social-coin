@@ -61,11 +61,18 @@ exports.newAppreciation = catchAsyncErrors(async (req, res, next) => {
 });
 
 //Get all appreciations => /api/v1/appreciations
-exports.getAppreciations = catchAsyncErrors(async (req, res, next) => {
+exports.getAppreciations = catchAsyncErrors(async (req, res) => {
   const appreciationsCount = await Appreciation.countDocuments();
 
+  const limitValue = 10;
+  const skipValue = req.query.skip ? Number(req.query.skip) : 0;
+
   const apiFeatures = new APIFeatures(
-    Appreciation.find().populate("hero").populate("user"),
+    Appreciation.find()
+      .populate("hero")
+      .populate("user")
+      .limit(limitValue)
+      .skip(skipValue),
     req.query
   ).search();
 
@@ -82,7 +89,12 @@ exports.getAppreciations = catchAsyncErrors(async (req, res, next) => {
 exports.getAppreciationByTag = catchAsyncErrors(async (req, res, next) => {
   const { tag } = req.params;
 
-  const appreciations = await Appreciation.find({ tags: { $in: tag } });
+  const limitValue = 12;
+  const skipValue = req.query.skip ? Number(req.query.skip) : 0;
+
+  const appreciations = await Appreciation.find({ tags: { $in: tag } })
+    .limit(limitValue)
+    .skip(skipValue);
 
   res.status(200).json({
     success: true,
@@ -95,9 +107,14 @@ exports.getAppreciationByRelatedTag = catchAsyncErrors(
   async (req, res, next) => {
     const tags = req.body;
 
+    const limitValue = 10;
+    const skipValue = req.query.skip ? Number(req.query.skip) : 0;
+
     const appreciations = await Appreciation.find({
       tags: { $in: tags },
-    });
+    })
+      .limit(limitValue)
+      .skip(skipValue);
 
     res.status(200).json({
       success: true,
@@ -125,9 +142,14 @@ exports.getAppreciationByRelatedCategory = catchAsyncErrors(
   async (req, res, next) => {
     const categories = req.body;
 
+    const limitValue = 10;
+    const skipValue = req.query.skip ? Number(req.query.skip) : 0;
+
     const appreciations = await Appreciation.find({
       categories: { $in: categories },
-    });
+    })
+      .limit(limitValue)
+      .skip(skipValue);
 
     res.status(200).json({
       success: true,
@@ -225,9 +247,15 @@ exports.deleteAppreciation = catchAsyncErrors(async (req, res, next) => {
 
 //Get logged in user appreciations => /api/v1/me/appreciations
 exports.myAppreciations = catchAsyncErrors(async (req, res, next) => {
+  const limitValue = 12;
+  const skipValue = req.query.skip ? Number(req.query.skip) : 0;
+
   const appreciations = await Appreciation.find({
     "user.id": req.user.id,
-  });
+  })
+    .limit(limitValue)
+    .skip(skipValue);
+
   let heroesIDs = [];
 
   for (let i = 0; i < appreciations.length; i++) {

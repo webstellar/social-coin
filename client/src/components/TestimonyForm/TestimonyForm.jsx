@@ -17,6 +17,7 @@ import {
 import {
   GrTypography,
   GrTagTypography,
+  GrBigTypography,
   GrBox,
   GrPaper,
   GrFormImage,
@@ -43,7 +44,6 @@ import Modal from "react-modal";
 import { useDropzone } from "react-dropzone";
 
 import { topTagWithSelectAll, topTags } from "../../data/tags";
-import defaultImage from "../../images/testimonybanner.png";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 
 const customStyles = {
@@ -221,16 +221,7 @@ const TestimonyForm = () => {
 
   return (
     <form onSubmit={onSubmit} style={{ position: "relative" }}>
-      <Box sx={{ my: 4, mb: 5 }}>
-        <GrTypography
-          variant="h6"
-          component="p"
-          color="grey.900"
-          sx={{ textAlign: "center" }}
-        >
-          STEP 2: WRITE YOUR TESTIMONY
-        </GrTypography>
-      </Box>
+      <Box sx={{ my: 4, mb: 5 }}></Box>
       <GrPaper elevation={0}>
         <Container maxWidth="lg">
           <Grid
@@ -263,19 +254,37 @@ const TestimonyForm = () => {
                   flexDirection: "column",
                 }}
               >
+                <GrBigTypography variant="h3" component="h2" color="grey.900">
+                  STEP 2: WRITE YOUR TESTIMONY
+                </GrBigTypography>
+              </Grid>
+              <Grid item xs={2} sm={2} md={2} lg={2}></Grid>
+              <Grid
+                item
+                xs={10}
+                sm={10}
+                md={10}
+                lg={10}
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  flexDirection: "column",
+                }}
+              >
                 <Typography
                   variant="p"
                   component="p"
                   gutterBottom
                   color="secondary"
                 >
-                  Upload File
+                  Upload Your Testimony Banner
                 </Typography>
                 <div
                   {...getRootProps()}
                   style={{
                     border: "5px dotted black",
-                    padding: "60px 40px 60px 40px",
+                    padding: "80px 60px 80px 60px",
                     backgroundColor: "#dcdcdc",
                     color: "#000",
                     marginBottom: "4rem",
@@ -283,11 +292,11 @@ const TestimonyForm = () => {
                 >
                   <input {...getInputProps()} />
                   {isDragActive ? (
-                    <p>Drop the files here ...</p>
+                    <p>Drop the image here ...</p>
                   ) : (
                     <>
                       <p>
-                        Drag 'n' drop some files here, or click to select files
+                        Drag 'n' drop an image here, or click to select files
                       </p>
                       <div
                         style={{

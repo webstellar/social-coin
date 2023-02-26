@@ -12,11 +12,11 @@ import {
 } from "@mui/material/";
 import SearchIcon from "@mui/icons-material/Search";
 import { GrBox, GrCTypography, GrDiv } from "./SearchResult.styles";
-import { getHeroes } from "../../redux/heroes/heroesSlice";
+import { getHeroes, getHeroesWithParams } from "../../redux/heroes/heroesSlice";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
-import HeroCard from "../HeroCard/HeroCard";
+import HeroesCard from "../HeroesCard/HeroesCard";
 
 const SearchResult = () => {
   const dispatch = useDispatch();
@@ -27,7 +27,7 @@ const SearchResult = () => {
   const searchHandler = (e) => {
     e.preventDefault();
     if (keyword.trim()) {
-      dispatch(getHeroes(keyword));
+      dispatch(getHeroesWithParams({ keyword }));
       navigate(`/search/${keyword}`);
     } else {
       navigate("/search");
@@ -73,7 +73,9 @@ const SearchResult = () => {
             ) : (
               <Grid item container md={12} spacing={4}>
                 {heroes &&
-                  heroes.map((hero) => <HeroCard key={hero._id} hero={hero} />)}
+                  heroes.map((hero) => (
+                    <HeroesCard key={hero._id} hero={hero} />
+                  ))}
               </Grid>
             )}
           </GrDiv>

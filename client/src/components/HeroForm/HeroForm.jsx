@@ -27,6 +27,7 @@ import { toast } from "react-toastify";
 import { createHero } from "../../redux/heroes/createHeroSlice";
 
 import data from "../../data/countries.json";
+import { getHeroes } from "../../redux/heroes/heroesSlice";
 
 const genders = ["Male", "Female", "Others"];
 const countries = data;
@@ -74,6 +75,7 @@ const HeroForm = () => {
     setOpen(!open);
     if (name && description && profilePicture) {
       dispatch(createHero({ formData, navigate, toast, hero }));
+      dispatch(getHeroes());
       setTimeout(() => {
         setOpen(open);
       }, 10000);

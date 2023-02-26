@@ -21,6 +21,20 @@ export const getHeroes = createAsyncThunk(
   }
 );
 
+export const getHeroesWithParams = createAsyncThunk(
+  "heroes/getHeroesWithParams",
+  async ({ keyword = null, skip, page = null }) => {
+    try {
+      const { data } = await axios.get(
+        `/api/v1/heroes?page=${page}&keyword=${keyword}&skip=${skip}`
+      );
+      return data;
+    } catch (error) {
+      return error.response.data.message;
+    }
+  }
+);
+
 export const getCategoryHero = createAsyncThunk(
   "heroes/getCategoryHero",
   async (category, { rejectWithValue }) => {
@@ -48,6 +62,19 @@ export const heroesSlice = createSlice({
       state.success = true;
     });
     builder.addCase(getHeroes.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+    builder.addCase(getHeroesWithParams.pending, (state) => {
+      state.loading = true;
+      state.heroes = [];
+    });
+    builder.addCase(getHeroesWithParams.fulfilled, (state, action) => {
+      state.loading = false;
+      state.heroes = action.payload.heroes;
+      state.success = true;
+    });
+    builder.addCase(getHeroesWithParams.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
     });

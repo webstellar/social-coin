@@ -59,6 +59,8 @@ export const GrHeroImage = styled("img")(({ theme }) => ({
 }));
 
 export const GrBigTypography = styled(Typography)(({ theme }) => ({
+  textAlign: "center",
+  marginBottom: "4rem",
   [theme.breakpoints.down("md")]: {
     fontSize: "2rem",
   },
@@ -80,7 +82,7 @@ export const GrTypography = styled(Typography)(({ theme }) => ({
 
 export const GrLink = styled(Link)({
   textDecoration: "none",
-  color: "#F6430A",
+  color: "",
   cursor: "pointer",
 });
 

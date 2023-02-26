@@ -9,21 +9,23 @@ import {
   Typography,
   Badge,
 } from "@mui/material";
-import { GrItem } from "./HeroCard.styles";
+import {
+  GrHeroTypography,
+  GrGiverTypography,
+  GrLink,
+  GrItem,
+} from "./HeroesCard.styles";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import ReviewsIcon from "@mui/icons-material/Reviews";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { likeGratitude } from "../../redux/gratitudes/gratitudesSlice";
 
-const HeroCard = ({ hero }) => {
+const HeroesCard = ({ hero }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const { user } = useSelector((state) => state.auth);
   const userId = user?.user?._id;
-
-  const heroAppreciationCount = hero?.appreciations.length;
 
   const handleLikes = () => {
     dispatch(likeGratitude({ userId }));
@@ -31,7 +33,7 @@ const HeroCard = ({ hero }) => {
 
   return (
     <>
-      <Grid item xs={12} md={12}>
+      <Grid item xs={12} md={3}>
         <CardActionArea sx={{ mb: 4 }}>
           <Card sx={{ display: "block" }}>
             <Link
@@ -44,7 +46,7 @@ const HeroCard = ({ hero }) => {
                 component="img"
                 sx={{
                   width: "100%",
-                  height: 500,
+                  height: 200,
                   filter: "grayscale(100%)",
                   "&:hover": {
                     filter: "grayscale(0%)",
@@ -55,6 +57,16 @@ const HeroCard = ({ hero }) => {
               />
             </Link>
             <CardContent sx={{ flex: 1, paddingLeft: 4, paddingRight: 4 }}>
+              <GrGiverTypography variant="caption" color="grey.500">
+                written by {hero?.user?.name || "gratitude"}
+              </GrGiverTypography>
+
+              <GrLink to={`/hero/${hero?._id}`}>
+                <GrHeroTypography variant="h6" component="h6" gutterBottom>
+                  for {hero?.name}
+                </GrHeroTypography>
+              </GrLink>
+
               <Stack
                 direction="row"
                 justifyContent="space-between"
@@ -64,7 +76,9 @@ const HeroCard = ({ hero }) => {
                 <GrItem
                   elevation={0}
                   onClick={() => {
-                    navigate(`/hero/${hero?._id}`);
+                    navigate("/create-testimony", {
+                      state: { data: hero?._id },
+                    });
                   }}
                   sx={{
                     textDecoration: "none",
@@ -81,7 +95,7 @@ const HeroCard = ({ hero }) => {
                       },
                     }}
                   >
-                    {hero?.name}
+                    EXPRESS
                   </Typography>
                 </GrItem>
                 <GrItem elevation={0}>
@@ -92,27 +106,12 @@ const HeroCard = ({ hero }) => {
                       vertical: "top",
                       horizontal: "right",
                     }}
-                    sx={{
-                      mr: 4,
-                    }}
                     onClick={handleLikes}
                   >
                     <FavoriteIcon />
                   </Badge>
-                  <Badge
-                    color="secondary"
-                    badgeContent={heroAppreciationCount}
-                    showZero
-                    anchorOrigin={{
-                      vertical: "top",
-                      horizontal: "right",
-                    }}
-                  >
-                    <ReviewsIcon />
-                  </Badge>
                 </GrItem>
               </Stack>
-              <Typography sx={{ mt: 3 }}>{hero?.description}</Typography>
             </CardContent>
           </Card>
         </CardActionArea>
@@ -121,8 +120,8 @@ const HeroCard = ({ hero }) => {
   );
 };
 
-HeroCard.propTypes = {
+HeroesCard.propTypes = {
   hero: PropTypes.object,
 };
 
-export default HeroCard;
+export default HeroesCard;

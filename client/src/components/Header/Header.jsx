@@ -27,6 +27,7 @@ import ModalRegister from "../AuthRegister/ModalRegister";
 
 import { useSelector, useDispatch } from "react-redux";
 import { setLogout } from "../../redux/auth/authSlice";
+import decode from "jwt-decode";
 
 const navItems = [
   {
@@ -62,6 +63,16 @@ const Header = () => {
   const [openSecond, setOpenSecond] = useState(false);
 
   const { user } = useSelector((state) => state.auth);
+
+  const token = user?.token;
+
+  if (token) {
+    const decodedToken = decode(token);
+
+    if (decodedToken.exp * 1000 < new Date().getTime()) {
+      dispatch(setLogout());
+    }
+  }
 
   const handleLogout = () => {
     dispatch(setLogout());

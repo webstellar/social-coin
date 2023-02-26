@@ -12,7 +12,7 @@ import {
   GrDiv,
 } from "./HomeHeroCategory.styles";
 
-import HeroCard from "../HeroCard/HeroCard";
+import HeroesCard from "../HeroesCard/HeroesCard";
 
 const HomeHeroCategory = () => {
   const dispatch = useDispatch();
@@ -67,7 +67,7 @@ const HomeHeroCategory = () => {
           <GrDiv>
             <Grid container spacing={4}>
               {heroes &&
-                heroes.map((hero) => <HeroCard key={hero._id} hero={hero} />)}
+                heroes.map((hero) => <HeroesCard key={hero._id} hero={hero} />)}
             </Grid>
           </GrDiv>
         </Container>

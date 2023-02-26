@@ -30,13 +30,22 @@ exports.newHero = catchAsyncErrors(async (req, res, next) => {
 
 //Get All Heroes
 exports.getHeroes = catchAsyncErrors(async (req, res, next) => {
-  const resPerPage = 8;
-  const heroesCount = await Hero.countDocuments();
+  const { page } = req.query;
+
+  const limitValue = req.query.limit ? Number(req.query.limit) : 12;
+  //const skipValue = req.query.skip ? Number(req.query.skip) : 0;
+  const startIndex = (Number(page) - 1) * limitValue;
+  const heroesCount = await Hero.countDocuments({});
 
   //const apiFeatures = new APIFeatures(Hero.find(), req.query).search();
 
   apiFeatures = new APIFeatures(
-    Hero.find().populate("appreciations").populate("user"),
+    Hero.find()
+      .populate("appreciations")
+      .populate("user")
+      .limit(limitValue)
+      .skip(startIndex)
+      .sort({ $natural: -1 }),
     req.query
   ).search();
 
@@ -44,8 +53,9 @@ exports.getHeroes = catchAsyncErrors(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    heroesCount: heroes.length,
-    resPerPage,
+    heroesCount,
+    currentPage: Number(page),
+    numberOfPages: Math.ceil(heroesCount / limitValue),
     heroes,
   });
 });
@@ -200,7 +210,12 @@ exports.deleteHero = catchAsyncErrors(async (req, res, next) => {
 
 //Get logged in user heros => /api/v1/me/heroes/
 exports.myHeroes = catchAsyncErrors(async (req, res, next) => {
-  const heroes = await Hero.find({ user: req.user.id });
+  const limitValue = 12;
+  const skipValue = req.query.skip ? Number(req.query.skip) : 0;
+
+  const heroes = await Hero.find({ user: req.user.id })
+    .limit(limitValue)
+    .skip(skipValue);
 
   res.status(200).json({
     success: true,
@@ -236,3 +251,15 @@ exports.getHeroesBySearch = catchAsyncErrors(async (req, res) => {
     });
   }
 });
+
+const categgoryOptions = [
+  "Husband",
+  "Wife",
+  "Brother",
+  "Sister",
+  "Childhood Friend",
+  "Acquaintance",
+  "Family",
+  "Friend",
+  "Relative",
+];

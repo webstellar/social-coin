@@ -9,7 +9,6 @@ const YoutubeEmbedForm = ({ video, summary }) => {
     if (video) {
       let videoUrl = video.toString();
 
-      console.log(videoUrl);
       if (videoUrl.includes("https://www.youtube.com/watch?v=")) {
         var yID = videoUrl.split("https://www.youtube.com/watch?v=");
         yID = yID[1].split("&");
