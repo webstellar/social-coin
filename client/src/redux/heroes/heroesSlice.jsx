@@ -7,13 +7,26 @@ const initialState = {
   loading: true,
   error: null,
   success: false,
+  heroesCount: null,
+  currentPage: 1,
+  numberOfPages: null,
+  loadedHeroes: [],
 };
 
-export const getHeroes = createAsyncThunk(
-  "heroes/getHeroes",
-  async (keyword = "") => {
+export const getHeroes = createAsyncThunk("heroes/getHeroes", async (page) => {
+  try {
+    const { data } = await axios.get(`/api/v1/heroes?page=${page}`);
+    return data;
+  } catch (error) {
+    return error.response.data.message;
+  }
+});
+
+export const getMoreHeroes = createAsyncThunk(
+  "heroes/getMoreHeroes",
+  async (skip) => {
     try {
-      const { data } = await axios.get(`/api/v1/heroes?keyword=${keyword}`);
+      const { data } = await axios.get(`/api/v1/moreHeroes?skip=${skip}`);
       return data;
     } catch (error) {
       return error.response.data.message;
@@ -23,7 +36,7 @@ export const getHeroes = createAsyncThunk(
 
 export const getHeroesWithParams = createAsyncThunk(
   "heroes/getHeroesWithParams",
-  async ({ keyword = null, skip, page = null }) => {
+  async ({ keyword = null, skip, page }) => {
     try {
       const { data } = await axios.get(
         `/api/v1/heroes?page=${page}&keyword=${keyword}&skip=${skip}`
@@ -50,7 +63,11 @@ export const getCategoryHero = createAsyncThunk(
 export const heroesSlice = createSlice({
   name: "heroes",
   initialState,
-  reducers: {},
+  reducers: {
+    setCurrentPage: (state, action) => {
+      state.currentPage = action.payload.currentPage;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(getHeroes.pending, (state) => {
       state.loading = true;
@@ -59,9 +76,26 @@ export const heroesSlice = createSlice({
     builder.addCase(getHeroes.fulfilled, (state, action) => {
       state.loading = false;
       state.heroes = action.payload.heroes;
+      state.heroesCount = action.payload.heroesCount;
+      state.currentPage = action.payload.currentPage;
+      state.numberOfPages = action.payload.numberOfPages;
       state.success = true;
     });
     builder.addCase(getHeroes.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+    builder.addCase(getMoreHeroes.pending, (state) => {
+      state.loading = true;
+      state.heroes = [];
+    });
+    builder.addCase(getMoreHeroes.fulfilled, (state, action) => {
+      state.loading = false;
+      state.loadedHeroes = [...state.loadedHeroes, ...action.payload.heroes];
+      state.heroesCount = action.payload.heroesCount;
+      state.success = true;
+    });
+    builder.addCase(getMoreHeroes.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
     });
@@ -72,7 +106,12 @@ export const heroesSlice = createSlice({
     builder.addCase(getHeroesWithParams.fulfilled, (state, action) => {
       state.loading = false;
       state.heroes = action.payload.heroes;
+      state.heroesCount = action.payload.heroesCount;
+      state.currentPage = action.payload.currentPage;
+      state.numberOfPages = action.payload.numberOfPages;
       state.success = true;
+
+      console.log(state.currentPage);
     });
     builder.addCase(getHeroesWithParams.rejected, (state, action) => {
       state.loading = false;
@@ -93,3 +132,5 @@ export const heroesSlice = createSlice({
     });
   },
 });
+
+export const { setCurrentPage } = heroesSlice.actions;

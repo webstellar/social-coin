@@ -1,49 +1,55 @@
 import * as React from "react";
 import LayoutHero from "../components/LayoutHero/LayoutHero";
 import { useDispatch, useSelector } from "react-redux";
-import { getHeroesWithParams } from "../redux/heroes/heroesSlice";
+import { getHeroes, getMoreHeroes } from "../redux/heroes/heroesSlice";
 import HeroCard from "../components/HeroCard/HeroCard";
 import Seo from "../components/Seo/Seo";
+import AutorenewIcon from "@mui/icons-material/Autorenew";
+import { Typography, Button } from "@mui/material";
 
 const Heroes = () => {
   const dispatch = useDispatch();
-  const [keyword, setKeyword] = React.useState("");
   const [skip, setSkip] = React.useState(0);
 
-  const { heroes } = useSelector((state) => ({ ...state.heroes }));
+  const limit = 12;
+
+  const { loadedHeroes, heroesCount, loading } = useSelector((state) => ({
+    ...state.heroes,
+  }));
 
   React.useEffect(() => {
-    dispatch(getHeroesWithParams({ keyword, skip }));
-  }, [dispatch, keyword, skip]);
+    dispatch(getMoreHeroes(skip));
+  }, [dispatch, skip]);
 
-  const handleScroll = (e) => {
-    const { offsetHeight, scrollTop, scrollHeight } = e.target;
-
-    if (offsetHeight + scrollTop >= scrollHeight) {
-      setSkip(heroes?.length);
-    }
-  };
-
-  const scrollToEnd = () => {
-    setSkip(heroes?.length);
-  };
-
-  window.onscroll = function () {
-    if (
-      window.innerHeight + document.documentElement.scrollTop ===
-      document.documentElement.offsetHeight
-    ) {
-      scrollToEnd();
-    }
+  const handleLoadMore = () => {
+    const skipTo = skip + limit;
+    dispatch(getMoreHeroes(skipTo));
+    setSkip(skipTo);
   };
 
   console.log(skip);
 
   return (
     <LayoutHero>
-      <div >
-        {heroes &&
-          heroes.map((hero) => <HeroCard key={hero._id} hero={hero} />)}
+      <div>
+        {loadedHeroes &&
+          loadedHeroes.map((hero) => <HeroCard key={hero._id} hero={hero} />)}
+      </div>
+      <div>
+        {heroesCount === loadedHeroes.length ? (
+          <Typography variant="h5" gutterBottom>
+            You have reached the end
+          </Typography>
+        ) : (
+          <Button
+            variant="contained"
+            color="secondary"
+            endIcon={<AutorenewIcon />}
+            onClick={handleLoadMore}
+          >
+            Load More
+          </Button>
+        )}
       </div>
     </LayoutHero>
   );

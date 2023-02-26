@@ -12,7 +12,7 @@ import {
 } from "@mui/material/";
 import SearchIcon from "@mui/icons-material/Search";
 import { GrBox, GrCTypography, GrDiv } from "./SearchResult.styles";
-import { getHeroes, getHeroesWithParams } from "../../redux/heroes/heroesSlice";
+import { getHeroesWithParams } from "../../redux/heroes/heroesSlice";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 

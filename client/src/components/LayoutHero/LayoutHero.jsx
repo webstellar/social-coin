@@ -18,11 +18,12 @@ const LayoutHero = ({ children }) => {
             direction="row"
             justifyContent="space-between"
             alignItems="flex-start"
+            columnGap={2}
           >
             <Grid item xs={12} sm={4} md={4}>
               <ListMenu />
             </Grid>
-            <Grid item xs={12} sm={8} md={8}>
+            <Grid item xs={12} sm={6} md={6}>
               <div>{children}</div>
             </Grid>
           </Grid>

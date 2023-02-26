@@ -33,11 +33,8 @@ exports.getHeroes = catchAsyncErrors(async (req, res, next) => {
   const { page } = req.query;
 
   const limitValue = req.query.limit ? Number(req.query.limit) : 12;
-  //const skipValue = req.query.skip ? Number(req.query.skip) : 0;
   const startIndex = (Number(page) - 1) * limitValue;
   const heroesCount = await Hero.countDocuments({});
-
-  //const apiFeatures = new APIFeatures(Hero.find(), req.query).search();
 
   apiFeatures = new APIFeatures(
     Hero.find()
@@ -55,6 +52,31 @@ exports.getHeroes = catchAsyncErrors(async (req, res, next) => {
     success: true,
     heroesCount,
     currentPage: Number(page),
+    numberOfPages: Math.ceil(heroesCount / limitValue),
+    heroes,
+  });
+});
+
+exports.loadMoreHeroes = catchAsyncErrors(async (req, res, next) => {
+  const { skip } = req.query;
+  const limitValue = req.query.limit ? Number(req.query.limit) : 12;
+  const heroesCount = await Hero.countDocuments({});
+
+  apiFeatures = new APIFeatures(
+    Hero.find()
+      .populate("appreciations")
+      .populate("user")
+      .skip(Number(skip))
+      .limit(limitValue)
+      .sort({ $natural: -1 }),
+    req.query
+  ).search();
+
+  const heroes = await apiFeatures.query;
+
+  res.status(200).json({
+    success: true,
+    heroesCount,
     numberOfPages: Math.ceil(heroesCount / limitValue),
     heroes,
   });

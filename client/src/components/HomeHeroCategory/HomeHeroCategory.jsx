@@ -1,7 +1,9 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getHeroes } from "../../redux/heroes/heroesSlice";
 import { getMyGratitudes } from "../../redux/gratitudes/myGratitudeSlice";
+import GeneralPagination from "../GeneralPagination/GeneralPagination";
+import { Spinner } from "../Spinner/Spinner";
 
 import { Container, Grid } from "@mui/material";
 import {
@@ -16,20 +18,21 @@ import HeroesCard from "../HeroesCard/HeroesCard";
 
 const HomeHeroCategory = () => {
   const dispatch = useDispatch();
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const { heroes } = useSelector((state) => ({
+  const { heroes, numberOfPages, loading } = useSelector((state) => ({
     ...state.heroes,
   }));
 
   //To display heroes by category use categoryHeroes in the useSelector
 
   useEffect(() => {
-    dispatch(getHeroes());
-  }, [dispatch]);
+    dispatch(getHeroes(currentPage));
+  }, [dispatch, currentPage]);
 
   useEffect(() => {
     dispatch(getMyGratitudes());
-  }, [dispatch]);
+  }, [dispatch, currentPage]);
 
   return (
     <>
@@ -52,7 +55,7 @@ const HomeHeroCategory = () => {
               </GrTypography>
             </Grid>
             <Grid item md={4}>
-              <GrLink to="/heroeslist">
+              <GrLink to="/heroes">
                 <GrCTypography
                   component="p"
                   variant="p"
@@ -64,12 +67,26 @@ const HomeHeroCategory = () => {
               </GrLink>
             </Grid>
           </Grid>
+
           <GrDiv>
-            <Grid container spacing={4}>
-              {heroes &&
-                heroes.map((hero) => <HeroesCard key={hero._id} hero={hero} />)}
-            </Grid>
+            {loading ? (
+              <Spinner />
+            ) : (
+              <Grid container spacing={4}>
+                {heroes &&
+                  heroes.map((hero) => (
+                    <HeroesCard key={hero._id} hero={hero} />
+                  ))}
+              </Grid>
+            )}
           </GrDiv>
+          <div>
+            <GeneralPagination
+              setCurrentPage={setCurrentPage}
+              currentPage={currentPage}
+              numberOfPages={numberOfPages}
+            />
+          </div>
         </Container>
       </GrBox>
     </>

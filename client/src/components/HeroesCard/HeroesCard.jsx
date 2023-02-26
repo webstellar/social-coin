@@ -33,7 +33,7 @@ const HeroesCard = ({ hero }) => {
 
   return (
     <>
-      <Grid item xs={12} md={3}>
+      <Grid item xs={12} sm={3} md={3}>
         <CardActionArea sx={{ mb: 4 }}>
           <Card sx={{ display: "block" }}>
             <Link

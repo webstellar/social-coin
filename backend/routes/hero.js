@@ -15,10 +15,12 @@ const {
   getHeroesBySearch,
   getHeroesByCategory,
   getHeroByRelatedCategory,
+  loadMoreHeroes,
 } = require("../controllers/heroControllers");
 const { isAuthenticatedUser, authorizeRoles } = require("../middlewares/auth");
 
 router.route("/heroes").get(getHeroes);
+router.route("/moreHeroes").get(loadMoreHeroes);
 router.route("/hero/:id").get(getSingleHero);
 router.route("/hero/category/:category").get(getHeroesByCategory);
 router.route("/hero/relatedcategory").get(getHeroByRelatedCategory);

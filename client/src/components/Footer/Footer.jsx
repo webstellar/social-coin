@@ -186,7 +186,7 @@ const Footer = () => {
             >
               <Grid item>
                 <Typography variant="caption" component="p">
-                  Copyright {year} -Gratitude
+                  Copyright {year} -Humble Hero
                 </Typography>
               </Grid>
             </Grid>
