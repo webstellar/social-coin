@@ -8,26 +8,17 @@ import {
   CardMedia,
   Typography,
   Badge,
+  Tooltip,
 } from "@mui/material";
 import { GrItem } from "./HeroCard.styles";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ReviewsIcon from "@mui/icons-material/Reviews";
 import { Link, useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { likeGratitude } from "../../redux/gratitudes/gratitudesSlice";
 
 const HeroCard = ({ hero }) => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-
-  const { user } = useSelector((state) => state.auth);
-  const userId = user?.user?._id;
 
   const heroAppreciationCount = hero?.appreciations.length;
-
-  const handleLikes = () => {
-    dispatch(likeGratitude({ userId }));
-  };
 
   return (
     <>
@@ -85,31 +76,35 @@ const HeroCard = ({ hero }) => {
                   </Typography>
                 </GrItem>
                 <GrItem elevation={0}>
-                  <Badge
-                    color="secondary"
-                    badgeContent={10}
-                    anchorOrigin={{
-                      vertical: "top",
-                      horizontal: "right",
-                    }}
-                    sx={{
-                      mr: 4,
-                    }}
-                    onClick={handleLikes}
-                  >
-                    <FavoriteIcon />
-                  </Badge>
-                  <Badge
-                    color="secondary"
-                    badgeContent={heroAppreciationCount}
-                    showZero
-                    anchorOrigin={{
-                      vertical: "top",
-                      horizontal: "right",
-                    }}
-                  >
-                    <ReviewsIcon />
-                  </Badge>
+                  <Tooltip title={`Number of likes`}>
+                    <Badge
+                      color="secondary"
+                      badgeContent={10}
+                      anchorOrigin={{
+                        vertical: "top",
+                        horizontal: "right",
+                      }}
+                      sx={{
+                        mr: 4,
+                      }}
+                    >
+                      <FavoriteIcon />
+                    </Badge>
+                  </Tooltip>
+
+                  <Tooltip title={`${heroAppreciationCount} testimonies`}>
+                    <Badge
+                      color="secondary"
+                      badgeContent={heroAppreciationCount}
+                      showZero
+                      anchorOrigin={{
+                        vertical: "top",
+                        horizontal: "right",
+                      }}
+                    >
+                      <ReviewsIcon />
+                    </Badge>
+                  </Tooltip>
                 </GrItem>
               </Stack>
               <Typography sx={{ mt: 3 }}>{hero?.description}</Typography>

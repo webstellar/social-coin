@@ -6,8 +6,11 @@ import GratitudeSubSection from "../components/GratitudeSubSection/GratitudeSubS
 import GratitudeMainSection from "../components/GratitudeMainSection/GratitudeMainSection";
 import GratitudeCommentSection from "../components/GratitudeCommentSection/GratitudeCommentSection";
 
+import Tooltip from "@mui/material/Tooltip";
+
 import Fab from "@mui/material/Fab";
 import EditIcon from "@mui/icons-material/Edit";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 
 import { useSelector, useDispatch } from "react-redux";
 import { useParams, Link } from "react-router-dom";
@@ -39,6 +42,14 @@ const Gratitude = () => {
         <GratitudeSubSection gratitude={appreciation} />
         <GratitudeMainSection gratitude={appreciation} />
         <GratitudeCommentSection gratitude={appreciation} id={id} />
+        <Fab
+          sx={{ position: "fixed", bottom: "15%", right: "5%" }}
+          color="secondary"
+          aria-label="add"
+        >
+          <FavoriteIcon />
+        </Fab>
+
         {user && user?.user?._id === appreciation?.user?.id ? (
           <Link to={`/edit/appreciation/${id}`}>
             <Fab

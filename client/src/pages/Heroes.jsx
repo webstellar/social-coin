@@ -1,11 +1,12 @@
 import * as React from "react";
 import LayoutHero from "../components/LayoutHero/LayoutHero";
 import { useDispatch, useSelector } from "react-redux";
-import { getHeroes, getMoreHeroes } from "../redux/heroes/heroesSlice";
+import { getMoreHeroes } from "../redux/heroes/heroesSlice";
 import HeroCard from "../components/HeroCard/HeroCard";
 import Seo from "../components/Seo/Seo";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
 import { Typography, Button } from "@mui/material";
+import { Spinner } from "../components/Spinner/Spinner";
 
 const Heroes = () => {
   const dispatch = useDispatch();
@@ -27,7 +28,7 @@ const Heroes = () => {
     setSkip(skipTo);
   };
 
-  console.log(skip);
+  if (loading) <Spinner />;
 
   return (
     <LayoutHero>

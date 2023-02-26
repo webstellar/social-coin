@@ -1,8 +1,9 @@
 import { useEffect } from "react";
 import WriteHero from "../components/WriterHero/WriterHero";
 import Layout from "../components/Layout/Layout";
-//import Seo from "../components/Seo/Seo";
 
+//import Seo from "../components/Seo/Seo";
+import Tooltip from "@mui/material/Tooltip";
 import Fab from "@mui/material/Fab";
 import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
@@ -25,7 +26,6 @@ const Hero = () => {
 
   useEffect(() => {
     if (id) {
-     
       dispatch(getHero(id));
     }
 
@@ -35,28 +35,32 @@ const Hero = () => {
   return (
     <Layout>
       <WriteHero hero={hero} />
-      <Fab
-        sx={{ position: "fixed", bottom: "15%", right: "5%" }}
-        color="secondary"
-        aria-label="add"
-        onClick={() => {
-          navigate("/create-testimony", {
-            state: { data: hero?._id },
-          });
-        }}
-      >
-        <AddIcon />
-      </Fab>
+      <Tooltip title="Add a Testimony">
+        <Fab
+          sx={{ position: "fixed", bottom: "15%", right: "5%" }}
+          color="secondary"
+          aria-label="add"
+          onClick={() => {
+            navigate("/create-testimony", {
+              state: { data: hero?._id },
+            });
+          }}
+        >
+          <AddIcon />
+        </Fab>
+      </Tooltip>
 
       {user && user?.user?._id === hero?.user ? (
         <Link to={`/edit/hero/${id}`}>
-          <Fab
-            sx={{ position: "fixed", bottom: "5%", right: "5%" }}
-            aria-label="edit"
-            color="secondary"
-          >
-            <EditIcon />
-          </Fab>
+          <Tooltip title="Edit your hero" placement="bottom-end">
+            <Fab
+              sx={{ position: "fixed", bottom: "5%", right: "5%" }}
+              aria-label="edit"
+              color="secondary"
+            >
+              <EditIcon />
+            </Fab>
+          </Tooltip>
         </Link>
       ) : null}
     </Layout>

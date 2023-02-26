@@ -43,6 +43,18 @@ export const updateGratitude = createAsyncThunk(
   }
 );
 
+export const likeGratitude = createAsyncThunk(
+  "gratitude/likeGratitude",
+  async ({ id }, { rejectWithValue }) => {
+    try {
+      const response = await axios.patch(`/api/v1/like/${id}`);
+      return response;
+    } catch (error) {
+      return rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
 export const gratitudeSlice = createSlice({
   name: "gratitude",
   initialState,
@@ -69,6 +81,24 @@ export const gratitudeSlice = createSlice({
       state.success = true;
     });
     builder.addCase(updateGratitude.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error;
+    });
+    builder.addCase(likeGratitude.pending, (state) => {});
+    builder.addCase(likeGratitude.fulfilled, (state, action) => {
+      state.loading = false;
+      const {
+        arg: { id },
+      } = action.meta;
+      if (id) {
+        state.appreciations = state.appreciations.map((item) =>
+          item._id === id ? action.payload : item
+        );
+      }
+      state.appreciation = action.payload.updatedGratitude;
+      state.success = true;
+    });
+    builder.addCase(likeGratitude.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error;
     });
