@@ -74,7 +74,7 @@ const Gratitude = () => {
   const action = (
     <Fragment>
       <Button color="secondary" size="small" onClick={handleClose}>
-        QUICK REFRESH
+        REFRESH
       </Button>
       <IconButton
         size="small"
@@ -113,7 +113,7 @@ const Gratitude = () => {
           open={open}
           autoHideDuration={6000}
           onClose={handleClose}
-          message="You like this testimony"
+          message="You liked this testimony"
           action={action}
         />
 
