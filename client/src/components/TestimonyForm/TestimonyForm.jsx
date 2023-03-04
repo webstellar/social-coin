@@ -31,6 +31,7 @@ import TestimonyFormSummary from "./TestimonyFormSummary";
 import TestimonyFormStory from "./TestimonyFormStory";
 import TestimonyFormTags from "./TestimonyFormTags";
 import TestimonyFormVideo from "./TestimonyFormVideo";
+import TestimonyFormCategory from "./TestimonyFormCategory";
 
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -86,10 +87,12 @@ const TestimonyForm = () => {
   const [fakeName, setFakeName] = React.useState("");
   const [image, setImage] = React.useState("");
   const [tags, setTags] = React.useState(["caring", "magnanimous"]);
+  const [categories, setCategories] = React.useState([]);
   const [video, setVideo] = React.useState("");
   const [open, setOpen] = React.useState(false);
 
   //Form Modal
+  const [openCategory, setOpenCategory] = React.useState(false);
   const [openSummary, setOpenSummary] = React.useState(false);
   const [openStory, setOpenStory] = React.useState(false);
   const [openTags, setOpenTags] = React.useState(false);
@@ -144,6 +147,7 @@ const TestimonyForm = () => {
     setImage("");
     setTags([]);
     setVideo("");
+    setCategories([]);
   };
 
   const handleClose = () => {
@@ -161,6 +165,7 @@ const TestimonyForm = () => {
       image: image,
       video: video,
       tags: tags,
+      categories: categories,
     };
 
     if (hero && summary && story && image) {
@@ -199,6 +204,13 @@ const TestimonyForm = () => {
     } else {
       setTags(newValue);
     }
+  };
+
+  const handleCategoryChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setCategories(typeof value === "string" ? value.split(",") : value);
   };
 
   const tinymce = process.env.REACT_APP_TINY_URL_KEY;
@@ -538,6 +550,93 @@ const TestimonyForm = () => {
                     handleTagChange={handleTagChange}
                     topTags={topTags}
                     topTagWithSelectAll={topTagWithSelectAll}
+                  />
+                </Modal>
+              </Grid>
+            </Grid>
+
+            <Grid
+              item
+              xs={12}
+              sm={12}
+              md={12}
+              lg={12}
+              container
+              direction="row"
+              justifyContent="space-evenly"
+              alignItems="flex-start"
+              sx={{
+                mt: 4,
+              }}
+            >
+              <Grid item xs={10} sm={10} md={10} lg={10}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    textAlign: "center",
+                  }}
+                >
+                  <Stack
+                    direction="row"
+                    justifyContent="center"
+                    alignItems="center"
+                    spacing={2}
+                  >
+                    <span style={{ color: "#000", fontSize: "1.2rem" }}>
+                      categories:{" "}
+                    </span>
+                    {categories
+                      ? categories.map((category) => (
+                          <GrItem elevation={0} key={category}>
+                            <GrTagTypography
+                              variant="subtitle1"
+                              component="p"
+                              sx={{
+                                color: "#000",
+                                textDecoration: "none",
+                                "&:hover": {
+                                  color: "#F6430A",
+                                },
+                              }}
+                            >
+                              {category}
+                            </GrTagTypography>
+                          </GrItem>
+                        ))
+                      : null}
+                  </Stack>
+                </Box>
+              </Grid>
+              <Grid item xs={2} sm={2} md={2} lg={2}>
+                <IconButton
+                  onClick={() => {
+                    setOpenCategory(true);
+                  }}
+                >
+                  <EditIcon fontSize="medium" color="secondary" />
+                </IconButton>
+                <Modal
+                  id="hero"
+                  isOpen={openCategory}
+                  onRequestClose={() => {
+                    setOpenCategory(false);
+                  }}
+                  aria={{
+                    labelledby: "Hero",
+                    describedby: "full_description",
+                  }}
+                  ariaHideApp={false}
+                  style={isMobile ? customMobileStyles : customStyles}
+                  contentLabel="Story"
+                  shouldCloseOnOverlayClick={true}
+                  shouldCloseOnEsc={true}
+                >
+                  <TestimonyFormCategory
+                    setOpenCategory={setOpenCategory}
+                    handleCategoryChange={handleCategoryChange}
+                    category={categories}
                   />
                 </Modal>
               </Grid>

@@ -125,6 +125,6 @@ export const GrGrid = styled(Grid)(({ theme }) => ({
 export const GrTagTypography = styled(Typography)({
   border: 0,
   backgroundColor: "#C5C5C5",
-  padding: "8px",
-  borderRadius: "20px",
+  padding: "4px 8px 4px 8px",
+  borderRadius: "15px",
 });

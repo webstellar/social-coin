@@ -123,77 +123,76 @@ const GratitudeHero = ({ gratitude }) => {
                   <span style={{ color: "#000", fontSize: "1.2rem" }}>
                     tag:
                   </span>
-                  {gratitude?.tags ? (
-                    gratitude?.tags.map((tag) => (
-                      <GrItem elevation={0} key={tag}>
-                        <Link
-                          to={`/appreciation/tag/${tag}`}
-                          sx={{ textDecoration: "none" }}
-                        >
-                          <GrTagTypography
-                            variant="subtitle1"
-                            component="p"
-                            sx={{
-                              color: "#000",
-                              textDecoration: "none",
-                              "&:hover": {
-                                color: "#F6430A",
-                              },
-                            }}
+                  {gratitude?.tags
+                    ? gratitude?.tags.map((tag) => (
+                        <GrItem elevation={0} key={tag}>
+                          <Link
+                            to={`/appreciation/tag/${tag}`}
+                            sx={{ textDecoration: "none" }}
                           >
-                            {tag}
-                          </GrTagTypography>
-                        </Link>
-                      </GrItem>
-                    ))
-                  ) : (
-                    <>
-                      <GrItem elevation={0}>
-                        <Link
-                          to="#video"
-                          color="inherit"
-                          variant="body2"
-                          underline="hover"
-                        >
-                          <Typography
-                            variant="subtitle1"
-                            component="p"
-                            sx={{
-                              color: "#000",
-                              textDecoration: "none",
-                              "&:hover": {
-                                color: "#F6430A",
-                              },
-                            }}
+                            <GrTagTypography
+                              variant="subtitle1"
+                              component="p"
+                              sx={{
+                                color: "#000",
+                                textDecoration: "none",
+                                "&:hover": {
+                                  color: "#F6430A",
+                                },
+                              }}
+                            >
+                              {tag}
+                            </GrTagTypography>
+                          </Link>
+                        </GrItem>
+                      ))
+                    : null}
+                </Stack>
+              </Box>
+
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  textAlign: "center",
+                  mt: 2,
+                  mb: 2,
+                }}
+              >
+                <Stack
+                  direction="row"
+                  justifyContent="center"
+                  alignItems="center"
+                  spacing={2}
+                >
+                  <span style={{ color: "#000", fontSize: "1.2rem" }}>
+                    categories:
+                  </span>
+                  {gratitude?.categories
+                    ? gratitude?.categories.map((category) => (
+                        <GrItem elevation={0} key={category}>
+                          <Link
+                            to={`/appreciation/categories/${category}`}
+                            sx={{ textDecoration: "none" }}
                           >
-                            Video
-                          </Typography>
-                        </Link>
-                      </GrItem>
-                      <GrItem elevation={0}>
-                        <Link
-                          to="#testimony"
-                          color="inherit"
-                          variant="body2"
-                          underline="hover"
-                        >
-                          <Typography
-                            variant="subtitle1"
-                            component="p"
-                            sx={{
-                              color: "#000",
-                              textDecoration: "none",
-                              "&:hover": {
-                                color: "#F6430A",
-                              },
-                            }}
-                          >
-                            Testimony
-                          </Typography>
-                        </Link>
-                      </GrItem>
-                    </>
-                  )}
+                            <GrTagTypography
+                              variant="subtitle1"
+                              component="p"
+                              sx={{
+                                color: "#000",
+                                textDecoration: "none",
+                                "&:hover": {
+                                  color: "#F6430A",
+                                },
+                              }}
+                            >
+                              {category}
+                            </GrTagTypography>
+                          </Link>
+                        </GrItem>
+                      ))
+                    : null}
                 </Stack>
               </Box>
             </Grid>

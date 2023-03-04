@@ -8,6 +8,7 @@ const {
   newAppreciation,
   myAppreciations,
   getAppreciations,
+  getAllCategories,
   updateAppreciation,
   likeMyAppreciation,
   deleteAppreciation,
@@ -29,6 +30,7 @@ router.route("/appreciation/:id").get(getSingleAppreciation);
 router.route("/appreciation/tag/:tag").get(getAppreciationByTag);
 router.route("/appreciation/relatedtag").get(getAppreciationByRelatedTag);
 router.route("/appreciation/alltags").post(getAllTags);
+router.route("/appreciation/allcategories").post(getAllCategories);
 router.route("/appreciation/category/:category").get(getAppreciationByCategory);
 router
   .route("/appreciation/relatedcategory")
