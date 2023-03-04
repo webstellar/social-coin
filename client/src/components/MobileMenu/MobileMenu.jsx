@@ -28,13 +28,13 @@ const drawerWidth = 240;
 const navItems = [
   {
     id: 1,
-    name: "Give",
+    name: "Write a Testimony",
     link: "/create-testimony",
   },
   {
     id: 2,
-    name: "Our story",
-    link: "/our-story",
+    name: "Explore",
+    link: "/testimonies",
   },
   {
     id: 3,

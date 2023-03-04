@@ -1,9 +1,8 @@
-import { useEffect, useTransition } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getGratitudes } from "../../redux/gratitudes/gratitudesSlice";
-import { getMyGratitudes } from "../../redux/gratitudes/myGratitudeSlice";
 
-import { Container, Grid, Typography } from "@mui/material";
+import { Container, Grid } from "@mui/material";
 import {
   GrBox,
   GrTypography,
@@ -12,96 +11,27 @@ import {
   GrDiv,
 } from "./HomeRecentTitle.styles";
 
-import GratitudeCard from "../GratitudeCard/GratitudeCard";
 import GratitudeCardBig from "../GratitudeCardBig/GratitudeCardBig";
+import GeneralPagination from "../GeneralPagination/GeneralPagination";
 
 const HomeRecentTitle = () => {
   const dispatch = useDispatch();
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const { appreciations } = useSelector((state) => ({ ...state.gratitudes }));
-
-  const { myappreciations } = useSelector((state) => ({
-    ...state.mygratitudes,
+  const { appreciations, numberOfPages } = useSelector((state) => ({
+    ...state.gratitudes,
   }));
 
-  const [isPending] = useTransition(myappreciations);
-
-  const { user } = useSelector((state) => state.auth);
-
   useEffect(() => {
-    dispatch(getGratitudes());
-    dispatch(getMyGratitudes());
-  }, [dispatch]);
+    dispatch(getGratitudes(currentPage));
+  }, [dispatch, currentPage]);
+
+  const refreshAppreciations = () => {
+    dispatch(getGratitudes(currentPage));
+  };
 
   return (
     <>
-      {user ? (
-        <GrBox sx={{ flexGrow: 1 }}>
-          <Container maxWidth="lg">
-            <Grid
-              container
-              direction="row"
-              justifyContent="space-between"
-              alignItems="center"
-            >
-              <Grid item md={8}>
-                <GrTypography
-                  component="p"
-                  variant="h2"
-                  color="inherit"
-                  gutterBottom
-                >
-                  Your recent stories, {user?.name}
-                </GrTypography>
-              </Grid>
-              <Grid item md={4}>
-                <GrLink to="/my-profile">
-                  <GrCTypography
-                    component="p"
-                    variant="p"
-                    color="inherit"
-                    gutterBottom
-                  >
-                    My collection
-                  </GrCTypography>
-                </GrLink>
-              </Grid>
-            </Grid>
-
-            <GrDiv>
-              {isPending ? (
-                <Typography
-                  color="secondary"
-                  variant="h5"
-                  sx={{ fontWeight: "300" }}
-                >
-                  You have no gratitudes to show
-                </Typography>
-              ) : (
-                <Grid
-                  container
-                  spacing={4}
-                  sx={{
-                    display: "flex",
-                    flexWrap: "nowrap",
-                    overflowX: "auto",
-                    WebkitOverflowScrolling: "touch",
-                  }}
-                >
-                  {myappreciations
-                    .map((appreciation) => (
-                      <GratitudeCard
-                        key={appreciation._id}
-                        gratitude={appreciation}
-                      />
-                    ))
-                    .reverse()}
-                </Grid>
-              )}
-            </GrDiv>
-          </Container>
-        </GrBox>
-      ) : null}
       <GrBox sx={{ flexGrow: 1 }}>
         <Container maxWidth="lg">
           <Grid
@@ -117,8 +47,20 @@ const HomeRecentTitle = () => {
                 color="inherit"
                 gutterBottom
               >
-                Our selection
+                Testimonies
               </GrTypography>
+            </Grid>
+            <Grid item md={4}>
+              <GrLink to="/testimonies">
+                <GrCTypography
+                  component="p"
+                  variant="p"
+                  color="inherit"
+                  gutterBottom
+                >
+                  All Testimonies
+                </GrCTypography>
+              </GrLink>
             </Grid>
           </Grid>
           <GrDiv>
@@ -128,43 +70,17 @@ const HomeRecentTitle = () => {
                   <GratitudeCardBig
                     key={appreciation._id}
                     gratitude={appreciation}
+                    currentPage={currentPage}
                   />
                 ))}
             </Grid>
           </GrDiv>
-        </Container>
-      </GrBox>
-      <GrBox sx={{ flexGrow: 1 }}>
-        <Container maxWidth="lg">
-          <Grid
-            container
-            direction="row"
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Grid item md={8}>
-              <GrTypography
-                omponent="p"
-                variant="h2"
-                color="inherit"
-                gutterBottom
-              >
-                Our selection
-              </GrTypography>
-            </Grid>
-          </Grid>
           <GrDiv>
-            <Grid container spacing={4}>
-              {appreciations &&
-                appreciations
-                  .slice(0, 4)
-                  .map((appreciation) => (
-                    <GratitudeCardBig
-                      key={appreciation._id}
-                      gratitude={appreciation}
-                    />
-                  ))}
-            </Grid>
+            <GeneralPagination
+              setCurrentPage={setCurrentPage}
+              currentPage={currentPage}
+              numberOfPages={numberOfPages}
+            />
           </GrDiv>
         </Container>
       </GrBox>

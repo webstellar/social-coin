@@ -61,6 +61,28 @@ const appreciationSchema = new mongoose.Schema(
         type: String,
       },
     ],
+
+    category: {
+      type: String,
+      required: [true, "Please select category for your appreciation"],
+      enum: {
+        values: [
+          "Family",
+          "Friend",
+          "Acquaintance",
+          "Relative",
+          "Colleague",
+          "Partner",
+          "Wife",
+          "Girlfriend",
+          "Boyfriend",
+          "Boss",
+          "Employee",
+        ],
+        message: "Please select correct category for product",
+      },
+    },
+
     comments: {
       type: {
         participants: [

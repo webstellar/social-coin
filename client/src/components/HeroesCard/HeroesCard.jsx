@@ -7,7 +7,6 @@ import {
   CardContent,
   CardMedia,
   Typography,
-  Badge,
   Tooltip,
 } from "@mui/material";
 import {
@@ -16,18 +15,17 @@ import {
   GrLink,
   GrItem,
 } from "./HeroesCard.styles";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import ReviewsIcon from "@mui/icons-material/Reviews";
+import TryOutlinedIcon from "@mui/icons-material/TryOutlined";
 import { Link, useNavigate } from "react-router-dom";
 
 const HeroesCard = ({ hero }) => {
   const navigate = useNavigate();
 
-  const heroAppreciationCount = hero?.appreciations.length;
+  const heroAppreciationCount = hero?.appreciations?.length;
 
   return (
     <>
-      <Grid item xs={12} sm={3} md={3}>
+      <Grid item xs={12} sm={12} md={3}>
         <CardActionArea sx={{ mb: 4 }}>
           <Card sx={{ display: "block" }}>
             <Link
@@ -50,7 +48,7 @@ const HeroesCard = ({ hero }) => {
                 alt={hero?.hero}
               />
             </Link>
-            <CardContent sx={{ flex: 1, paddingLeft: 4, paddingRight: 4 }}>
+            <CardContent sx={{ flex: 1, paddingLeft: 2, paddingRight: 2 }}>
               <GrGiverTypography variant="caption" color="grey.500">
                 written by {hero?.user?.name || "gratitude"}
               </GrGiverTypography>
@@ -94,36 +92,24 @@ const HeroesCard = ({ hero }) => {
                     </Typography>
                   </Tooltip>
                 </GrItem>
-                <GrItem elevation={0}>
-                  <Tooltip title={`Number of likes`}>
-                    <Badge
-                      color="secondary"
-                      badgeContent={10}
-                      anchorOrigin={{
-                        vertical: "top",
-                        horizontal: "right",
-                      }}
-                      sx={{
-                        mr: 2,
-                      }}
-                    >
-                      <FavoriteIcon />
-                    </Badge>
-                  </Tooltip>
-                  
-                  <Tooltip title={`${heroAppreciationCount} testimonies`}>
-                    <Badge
-                      color="secondary"
-                      badgeContent={heroAppreciationCount}
-                      showZero
-                      anchorOrigin={{
-                        vertical: "top",
-                        horizontal: "right",
-                      }}
-                    >
-                      <ReviewsIcon />
-                    </Badge>
-                  </Tooltip>
+                <GrItem
+                  elevation={0}
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  {heroAppreciationCount > 0 ? (
+                    <>
+                      <Typography variant="subtitle1" component="p">
+                        {heroAppreciationCount}
+                      </Typography>
+                      <Tooltip title={`${heroAppreciationCount} testimonies`}>
+                        <TryOutlinedIcon sx={{ fontSize: "1.1rem" }} />
+                      </Tooltip>
+                    </>
+                  ) : null}
                 </GrItem>
               </Stack>
             </CardContent>

@@ -51,7 +51,7 @@ const HomeHeroCategory = () => {
                 color="inherit"
                 gutterBottom
               >
-                Latest Heroes
+                Heroes
               </GrTypography>
             </Grid>
             <Grid item md={4}>

@@ -20,15 +20,12 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import defaultImage from "../../images/dummy_post.webp";
-import {
-  likeGratitude,
-  getGratitudes,
-} from "../../redux/gratitudes/gratitudesSlice";
+import { likeGratitude } from "../../redux/gratitudes/gratitudesSlice";
 
 import ThumbUpAltOutlinedIcon from "@mui/icons-material/ThumbUpAltOutlined";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 
-const GratitudeCardBig = ({ gratitude, currentPage }) => {
+const GratitudesCard = ({ gratitude, currentPage }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -90,7 +87,7 @@ const GratitudeCardBig = ({ gratitude, currentPage }) => {
 
   return (
     <>
-      <Grid item xs={12} md={3}>
+      <Grid item xs={12} md={12} sx={{ mb: 5 }}>
         <CardActionArea>
           <Card sx={{ display: "block" }}>
             <Link
@@ -103,7 +100,7 @@ const GratitudeCardBig = ({ gratitude, currentPage }) => {
                 component="img"
                 sx={{
                   width: "100%",
-                  height: 200,
+                  height: 300,
                   filter: "grayscale(100%)",
                   "&:hover": {
                     filter: "grayscale(0%)",
@@ -171,9 +168,9 @@ const GratitudeCardBig = ({ gratitude, currentPage }) => {
   );
 };
 
-GratitudeCardBig.propTypes = {
+GratitudesCard.propTypes = {
   gratitude: PropTypes.object,
   refreshAppreciation: PropTypes.object,
 };
 
-export default GratitudeCardBig;
+export default GratitudesCard;

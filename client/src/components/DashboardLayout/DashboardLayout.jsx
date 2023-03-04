@@ -143,9 +143,9 @@ const DashboardLayout = ({ children }) => {
                       <AddCommentIcon color="secondary" sx={{ mr: 1 }} />
                       Add Testimonies
                     </MenuItem>
-                    <MenuItem onClick={() => navigate("/edit-profile")}>
+                    <MenuItem onClick={() => navigate("/my-profile")}>
                       <HomeIcon color="secondary" sx={{ mr: 1 }} />
-                      Edit Profile
+                      My Profile
                     </MenuItem>
                     <MenuItem onClick={handleLogout}>
                       <LogoutIcon color="secondary" sx={{ mr: 1 }} />

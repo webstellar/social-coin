@@ -13,6 +13,7 @@ import {
   Backdrop,
   CircularProgress,
   Divider,
+  Typography,
 } from "@mui/material/";
 import { GrTypography, GrBox } from "./HeroForm.styles";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
@@ -73,12 +74,14 @@ const HeroForm = () => {
   const onSubmit = (e) => {
     e.preventDefault();
     setOpen(!open);
-    if (name && description && profilePicture) {
+    if (name && description && profilePicture < 1e6) {
       dispatch(createHero({ formData, navigate, toast, hero }));
       dispatch(getHeroes());
       setTimeout(() => {
         setOpen(open);
-      }, 10000);
+      }, 5000);
+    } else {
+      toast.error("image size is larger than 1mb");
     }
   };
 
@@ -200,6 +203,16 @@ const HeroForm = () => {
                           label="Describe your hero"
                           onChange={onChange}
                         />
+                        <Typography
+                          component="p"
+                          variant="p"
+                          sx={{
+                            mt: 1,
+                            color: description.length > 1500 ? "red" : "#000",
+                          }}
+                        >
+                          {description?.length} characters
+                        </Typography>
                       </Grid>
                       <Grid item xs={12} md={12}>
                         <ButtonGroup

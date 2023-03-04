@@ -6,13 +6,16 @@ const initialState = {
   loading: true,
   error: null,
   success: false,
+  appreciationsCount: 0,
+  currentPage: 1,
+  numberOfPages: null,
 };
 
 export const getMyGratitudes = createAsyncThunk(
   "gratitudes/getMyGratitudes",
-  async () => {
+  async (page) => {
     try {
-      const { data } = await axios.get("/api/v1/me/appreciations");
+      const { data } = await axios.get(`/api/v1/me/appreciations?page=${page}`);
       return data;
     } catch (error) {
       return error.response.data.message;
@@ -32,6 +35,9 @@ export const myGratitudesSlice = createSlice({
     builder.addCase(getMyGratitudes.fulfilled, (state, action) => {
       state.loading = false;
       state.myappreciations = action.payload.appreciations;
+      state.appreciationsCount = action.payload.appreciationsCount;
+      state.currentPage = action.payload.currentPage;
+      state.numberOfPages = action.payload.numberOfPages;
       state.success = true;
     });
     builder.addCase(getMyGratitudes.rejected, (state, action) => {

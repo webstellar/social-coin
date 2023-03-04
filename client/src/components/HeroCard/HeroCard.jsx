@@ -11,8 +11,7 @@ import {
   Tooltip,
 } from "@mui/material";
 import { GrItem } from "./HeroCard.styles";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import ReviewsIcon from "@mui/icons-material/Reviews";
+import TryOutlinedIcon from "@mui/icons-material/TryOutlined";
 import { Link, useNavigate } from "react-router-dom";
 
 const HeroCard = ({ hero }) => {
@@ -76,35 +75,16 @@ const HeroCard = ({ hero }) => {
                   </Typography>
                 </GrItem>
                 <GrItem elevation={0}>
-                  <Tooltip title={`Number of likes`}>
-                    <Badge
-                      color="secondary"
-                      badgeContent={10}
-                      anchorOrigin={{
-                        vertical: "top",
-                        horizontal: "right",
-                      }}
-                      sx={{
-                        mr: 4,
-                      }}
-                    >
-                      <FavoriteIcon />
-                    </Badge>
-                  </Tooltip>
-
-                  <Tooltip title={`${heroAppreciationCount} testimonies`}>
-                    <Badge
-                      color="secondary"
-                      badgeContent={heroAppreciationCount}
-                      showZero
-                      anchorOrigin={{
-                        vertical: "top",
-                        horizontal: "right",
-                      }}
-                    >
-                      <ReviewsIcon />
-                    </Badge>
-                  </Tooltip>
+                  {heroAppreciationCount > 0 ? (
+                    <>
+                      <Typography variant="subtitle1" component="p">
+                        {heroAppreciationCount}
+                      </Typography>
+                      <Tooltip title={`${heroAppreciationCount} testimonies`}>
+                        <TryOutlinedIcon sx={{ fontSize: "1.1rem" }} />
+                      </Tooltip>
+                    </>
+                  ) : null}
                 </GrItem>
               </Stack>
               <Typography sx={{ mt: 3 }}>{hero?.description}</Typography>

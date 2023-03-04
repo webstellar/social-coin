@@ -9,9 +9,14 @@ const { sendGeneralNotifiation } = require("../microservices/email.service");
 
 //Create a new Hero
 exports.newHero = catchAsyncErrors(async (req, res, next) => {
-  const result = await cloudinary.v2.uploader.upload(req.body.profilePicture, {
-    folder: "social-coin/hero_avatars",
-  });
+  const result = await cloudinary.v2.uploader.upload_large(
+    req.body.profilePicture,
+    {
+      folder: "social-coin/hero_avatars",
+      chunk_size: 6000000,
+      resource_type: "image",
+    }
+  );
 
   req.body.profilePicture = result;
   req.body.user = req.user.id;
@@ -53,6 +58,24 @@ exports.getHeroes = catchAsyncErrors(async (req, res, next) => {
     heroesCount,
     currentPage: Number(page),
     numberOfPages: Math.ceil(heroesCount / limitValue),
+    heroes,
+  });
+});
+
+//Get All Heroes
+exports.getAllHeroes = catchAsyncErrors(async (req, res) => {
+  apiFeatures = new APIFeatures(
+    Hero.find()
+      .populate("appreciations")
+      .populate("user")
+      .sort({ $natural: -1 }),
+    req.query
+  ).search();
+
+  const heroes = await apiFeatures.query;
+
+  res.status(200).json({
+    success: true,
     heroes,
   });
 });
@@ -232,15 +255,23 @@ exports.deleteHero = catchAsyncErrors(async (req, res, next) => {
 
 //Get logged in user heros => /api/v1/me/heroes/
 exports.myHeroes = catchAsyncErrors(async (req, res, next) => {
-  const limitValue = 12;
-  const skipValue = req.query.skip ? Number(req.query.skip) : 0;
+  const { page } = req.query;
+
+  const limitValue = req.query.limit ? Number(req.query.limit) : 12;
+  const startIndex = (Number(page) - 1) * limitValue;
+  const heroesCount = await Hero.countDocuments({});
 
   const heroes = await Hero.find({ user: req.user.id })
     .limit(limitValue)
-    .skip(skipValue);
+    .limit(limitValue)
+    .skip(startIndex)
+    .sort({ $natural: -1 });
 
   res.status(200).json({
     success: true,
+    heroesCount,
+    currentPage: Number(page),
+    numberOfPages: Math.ceil(heroesCount / limitValue),
     heroes,
   });
 });

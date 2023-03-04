@@ -22,7 +22,7 @@ const IndulgeStories = () => {
                 color="inherit"
                 gutterBottom
               >
-                Our selection
+                Testimonies
               </GrTypography>
             </Grid>
           </Grid>

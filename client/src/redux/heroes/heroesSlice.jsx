@@ -2,12 +2,13 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const initialState = {
+  allHeroes: [],
   heroes: [],
   categoryHeroes: [],
   loading: true,
   error: null,
   success: false,
-  heroesCount: null,
+  heroesCount: 0,
   currentPage: 1,
   numberOfPages: null,
   loadedHeroes: [],
@@ -21,6 +22,18 @@ export const getHeroes = createAsyncThunk("heroes/getHeroes", async (page) => {
     return error.response.data.message;
   }
 });
+
+export const getAllHeroes = createAsyncThunk(
+  "heroes/getAllHeroes",
+  async () => {
+    try {
+      const { data } = await axios.get(`/api/v1/allHeroes`);
+      return data;
+    } catch (error) {
+      return error.response.data.message;
+    }
+  }
+);
 
 export const getMoreHeroes = createAsyncThunk(
   "heroes/getMoreHeroes",
@@ -82,6 +95,19 @@ export const heroesSlice = createSlice({
       state.success = true;
     });
     builder.addCase(getHeroes.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+    builder.addCase(getAllHeroes.pending, (state) => {
+      state.loading = true;
+      state.heroes = [];
+    });
+    builder.addCase(getAllHeroes.fulfilled, (state, action) => {
+      state.loading = false;
+      state.allHeroes = action.payload.heroes;
+      state.success = true;
+    });
+    builder.addCase(getAllHeroes.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
     });

@@ -10,7 +10,7 @@ import {
 } from "@mui/material/";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { getHeroes } from "../../redux/heroes/heroesSlice";
+import { getAllHeroes } from "../../redux/heroes/heroesSlice";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { GrTypography } from "./HeroAutocompleteForm.styles";
 
@@ -20,15 +20,15 @@ const HeroAutocompleteForm = () => {
   const [hero, setHero] = React.useState();
   const [fakeHero, setFakeHero] = React.useState("");
 
-  const { heroes } = useSelector((state) => ({
+  const { allHeroes } = useSelector((state) => ({
     ...state.heroes,
   }));
 
   React.useEffect(() => {
-    dispatch(getHeroes());
+    dispatch(getAllHeroes());
   }, [dispatch]);
 
-  const heroDisplay = heroes.filter((halo) =>
+  const heroDisplay = allHeroes.filter((halo) =>
     fakeHero === halo.name ? halo : null
   );
 
@@ -52,7 +52,7 @@ const HeroAutocompleteForm = () => {
           <Grid item xs={12} md={12}>
             <Autocomplete
               fullWidth
-              options={heroes}
+              options={allHeroes}
               autoHighlight
               getOptionLabel={(option) => option.name || option}
               renderOption={(props, option) => (

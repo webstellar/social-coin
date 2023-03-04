@@ -4,6 +4,7 @@ const router = express.Router();
 //routes interact with the controllers
 const {
   getHeroes,
+  getAllHeroes,
   newHero,
   getSingleHero,
   updateHero,
@@ -20,6 +21,7 @@ const {
 const { isAuthenticatedUser, authorizeRoles } = require("../middlewares/auth");
 
 router.route("/heroes").get(getHeroes);
+router.route("/allHeroes").get(getAllHeroes);
 router.route("/moreHeroes").get(loadMoreHeroes);
 router.route("/hero/:id").get(getSingleHero);
 router.route("/hero/category/:category").get(getHeroesByCategory);

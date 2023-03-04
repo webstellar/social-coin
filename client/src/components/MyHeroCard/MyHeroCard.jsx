@@ -21,21 +21,24 @@ const MyHeroCard = ({ hero, handleDelete }) => {
   return (
     <>
       <Grid item xs={12} md={3}>
-        <CardActionArea component={GrLink} to={`/hero/${hero?._id}`}>
+        <CardActionArea>
           <Card sx={{ display: "block" }}>
-            <CardMedia
-              component="img"
-              sx={{
-                width: "100%",
-                height: 200,
-                filter: "grayscale(100%)",
-                "&:hover": {
-                  filter: "grayscale(0%)",
-                },
-              }}
-              image={hero?.profilePicture?.url}
-              alt={hero?.hero}
-            />
+            <GrLink to={`/hero/${hero?._id}`}>
+              <CardMedia
+                component="img"
+                sx={{
+                  width: "100%",
+                  height: 200,
+                  filter: "grayscale(100%)",
+                  "&:hover": {
+                    filter: "grayscale(0%)",
+                  },
+                }}
+                image={hero?.profilePicture?.url}
+                alt={hero?.hero}
+              />
+            </GrLink>
+
             <CardContent sx={{ flex: 1 }}>
               <GrGiverTypography variant="caption" color="grey.500">
                 written by {hero?.user?.name || "gratitude"}

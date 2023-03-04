@@ -62,17 +62,18 @@ exports.newAppreciation = catchAsyncErrors(async (req, res, next) => {
 
 //Get all appreciations => /api/v1/appreciations
 exports.getAppreciations = catchAsyncErrors(async (req, res) => {
+  const { page } = req.query;
+  const limitValue = req.query.limit ? Number(req.query.limit) : 12;
+  const startIndex = (Number(page) - 1) * limitValue;
   const appreciationsCount = await Appreciation.countDocuments();
-
-  const limitValue = 10;
-  const skipValue = req.query.skip ? Number(req.query.skip) : 0;
 
   const apiFeatures = new APIFeatures(
     Appreciation.find()
       .populate("hero")
       .populate("user")
       .limit(limitValue)
-      .skip(skipValue),
+      .skip(startIndex)
+      .sort({ $natural: -1 }),
     req.query
   ).search();
 
@@ -82,6 +83,8 @@ exports.getAppreciations = catchAsyncErrors(async (req, res) => {
     success: true,
     appreciationsCount,
     appreciations,
+    currentPage: Number(page),
+    numberOfPages: Math.ceil(appreciationsCount / limitValue),
   });
 });
 
@@ -122,6 +125,32 @@ exports.getAppreciationByRelatedTag = catchAsyncErrors(
     });
   }
 );
+
+//get All Tags
+exports.getAllTags = catchAsyncErrors(async (req, res) => {
+  const apiFeatures = new APIFeatures(Appreciation.find());
+  const appreciations = await apiFeatures.query;
+  const totalTags = [...new Set(appreciations.flatMap(({ tags }) => tags))];
+
+  res.status(200).json({
+    success: true,
+    totalTags,
+  });
+});
+
+//get All Tags
+exports.getAllCategories = catchAsyncErrors(async (req, res) => {
+  const apiFeatures = new APIFeatures(Appreciation.find());
+  const appreciations = await apiFeatures.query;
+  const totalCategories = [
+    ...new Set(appreciations.flatMap(({ categories }) => categories)),
+  ];
+
+  res.status(200).json({
+    success: true,
+    totalCategories,
+  });
+});
 
 // get Appreciations by Categories
 exports.getAppreciationByCategory = catchAsyncErrors(async (req, res, next) => {
@@ -247,14 +276,17 @@ exports.deleteAppreciation = catchAsyncErrors(async (req, res, next) => {
 
 //Get logged in user appreciations => /api/v1/me/appreciations
 exports.myAppreciations = catchAsyncErrors(async (req, res, next) => {
-  const limitValue = 12;
-  const skipValue = req.query.skip ? Number(req.query.skip) : 0;
+  const { page } = req.query;
+  const limitValue = req.query.limit ? Number(req.query.limit) : 12;
+  const startIndex = (Number(page) - 1) * limitValue;
+  const appreciationsCount = await Appreciation.countDocuments();
 
   const appreciations = await Appreciation.find({
     "user.id": req.user.id,
   })
     .limit(limitValue)
-    .skip(skipValue);
+    .skip(startIndex)
+    .sort({ $natural: -1 });
 
   let heroesIDs = [];
 
@@ -275,6 +307,9 @@ exports.myAppreciations = catchAsyncErrors(async (req, res, next) => {
     success: true,
     appreciations,
     heroes,
+    appreciationsCount,
+    currentPage: Number(page),
+    numberOfPages: Math.ceil(appreciationsCount / limitValue),
   });
 });
 
@@ -343,7 +378,8 @@ exports.likeMyAppreciation = catchAsyncErrors(async (req, res) => {
     return res.json({ message: "User is not authenicated" });
   }
 
-  const appreciation = await Appreciation.findById(id);
+  const appreciation = await Appreciation.findById(req.params.id);
+
   const index = appreciation.likes.findIndex(
     (id) => id === String(req.user.id)
   );

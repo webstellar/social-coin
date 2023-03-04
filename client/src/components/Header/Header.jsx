@@ -33,7 +33,7 @@ const navItems = [
   {
     id: 1,
     name: "Explore",
-    link: "/heroes",
+    link: "/testimonies",
     type: "text",
     variant: "h6",
     weight: "regular",

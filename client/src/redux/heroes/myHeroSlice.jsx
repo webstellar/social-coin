@@ -6,16 +6,22 @@ const initialState = {
   loading: true,
   error: null,
   success: false,
+  heroesCount: 0,
+  currentPage: 1,
+  numberOfPages: null,
 };
 
-export const getMyHeroes = createAsyncThunk("heroes/getMyHeroes", async () => {
-  try {
-    const { data } = await axios.get("/api/v1/me/heroes");
-    return data.heroes;
-  } catch (error) {
-    return error.response.data.message;
+export const getMyHeroes = createAsyncThunk(
+  "heroes/getMyHeroes",
+  async (page) => {
+    try {
+      const { data } = await axios.get(`/api/v1/me/heroes?page=${page}`);
+      return data;
+    } catch (error) {
+      return error.response.data.message;
+    }
   }
-});
+);
 
 export const myHeroesSlice = createSlice({
   name: "myHeroes",
@@ -34,7 +40,10 @@ export const myHeroesSlice = createSlice({
     });
     builder.addCase(getMyHeroes.fulfilled, (state, action) => {
       state.loading = false;
-      state.myheroes = action.payload;
+      state.myheroes = action.payload.heroes;
+      state.heroesCount = action.payload.heroesCount;
+      state.currentPage = action.payload.currentPage;
+      state.numberOfPages = action.payload.numberOfPages;
       state.success = true;
     });
     builder.addCase(getMyHeroes.rejected, (state, action) => {

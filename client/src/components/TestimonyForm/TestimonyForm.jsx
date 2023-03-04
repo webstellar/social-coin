@@ -36,7 +36,7 @@ import { useLocation, useNavigate, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { createGratitude } from "../../redux/gratitudes/createGratitudeSlice";
-import { getHeroes } from "../../redux/heroes/heroesSlice";
+import { getAllHeroes } from "../../redux/heroes/heroesSlice";
 import YoutubeEmbedForm from "../YoutubeEmbed/YoutubeEmbedForm";
 
 import Modal from "react-modal";
@@ -79,7 +79,6 @@ const TestimonyForm = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const data = location.state?.data;
-  console.log(data);
 
   const [summary, setSummary] = React.useState("");
   const [story, setStory] = React.useState("");
@@ -121,7 +120,7 @@ const TestimonyForm = () => {
     ...state.newgratitude,
   }));
 
-  const { heroes } = useSelector((state) => ({
+  const { allHeroes } = useSelector((state) => ({
     ...state.heroes,
   }));
 
@@ -205,11 +204,11 @@ const TestimonyForm = () => {
   const tinymce = process.env.REACT_APP_TINY_URL_KEY;
 
   React.useEffect(() => {
-    dispatch(getHeroes());
+    dispatch(getAllHeroes());
     error && toast.error(error);
   }, [dispatch, error]);
 
-  const heroNameDisplay = heroes.filter((halo) =>
+  const heroNameDisplay = allHeroes.filter((halo) =>
     data === halo._id ? halo : null
   );
 
@@ -369,7 +368,7 @@ const TestimonyForm = () => {
                       align="center"
                       sx={{ color: "#f44336" }}
                     >
-                      No Hero selected
+                      {heroNameDisplay[0]?.name}
                     </Typography>
                     <Link to="/create-hero" style={{ textAlign: "center" }}>
                       <Typography align="center">

@@ -126,13 +126,24 @@ const TestimonyFormEdit = () => {
     e.preventDefault();
     setOpen(!open);
 
-    const formData = {
-      summary: summary,
-      story: story,
-      image: image,
-      video: video,
-      tags: tags,
-    };
+    let formData = {};
+
+    if (image.includes("http://res.cloudinary.com")) {
+      formData = {
+        summary: summary,
+        story: story,
+        video: video,
+        tags: tags,
+      };
+    } else {
+      formData = {
+        summary: summary,
+        story: story,
+        image: image,
+        video: video,
+        tags: tags,
+      };
+    }
 
     if (user?.user?._id === appreciation?.user?.id) {
       dispatch(editGratitude({ id, formData, toast, navigate }));
@@ -172,6 +183,8 @@ const TestimonyFormEdit = () => {
   };
 
   const tinymce = process.env.REACT_APP_TINY_URL_KEY;
+
+  console.log(image);
 
   return (
     <form onSubmit={onSubmit} style={{ position: "relative" }}>

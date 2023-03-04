@@ -3,6 +3,7 @@ const router = express.Router();
 
 //routes interact with the controllers
 const {
+  getAllTags,
   deleteComment,
   newAppreciation,
   myAppreciations,
@@ -27,6 +28,7 @@ router.route("/appreciations").get(getAppreciations);
 router.route("/appreciation/:id").get(getSingleAppreciation);
 router.route("/appreciation/tag/:tag").get(getAppreciationByTag);
 router.route("/appreciation/relatedtag").get(getAppreciationByRelatedTag);
+router.route("/appreciation/alltags").post(getAllTags);
 router.route("/appreciation/category/:category").get(getAppreciationByCategory);
 router
   .route("/appreciation/relatedcategory")
@@ -59,6 +61,8 @@ router
   .route("/admin/delete/comment/:id")
   .post(isAuthenticatedUser, authorizeRoles("admin"), deleteComment);
 
-router.route("/like/:id").patch(isAuthenticatedUser, likeMyAppreciation);
+router
+  .route("/appreciation/likes/:id/")
+  .patch(isAuthenticatedUser, likeMyAppreciation);
 
 module.exports = router;

@@ -19,6 +19,9 @@ import {
 import defaultImage from "../../images/testimonybanner.png";
 
 const GratitudeHero = ({ gratitude }) => {
+  const likes = gratitude?.likes;
+  const LikesCount = likes?.length;
+
   return (
     <>
       <GrPaper elevation={0}>
@@ -83,6 +86,20 @@ const GratitudeHero = ({ gratitude }) => {
                     <strong>{gratitude.user && gratitude?.user?.name}</strong>
                   </Typography>
                 </Link>
+
+                {LikesCount > 0 ? (
+                  <Typography
+                    variant="subtitle1"
+                    component="p"
+                    align="center"
+                    sx={{
+                      color: "#000",
+                      mt: 1,
+                    }}
+                  >
+                    {LikesCount} Likes
+                  </Typography>
+                ) : null}
               </GrBox>
             </Grid>
 
