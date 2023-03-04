@@ -10,7 +10,10 @@ import {
   Chip,
   Collapse,
 } from "@mui/material";
-import { getAllTags } from "../../redux/gratitudes/gratitudesSlice";
+import {
+  getAllTags,
+  getAllCategories,
+} from "../../redux/gratitudes/gratitudesSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import Checkbox from "@mui/material/Checkbox";
@@ -44,12 +47,13 @@ const ListMenu = () => {
     setChecked(newChecked);
   };
 
-  const { totalTags } = useSelector((state) => ({
+  const { totalTags, totalCategories } = useSelector((state) => ({
     ...state.gratitudes,
   }));
 
   React.useEffect(() => {
     dispatch(getAllTags());
+    dispatch(getAllCategories());
   }, [dispatch]);
 
   const searchHandler = (e) => {};
@@ -148,7 +152,19 @@ const ListMenu = () => {
       </Typography>
 
       {totalTags.map((tag, i) => (
-        <Chip key={i} label={tag} sx={{ ml: 1, mt: 1 }} />
+        <Chip key={i} label={tag} sx={{ ml: 1, mt: 1, mb: 2 }} />
+      ))}
+      <Typography
+        variant="h6"
+        component="p"
+        sx={{ fontWeight: "Bold" }}
+        gutterBottom
+      >
+        Categories
+      </Typography>
+
+      {totalCategories.map((category, i) => (
+        <Chip key={i} label={category} sx={{ ml: 1, mt: 1 }} />
       ))}
     </Box>
   );

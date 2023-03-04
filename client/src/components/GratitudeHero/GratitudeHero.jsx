@@ -128,7 +128,7 @@ const GratitudeHero = ({ gratitude }) => {
                         <GrItem elevation={0} key={tag}>
                           <Link
                             to={`/appreciation/tag/${tag}`}
-                            sx={{ textDecoration: "none" }}
+                            style={{ textDecoration: "none" }}
                           >
                             <GrTagTypography
                               variant="subtitle1"
@@ -173,8 +173,8 @@ const GratitudeHero = ({ gratitude }) => {
                     ? gratitude?.categories.map((category) => (
                         <GrItem elevation={0} key={category}>
                           <Link
-                            to={`/appreciation/categories/${category}`}
-                            sx={{ textDecoration: "none" }}
+                            to={`/appreciation/category/${category}`}
+                            style={{ textDecoration: "none" }}
                           >
                             <GrTagTypography
                               variant="subtitle1"

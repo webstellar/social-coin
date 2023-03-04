@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const initialState = {
+  totalCategories: [],
   totalTags: [],
   appreciations: [],
   tagAppreciations: [],
@@ -69,6 +70,18 @@ export const getAllTags = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const { data } = await axios.post("/api/v1/appreciation/alltags");
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.data);
+    }
+  }
+);
+
+export const getAllCategories = createAsyncThunk(
+  "gratitude/getAllCategories",
+  async (_, { rejectWithValue }) => {
+    try {
+      const { data } = await axios.post("/api/v1/appreciation/allcategories");
       return data;
     } catch (error) {
       return rejectWithValue(error.data);
@@ -149,6 +162,20 @@ export const gratitudesSlice = createSlice({
       state.success = true;
     });
     builder.addCase(getAllTags.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+
+    builder.addCase(getAllCategories.pending, (state) => {
+      state.loading = true;
+      state.totalCategories = [];
+    });
+    builder.addCase(getAllCategories.fulfilled, (state, action) => {
+      state.loading = false;
+      state.totalCategories = action.payload.totalCategories;
+      state.success = true;
+    });
+    builder.addCase(getAllCategories.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
     });
