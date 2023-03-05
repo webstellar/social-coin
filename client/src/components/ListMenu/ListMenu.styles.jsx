@@ -1,12 +1,13 @@
 import { styled, alpha } from "@mui/material/styles";
-import { Box, InputBase } from "@mui/material";
+import { Box, InputBase, Typography } from "@mui/material";
 
 export const Search = styled("div")(({ theme }) => ({
+  marginBottom: "1rem",
   position: "relative",
   borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.black, 0.15),
+  backgroundColor: alpha(theme.palette.common.black, 0.05),
   "&:hover": {
-    backgroundColor: alpha(theme.palette.common.black, 0.25),
+    backgroundColor: alpha(theme.palette.common.black, 0.10),
   },
   marginLeft: 0,
   width: "100%",
@@ -50,4 +51,11 @@ export const Wrapper = styled(Box)({
   transform: "translate(-50%, -50%)",
   background:
     "linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(229,226,226,1) 30%)",
+});
+
+export const GrTagTypography = styled(Typography)({
+  border: 0,
+  backgroundColor: "#C5C5C5",
+  padding: "2px 8px 2px 8px",
+  borderRadius: "20px",
 });

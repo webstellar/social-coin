@@ -66,81 +66,29 @@ const ListMenu = () => {
         bgcolor: "background.paper",
       }}
     >
-      <List
-        sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
-        component="nav"
-        aria-labelledby="nested-list-subheader"
-        subheader={
-          <Typography
-            variant="h6"
-            component="p"
-            sx={{ fontWeight: "Bold" }}
-            gutterBottom
-          >
-            Filter
-          </Typography>
-        }
+      <Typography
+        variant="h6"
+        component="p"
+        sx={{ fontWeight: "Bold" }}
+        gutterBottom
       >
-        <ListItem>
-          <form onSubmit={searchHandler}>
-            <Search>
-              <SearchIconWrapper type="submit" aria-label="search">
-                <SearchIcon />
-              </SearchIconWrapper>
-              <StyledInputBase
-                placeholder="Search…"
-                inputProps={{ "aria-label": "search" }}
-                value={searchText}
-                onChange={(e) => {
-                  setSearchText(e.target.value);
-                }}
-              />
-            </Search>
-          </form>
-        </ListItem>
-        <ListItem>
-          <ListItemButton onClick={handleClick}>
-            <ListItemIcon>
-              <TagIcon />
-            </ListItemIcon>
-            <ListItemText primary="tags" />
-            {open ? <ExpandLess /> : <ExpandMore />}
-          </ListItemButton>
-        </ListItem>
-      </List>
-
-      <Collapse in={open} timeout="auto" unmountOnExit>
-        <List
-          dense
-          sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
-        >
-          {totalTags.map((value) => {
-            const labelId = `checkbox-list-label-${value}`;
-
-            return (
-              <ListItem key={value} dense disablePadding>
-                <ListItemButton
-                  role={undefined}
-                  onClick={handleToggle(value)}
-                  dense
-                >
-                  <ListItemIcon>
-                    <Checkbox
-                      edge="start"
-                      checked={checked.indexOf(value) !== -1}
-                      tabIndex={-1}
-                      disableRipple
-                      inputProps={{ "aria-labelledby": labelId }}
-                      color="secondary"
-                    />
-                  </ListItemIcon>
-                  <ListItemText id={labelId} primary={value} />
-                </ListItemButton>
-              </ListItem>
-            );
-          })}
-        </List>
-      </Collapse>
+        Search
+      </Typography>
+      <form onSubmit={searchHandler}>
+        <Search>
+          <SearchIconWrapper type="submit" aria-label="search">
+            <SearchIcon />
+          </SearchIconWrapper>
+          <StyledInputBase
+            placeholder="Search…"
+            inputProps={{ "aria-label": "search" }}
+            value={searchText}
+            onChange={(e) => {
+              setSearchText(e.target.value);
+            }}
+          />
+        </Search>
+      </form>
 
       <Typography
         variant="h6"
