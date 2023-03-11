@@ -27,3 +27,7 @@ body {
 .lkjDVC {
   padding: 80px 60px 80px 60px !important;
 }
+
+.MuiAccordion-root {
+  border: 0px;
+}

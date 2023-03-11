@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const initialState = {
+  totalFilteredCount: 0,
   totalCategories: [],
   totalTags: [],
   appreciations: [],
@@ -12,7 +13,7 @@ const initialState = {
   success: false,
   appreciationsCount: 0,
   currentPage: 1,
-  numberOfPages: null,
+  numberOfPages: 0,
 };
 
 export const getGratitudes = createAsyncThunk(

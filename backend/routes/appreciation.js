@@ -13,19 +13,24 @@ const {
   likeMyAppreciation,
   deleteAppreciation,
   updateMyAppreciation,
-  getAppreciationByTag,
   deleteMyAppreciation,
+  getAppreciationByTag,
   getAdminAppreciations,
   getSingleAppreciation,
+  createAppreciationReview,
   addCommentToAppreciation,
   getAppreciationByCategory,
+  getAppreciationsByFilters,
   getAppreciationByRelatedTag,
   addMyReactionToAppreciation,
   getAppreciationByRelatedCategory,
 } = require("../controllers/appreciationControllers");
 const { isAuthenticatedUser, authorizeRoles } = require("../middlewares/auth");
 
+router.route("/review").patch(isAuthenticatedUser, createAppreciationReview);
+
 router.route("/appreciations").get(getAppreciations);
+router.route("/filterappreciations").get(getAppreciationsByFilters);
 router.route("/appreciation/:id").get(getSingleAppreciation);
 router.route("/appreciation/tag/:tag").get(getAppreciationByTag);
 router.route("/appreciation/relatedtag").get(getAppreciationByRelatedTag);

@@ -17,7 +17,7 @@ const GratitudeMainSection = ({ gratitude }) => {
 
           <div
             id="testimony"
-            style={{ fontSize: "20px", fontWeight: "400" }}
+            style={{ fontSize: "20px", fontWeight: "400", marginTop: "4rem" }}
             dangerouslySetInnerHTML={{ __html: gratitude.story }}
           />
         </Container>

@@ -37,6 +37,7 @@ export const GrTypography = styled(Typography)(({ theme }) => ({
   lineHeight: "normal",
   fontWeight: "600",
   color: "grey.900",
+
   [theme.breakpoints.down("md")]: {
     fontSize: "1.5rem",
     fontWeight: "600",

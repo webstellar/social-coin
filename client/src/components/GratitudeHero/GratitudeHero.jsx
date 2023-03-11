@@ -69,7 +69,7 @@ const GratitudeHero = ({ gratitude }) => {
 
                 <GrTypography
                   component="h1"
-                  variant="h2"
+                  variant="h1"
                   color="grey.900"
                   align="center"
                   gutterBottom

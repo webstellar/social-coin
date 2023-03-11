@@ -14,21 +14,19 @@ import {
 } from "@mui/material";
 import {
   GrStoriesTypography,
+  GrGiverTypography,
   GrHeroTypography,
   GrItem,
 } from "./GratitudeCardBig.styles";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import defaultImage from "../../images/dummy_post.webp";
-import {
-  likeGratitude,
-  getGratitudes,
-} from "../../redux/gratitudes/gratitudesSlice";
+import { likeGratitude } from "../../redux/gratitudes/gratitudesSlice";
 
 import ThumbUpAltOutlinedIcon from "@mui/icons-material/ThumbUpAltOutlined";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 
-const GratitudeCardBig = ({ gratitude, currentPage }) => {
+const GratitudeCardBig = ({ gratitude }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -69,16 +67,20 @@ const GratitudeCardBig = ({ gratitude, currentPage }) => {
         </Tooltip>
       ) : (
         <Tooltip
-          title={`${likes.length} liked this testimony`}
+          title={`${likes.length} person liked this testimony`}
           placement="bottom"
         >
-          <Typography>{likes.length} Likes</Typography>
+          <Typography>
+            {likes.length} Like{likes.length > 1 ? "s" : ""}
+          </Typography>
         </Tooltip>
       );
     } else {
       return (
         <Tooltip title="Be the first to like this post" placement="bottom">
-          <Typography>{likes.length} Likes</Typography>
+          <Typography>
+            {likes.length} Like{likes.length > 1 ? "s" : ""}
+          </Typography>
         </Tooltip>
       );
     }
@@ -121,46 +123,63 @@ const GratitudeCardBig = ({ gratitude, currentPage }) => {
                 spacing={1}
               >
                 <GrItem elevation={0}>
+                  <Stack
+                    direction="row"
+                    justifyContent="flex-start"
+                    alignItems="center"
+                    spacing={1}
+                    onClick={() => {
+                      navigate(`/hero/${gratitude?.hero?.id}`);
+                    }}
+                  >
+                    <GrItem elevation={0}>
+                      <Avatar
+                        alt={gratitude?.hero?.name}
+                        src={gratitude?.hero?.profilePicture}
+                        sx={{ width: 24, height: 24 }}
+                      />
+                    </GrItem>
+                    <GrItem elevation={0}>
+                      <GrHeroTypography
+                        variant="subtitle1"
+                        component="p"
+                        gutterBottom
+                      >
+                        {gratitude?.hero?.name}
+                      </GrHeroTypography>
+                    </GrItem>
+                  </Stack>
+                </GrItem>
+
+                <GrItem elevation={0}>
                   <IconButton onClick={!userId ? null : handleLike}>
                     <Likes />
                   </IconButton>
                 </GrItem>
-                <GrItem elevation={0}>
-                  <LikesCount />
-                </GrItem>
               </Stack>
-
-              <GrStoriesTypography variant="p" component="h2">
-                {gratitude.summary.substring(0, 30)}...
-              </GrStoriesTypography>
-              {/*<GrGiverTypography variant="caption" color="grey.500">
-                written by {gratitude.user && gratitude?.user?.name}
-              </GrGiverTypography>*/}
-              <Stack
-                direction="row"
-                justifyContent="flex-start"
-                alignItems="center"
-                spacing={1}
+              <GrStoriesTypography
+                variant="p"
+                component="h2"
                 onClick={() => {
-                  navigate(`/hero/${gratitude?.hero?.id}`);
+                  navigate(`/appreciation/${gratitude._id}`);
                 }}
               >
-                <GrItem elevation={0}>
-                  <Avatar
-                    alt={gratitude?.hero?.name}
-                    src={gratitude?.hero?.profilePicture}
-                    sx={{ width: 24, height: 24 }}
-                  />
-                </GrItem>
+                {gratitude.summary.substring(0, 50)}...
+              </GrStoriesTypography>
 
+              <Stack
+                direction="row"
+                justifyContent="space-between"
+                alignItems="center"
+                spacing={1}
+              >
                 <GrItem elevation={0}>
-                  <GrHeroTypography
-                    variant="subtitle1"
-                    component="p"
-                    gutterBottom
-                  >
-                    {gratitude?.hero?.name}
-                  </GrHeroTypography>
+                  <GrGiverTypography variant="caption" color="grey.500">
+                    by {gratitude?.user ? gratitude?.user?.name : "unknown"}
+                  </GrGiverTypography>
+                </GrItem>
+                <GrItem elevation={0}>
+                  <LikesCount />
                 </GrItem>
               </Stack>
             </CardContent>

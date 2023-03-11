@@ -46,6 +46,7 @@ import { useDropzone } from "react-dropzone";
 
 import { topTagWithSelectAll, topTags } from "../../data/tags";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const customStyles = {
   content: {
@@ -180,23 +181,6 @@ const TestimonyForm = () => {
     }
   };
 
-  //images
-  const onChange = (e) => {
-    if (e.target.name === "image") {
-      const reader = new FileReader();
-      const file = e.target.files[0];
-      if (file > 8e6) {
-        alert("Max Limit is: 8mb");
-        return;
-      }
-      reader.onload = () => {
-        setImage(reader.result);
-      };
-
-      reader.readAsDataURL(file);
-    }
-  };
-
   const handleTagChange = (e, newValue) => {
     const isSelectAll = newValue.findIndex((v) => v.isSelectAll) > -1;
     if (isSelectAll) {
@@ -229,6 +213,10 @@ const TestimonyForm = () => {
   React.useEffect(() => {
     setFakeName(myArray[0]?.name);
   }, [myArray]);
+
+  const handleImageClear = () => {
+    setImage("");
+  };
 
   return (
     <form onSubmit={onSubmit} style={{ position: "relative" }}>
@@ -283,62 +271,65 @@ const TestimonyForm = () => {
                   flexDirection: "column",
                 }}
               >
-                <Typography
-                  variant="p"
-                  component="p"
-                  gutterBottom
-                  color="secondary"
-                >
-                  Upload Your Testimony Banner
-                </Typography>
-                <div
-                  {...getRootProps()}
-                  style={{
-                    border: "5px dotted black",
-                    padding: "80px 60px 80px 60px",
-                    backgroundColor: "#dcdcdc",
-                    color: "#000",
-                    marginBottom: "4rem",
-                  }}
-                >
-                  <input {...getInputProps()} />
-                  {isDragActive ? (
-                    <p>Drop the image here ...</p>
-                  ) : (
-                    <>
-                      <p>
-                        Drag 'n' drop an image here, or click to select files
-                      </p>
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                        }}
-                      >
-                        <CloudUploadIcon sx={{ fontSize: "3rem" }} />
-                      </div>
-                    </>
-                  )}
-                </div>
+                {!image ? (
+                  <>
+                    <Typography
+                      variant="p"
+                      component="p"
+                      gutterBottom
+                      color="secondary"
+                    >
+                      Upload Your Testimony Banner
+                    </Typography>
+                    <div
+                      {...getRootProps()}
+                      style={{
+                        border: "5px dotted black",
+                        padding: "80px 60px 80px 60px",
+                        backgroundColor: "#dcdcdc",
+                        color: "#000",
+                        marginBottom: "4rem",
+                      }}
+                    >
+                      <input {...getInputProps()} />
+                      {isDragActive ? (
+                        <p>Drop the image here ...</p>
+                      ) : (
+                        <>
+                          <p>
+                            Drag 'n' drop an image here, or click to select
+                            files
+                          </p>
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              cursor: "pointer",
+                            }}
+                          >
+                            <CloudUploadIcon sx={{ fontSize: "3rem" }} />
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  </>
+                ) : null}
+
                 <GrFormImage src={image} alt={summary} />
               </Grid>
+
               <Grid item xs={2} sm={2} md={2} lg={2}>
-                <IconButton
-                  variant="contained"
-                  component="label"
-                  color="secondary"
-                >
-                  <input
-                    hidden
-                    accept="image/*"
-                    multiple
-                    type="file"
-                    name="image"
-                    onChange={onChange}
-                  />
-                  <EditIcon />
-                </IconButton>
+                {image ? (
+                  <IconButton
+                    variant="contained"
+                    component="label"
+                    color="secondary"
+                    onClick={handleImageClear}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                ) : null}
               </Grid>
             </Grid>
 
@@ -468,179 +459,6 @@ const TestimonyForm = () => {
             </Grid>
 
             <Divider sx={{ bgcolor: "background.paper", mt: 1, mb: 1 }} />
-
-            <Grid
-              item
-              xs={12}
-              sm={12}
-              md={12}
-              lg={12}
-              container
-              direction="row"
-              justifyContent="space-evenly"
-              alignItems="flex-start"
-            >
-              <Grid item xs={10} sm={10} md={10} lg={10}>
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    textAlign: "center",
-                  }}
-                >
-                  <Stack
-                    direction="row"
-                    justifyContent="center"
-                    alignItems="center"
-                    spacing={2}
-                  >
-                    <span style={{ color: "#000", fontSize: "1.2rem" }}>
-                      tag:{" "}
-                    </span>
-                    {tags
-                      ? tags.map((tag) => (
-                          <GrItem elevation={0} key={tag}>
-                            <GrTagTypography
-                              variant="subtitle1"
-                              component="p"
-                              sx={{
-                                color: "#000",
-                                textDecoration: "none",
-                                "&:hover": {
-                                  color: "#F6430A",
-                                },
-                              }}
-                            >
-                              {tag}
-                            </GrTagTypography>
-                          </GrItem>
-                        ))
-                      : null}
-                  </Stack>
-                </Box>
-              </Grid>
-              <Grid item xs={2} sm={2} md={2} lg={2}>
-                <IconButton
-                  onClick={() => {
-                    setOpenTags(true);
-                  }}
-                >
-                  <EditIcon fontSize="medium" color="secondary" />
-                </IconButton>
-                <Modal
-                  id="hero"
-                  isOpen={openTags}
-                  onRequestClose={() => {
-                    setOpenTags(false);
-                  }}
-                  aria={{
-                    labelledby: "Hero",
-                    describedby: "full_description",
-                  }}
-                  ariaHideApp={false}
-                  style={isMobile ? customMobileStyles : customStyles}
-                  contentLabel="Story"
-                  shouldCloseOnOverlayClick={true}
-                  shouldCloseOnEsc={true}
-                >
-                  <TestimonyFormTags
-                    tags={tags}
-                    setOpenTags={setOpenTags}
-                    handleTagChange={handleTagChange}
-                    topTags={topTags}
-                    topTagWithSelectAll={topTagWithSelectAll}
-                  />
-                </Modal>
-              </Grid>
-            </Grid>
-
-            <Grid
-              item
-              xs={12}
-              sm={12}
-              md={12}
-              lg={12}
-              container
-              direction="row"
-              justifyContent="space-evenly"
-              alignItems="flex-start"
-              sx={{
-                mt: 4,
-              }}
-            >
-              <Grid item xs={10} sm={10} md={10} lg={10}>
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    textAlign: "center",
-                  }}
-                >
-                  <Stack
-                    direction="row"
-                    justifyContent="center"
-                    alignItems="center"
-                    spacing={2}
-                  >
-                    <span style={{ color: "#000", fontSize: "1.2rem" }}>
-                      categories:{" "}
-                    </span>
-                    {categories
-                      ? categories.map((category) => (
-                          <GrItem elevation={0} key={category}>
-                            <GrTagTypography
-                              variant="subtitle1"
-                              component="p"
-                              sx={{
-                                color: "#000",
-                                textDecoration: "none",
-                                "&:hover": {
-                                  color: "#F6430A",
-                                },
-                              }}
-                            >
-                              {category}
-                            </GrTagTypography>
-                          </GrItem>
-                        ))
-                      : null}
-                  </Stack>
-                </Box>
-              </Grid>
-              <Grid item xs={2} sm={2} md={2} lg={2}>
-                <IconButton
-                  onClick={() => {
-                    setOpenCategory(true);
-                  }}
-                >
-                  <EditIcon fontSize="medium" color="secondary" />
-                </IconButton>
-                <Modal
-                  id="hero"
-                  isOpen={openCategory}
-                  onRequestClose={() => {
-                    setOpenCategory(false);
-                  }}
-                  aria={{
-                    labelledby: "Hero",
-                    describedby: "full_description",
-                  }}
-                  ariaHideApp={false}
-                  style={isMobile ? customMobileStyles : customStyles}
-                  contentLabel="Story"
-                  shouldCloseOnOverlayClick={true}
-                  shouldCloseOnEsc={true}
-                >
-                  <TestimonyFormCategory
-                    setOpenCategory={setOpenCategory}
-                    handleCategoryChange={handleCategoryChange}
-                    category={categories}
-                  />
-                </Modal>
-              </Grid>
-            </Grid>
           </Grid>
         </Container>
       </GrPaper>
@@ -761,9 +579,168 @@ const TestimonyForm = () => {
                 </Modal>
               </Grid>
             </Grid>
+
+            <Grid
+              item
+              xs={12}
+              sm={12}
+              md={12}
+              lg={12}
+              container
+              direction="row"
+              justifyContent="space-evenly"
+              alignItems="flex-start"
+            >
+              <Grid item xs={10} sm={10} md={10} lg={10}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    textAlign: "center",
+                  }}
+                >
+                  <Stack
+                    direction="row"
+                    justifyContent="center"
+                    alignItems="center"
+                    spacing={2}
+                  >
+                    <span style={{ color: "#000", fontSize: "1.2rem" }}>
+                      tag:{" "}
+                    </span>
+                    {tags
+                      ? tags.map((tag) => (
+                          <GrItem elevation={0} key={tag}>
+                            <GrTagTypography
+                              variant="subtitle1"
+                              component="p"
+                              sx={{
+                                color: "#000",
+                                textDecoration: "none",
+                                "&:hover": {
+                                  color: "#F6430A",
+                                },
+                              }}
+                            >
+                              {tag}
+                            </GrTagTypography>
+                          </GrItem>
+                        ))
+                      : null}
+                  </Stack>
+                </Box>
+              </Grid>
+              <Grid item xs={2} sm={2} md={2} lg={2}>
+                <IconButton
+                  onClick={() => {
+                    setOpenTags(true);
+                  }}
+                >
+                  <EditIcon fontSize="medium" color="secondary" />
+                </IconButton>
+                <Modal
+                  id="hero"
+                  isOpen={openTags}
+                  onRequestClose={() => {
+                    setOpenTags(false);
+                  }}
+                  aria={{
+                    labelledby: "Hero",
+                    describedby: "full_description",
+                  }}
+                  ariaHideApp={false}
+                  style={isMobile ? customMobileStyles : customStyles}
+                  contentLabel="Story"
+                  shouldCloseOnOverlayClick={true}
+                  shouldCloseOnEsc={true}
+                >
+                  <TestimonyFormTags
+                    tags={tags}
+                    setOpenTags={setOpenTags}
+                    handleTagChange={handleTagChange}
+                    topTags={topTags}
+                    topTagWithSelectAll={topTagWithSelectAll}
+                  />
+                </Modal>
+              </Grid>
+
+              <Grid item xs={10} sm={10} md={10} lg={10}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    textAlign: "center",
+                  }}
+                >
+                  <Stack
+                    direction="row"
+                    justifyContent="center"
+                    alignItems="center"
+                    spacing={2}
+                  >
+                    <span style={{ color: "#000", fontSize: "1.2rem" }}>
+                      categories:{" "}
+                    </span>
+                    {categories
+                      ? categories.map((category) => (
+                          <GrItem elevation={0} key={category}>
+                            <GrTagTypography
+                              variant="subtitle1"
+                              component="p"
+                              sx={{
+                                color: "#000",
+                                textDecoration: "none",
+                                "&:hover": {
+                                  color: "#F6430A",
+                                },
+                              }}
+                            >
+                              {category}
+                            </GrTagTypography>
+                          </GrItem>
+                        ))
+                      : null}
+                  </Stack>
+                </Box>
+              </Grid>
+              <Grid item xs={2} sm={2} md={2} lg={2}>
+                <IconButton
+                  onClick={() => {
+                    setOpenCategory(true);
+                  }}
+                >
+                  <EditIcon fontSize="medium" color="secondary" />
+                </IconButton>
+                <Modal
+                  id="hero"
+                  isOpen={openCategory}
+                  onRequestClose={() => {
+                    setOpenCategory(false);
+                  }}
+                  aria={{
+                    labelledby: "Hero",
+                    describedby: "full_description",
+                  }}
+                  ariaHideApp={false}
+                  style={isMobile ? customMobileStyles : customStyles}
+                  contentLabel="Story"
+                  shouldCloseOnOverlayClick={true}
+                  shouldCloseOnEsc={true}
+                >
+                  <TestimonyFormCategory
+                    setOpenCategory={setOpenCategory}
+                    handleCategoryChange={handleCategoryChange}
+                    category={categories}
+                  />
+                </Modal>
+              </Grid>
+            </Grid>
           </Container>
         </GrBox>
       </section>
+
       <Fab
         component={Button}
         variant="extended"

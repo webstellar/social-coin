@@ -14,7 +14,10 @@ import CloseIcon from "@mui/icons-material/Close";
 
 import { useSelector, useDispatch } from "react-redux";
 import { useParams, Link } from "react-router-dom";
-import { getGratitude } from "../redux/gratitudes/gratitudeSlice";
+import {
+  getGratitude,
+  reviewGratitude,
+} from "../redux/gratitudes/gratitudeSlice";
 import { likeGratitude } from "../redux/gratitudes/gratitudesSlice";
 import { toast } from "react-toastify";
 
@@ -22,15 +25,8 @@ const Gratitude = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
 
+  const [comment, setComment] = useState("");
   const [open, setOpen] = useState(false);
-
-  const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    dispatch(getGratitude(id));
-    setOpen(false);
-  };
 
   const { error, appreciation } = useSelector((state) => ({
     ...state.gratitude,
@@ -40,6 +36,36 @@ const Gratitude = () => {
 
   const userId = user?.user?._id;
   const likes = appreciation?.likes;
+
+  const handleClose = (e, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    dispatch(getGratitude(id));
+    setOpen(false);
+  };
+
+  const handleClear = () => {
+    setComment("");
+  };
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+
+    const reviewData = {
+      id: id,
+      comment: comment,
+    };
+    console.log(reviewData);
+
+    if (comment !== "") {
+      dispatch(reviewGratitude(reviewData));
+      handleClear();
+      dispatch(getGratitude(id));
+    } else {
+      toast.error("kindly add a comment");
+    }
+  };
 
   useEffect(() => {
     if (id) {
@@ -93,7 +119,13 @@ const Gratitude = () => {
         <GratitudeHero gratitude={appreciation} />
         <GratitudeSubSection gratitude={appreciation} />
         <GratitudeMainSection gratitude={appreciation} />
-        <GratitudeCommentSection gratitude={appreciation} id={id} />
+        <GratitudeCommentSection
+          gratitude={appreciation}
+          user={user}
+          comment={comment}
+          setComment={setComment}
+          onSubmit={onSubmit}
+        />
         <Tooltip title="Like this testimony">
           <Fab
             sx={{ position: "fixed", bottom: "15%", right: "5%" }}

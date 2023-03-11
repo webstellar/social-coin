@@ -20,6 +20,24 @@ export const getGratitude = createAsyncThunk(
   }
 );
 
+export const reviewGratitude = createAsyncThunk(
+  "gratitude/reviewGratitude",
+  async (reviewData) => {
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      const { data } = await axios.patch("/api/v1/review", reviewData, config);
+      return data;
+    } catch (error) {
+      return error.response.data.message;
+    }
+  }
+);
+
 export const updateGratitude = createAsyncThunk(
   "gratitude/updatedGratitude",
   async (formData, id, toast, navigate) => {
@@ -69,6 +87,17 @@ export const gratitudeSlice = createSlice({
       state.success = true;
     });
     builder.addCase(updateGratitude.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error;
+    });
+    builder.addCase(reviewGratitude.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(reviewGratitude.fulfilled, (state, action) => {
+      state.loading = false;
+      state.success = action.payload;
+    });
+    builder.addCase(reviewGratitude.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error;
     });

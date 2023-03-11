@@ -61,7 +61,51 @@ const appreciationSchema = new mongoose.Schema(
         type: String,
       },
     ],
-
+    reviews: [
+      {
+        user: {
+          type: {
+            id: mongoose.Schema.ObjectId,
+            name: String,
+            email: String,
+            profilePicture: {
+              public_id: {
+                type: String,
+              },
+              url: {
+                type: String,
+              },
+            },
+          },
+          ref: "User",
+          required: true,
+        },
+        name: {
+          type: String,
+          required: true,
+        },
+        comment: {
+          type: String,
+          required: true,
+        },
+        profilePicture: {
+          public_id: {
+            type: String,
+          },
+          url: {
+            type: String,
+          },
+          createdAt: {
+            type: Date,
+            default: Date.now,
+          },
+        },
+      },
+    ],
+    numOfReviews: {
+      type: Number,
+      default: 0,
+    },
     comments: {
       type: {
         participants: [

@@ -19,6 +19,7 @@ const LayoutGratitude = ({ children }) => {
             justifyContent="space-between"
             alignItems="flex-start"
             columnGap={2}
+            rowGap={6}
           >
             <Grid item xs={12} sm={4} md={4}>
               <ListMenu />

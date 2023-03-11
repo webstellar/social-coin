@@ -88,8 +88,57 @@ exports.getAppreciations = catchAsyncErrors(async (req, res) => {
   });
 });
 
+//Get all appreciations => /api/v1/appreciations
+exports.getAppreciationsByFilters = catchAsyncErrors(async (req, res) => {
+  const page = req.query.page;
+  const search = req.query.search || "";
+  const tag = req.query.tag || "";
+  const category = req.query.category || "";
+
+  const limitValue = req.query.limit ? Number(req.query.limit) : 12;
+  const startIndex = (Number(page) - 1) * limitValue;
+  const appreciationsCount = await Appreciation.countDocuments();
+
+  let appreciations = await Appreciation.find()
+    .populate("hero")
+    .populate("user")
+    .limit(limitValue)
+    .skip(startIndex)
+    .sort({ $natural: -1 });
+
+  if (search || tag || category) {
+    appreciations = await Appreciation.find({
+      tags: { $in: tag },
+      categories: { $in: category },
+    })
+      .populate("hero")
+      .populate("user")
+      .limit(limitValue)
+      .skip(startIndex)
+      .sort({ $natural: -1 });
+  }
+
+  const totalFilteredCount = await Appreciation.countDocuments({
+    tags: { $in: tag },
+    categories: { $in: category },
+    summary: { $regex: search, $options: "i" },
+  });
+
+  res.status(200).json({
+    success: true,
+    search,
+    tag,
+    totalFilteredCount,
+    category,
+    appreciationsCount,
+    appreciations,
+    currentPage: Number(page),
+    numberOfPages: Math.ceil(appreciationsCount / limitValue),
+  });
+});
+
 // get Appreciations by Tags
-exports.getAppreciationByTag = catchAsyncErrors(async (req, res, next) => {
+exports.getAppreciationByTag = catchAsyncErrors(async (req, res) => {
   const { tag } = req.params;
 
   const limitValue = 12;
@@ -106,25 +155,23 @@ exports.getAppreciationByTag = catchAsyncErrors(async (req, res, next) => {
 });
 
 // get Appreciations by Related Tags
-exports.getAppreciationByRelatedTag = catchAsyncErrors(
-  async (req, res, next) => {
-    const tags = req.body;
+exports.getAppreciationByRelatedTag = catchAsyncErrors(async (req, res) => {
+  const tags = req.body;
 
-    const limitValue = 10;
-    const skipValue = req.query.skip ? Number(req.query.skip) : 0;
+  const limitValue = 10;
+  const skipValue = req.query.skip ? Number(req.query.skip) : 0;
 
-    const appreciations = await Appreciation.find({
-      tags: { $in: tags },
-    })
-      .limit(limitValue)
-      .skip(skipValue);
+  const appreciations = await Appreciation.find({
+    tags: { $in: tags },
+  })
+    .limit(limitValue)
+    .skip(skipValue);
 
-    res.status(200).json({
-      success: true,
-      appreciations,
-    });
-  }
-);
+  res.status(200).json({
+    success: true,
+    appreciations,
+  });
+});
 
 //get All Tags
 exports.getAllTags = catchAsyncErrors(async (req, res) => {
@@ -401,6 +448,39 @@ exports.likeMyAppreciation = catchAsyncErrors(async (req, res) => {
   res.status(200).json({
     success: true,
     updatedAppreciation,
+  });
+});
+
+exports.createAppreciationReview = catchAsyncErrors(async (req, res, next) => {
+  const { comment, id } = req.body;
+
+  const review = {
+    user: req.user.id,
+    name: req.user.name,
+    profilePicture: req.user.profilePicture,
+    comment,
+  };
+
+  const appreciation = await Appreciation.findById(id);
+
+  const isReviewed = appreciation.reviews.find(
+    (r) => r.user.id.toString() === req.user.id.toString()
+  );
+
+  if (isReviewed) {
+    appreciation.reviews.forEach((review) => {
+      if (review.user.id.toString() === req.user.id.toString()) {
+        review.comment = comment;
+      }
+    });
+  } else {
+    appreciation.reviews.push(review);
+    appreciation.numOfReviews = appreciation.reviews.length;
+  }
+  await appreciation.save({ validateBeforeSave: false });
+
+  res.status(200).json({
+    success: true,
   });
 });
 
