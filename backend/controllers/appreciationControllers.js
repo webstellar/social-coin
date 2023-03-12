@@ -439,6 +439,8 @@ exports.likeMyAppreciation = catchAsyncErrors(async (req, res) => {
     );
   }
 
+  const likeCount = appreciation.likes.length;
+
   const updatedAppreciation = await Appreciation.findByIdAndUpdate(
     id,
     appreciation,
@@ -481,6 +483,75 @@ exports.createAppreciationReview = catchAsyncErrors(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
+    appreciation,
+  });
+});
+
+// Get Appreciation Reviews   =>   /api/v1/reviews
+exports.getAppreciationReviews = catchAsyncErrors(async (req, res, next) => {
+  const appreciation = await Appreciation.findById(req.query.id);
+
+  res.status(200).json({
+    success: true,
+    reviews: appreciation.reviews,
+  });
+});
+
+// Delete Product Review   =>   /api/v1/reviews
+exports.deleteReview = catchAsyncErrors(async (req, res, next) => {
+  const appreciation = await Appreciation.findById(req.query.appreciationid);
+  const reviews = appreciation.reviews.filter(
+    (review) => review._id.toString() !== req.query.id.toString()
+  );
+
+  const numOfReviews = reviews.length;
+
+  await Appreciation.findByIdAndUpdate(
+    req.query.appreciationid,
+    {
+      reviews,
+      numOfReviews,
+    },
+    {
+      new: true,
+    }
+  );
+
+  res.status(200).json({
+    success: true,
+    appreciation,
+  });
+});
+
+exports.deleteMyReview = catchAsyncErrors(async (req, res) => {
+  const { id } = req.params;
+
+  console.log(req.user);
+
+  if (!req.user.id) {
+    return res.json({ message: "User is not authenicated" });
+  }
+
+  const appreciation = await Appreciation.findById(req.params.id);
+
+  const reviews = appreciation.reviews.filter(
+    (review) => review.name !== String(req.user.name)
+  );
+
+  const numOfReviews = reviews.length;
+
+  await Appreciation.findByIdAndUpdate(
+    id,
+    {
+      reviews,
+      numOfReviews,
+    },
+    { new: true }
+  );
+
+  res.status(200).json({
+    success: true,
+    reviews: appreciation.reviews,
   });
 });
 

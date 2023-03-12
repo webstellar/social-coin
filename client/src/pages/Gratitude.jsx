@@ -17,6 +17,9 @@ import { useParams, Link } from "react-router-dom";
 import {
   getGratitude,
   reviewGratitude,
+  getReviews,
+  deleteReview,
+  deleteMyReview,
 } from "../redux/gratitudes/gratitudeSlice";
 import { likeGratitude } from "../redux/gratitudes/gratitudesSlice";
 import { toast } from "react-toastify";
@@ -27,8 +30,9 @@ const Gratitude = () => {
 
   const [comment, setComment] = useState("");
   const [open, setOpen] = useState(false);
+  const [appreciationid, setAppreciationid] = useState("");
 
-  const { error, appreciation } = useSelector((state) => ({
+  const { error, appreciation, reviews } = useSelector((state) => ({
     ...state.gratitude,
   }));
 
@@ -61,7 +65,6 @@ const Gratitude = () => {
     if (comment !== "") {
       dispatch(reviewGratitude(reviewData));
       handleClear();
-      dispatch(getGratitude(id));
     } else {
       toast.error("kindly add a comment");
     }
@@ -70,6 +73,8 @@ const Gratitude = () => {
   useEffect(() => {
     if (id) {
       dispatch(getGratitude(id));
+      dispatch(getReviews(id));
+      setAppreciationid(id);
     }
 
     error && toast.error(error);
@@ -97,6 +102,15 @@ const Gratitude = () => {
     setOpen(true);
   };
 
+  const deleteComment = (id) => {
+    dispatch(deleteReview({ id, appreciationid }));
+    dispatch(getGratitude(appreciationid));
+  };
+
+  /*   const deleteComment = () => {
+    dispatch(deleteMyReview(id));
+  };
+ */
   const action = (
     <Fragment>
       <Button color="secondary" size="small" onClick={handleClose}>
@@ -125,6 +139,8 @@ const Gratitude = () => {
           comment={comment}
           setComment={setComment}
           onSubmit={onSubmit}
+          reviews={reviews}
+          deleteComment={deleteComment}
         />
         <Tooltip title="Like this testimony">
           <Fab

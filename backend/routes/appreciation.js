@@ -4,7 +4,9 @@ const router = express.Router();
 //routes interact with the controllers
 const {
   getAllTags,
+  deleteReview,
   deleteComment,
+  deleteMyReview,
   newAppreciation,
   myAppreciations,
   getAppreciations,
@@ -17,6 +19,7 @@ const {
   getAppreciationByTag,
   getAdminAppreciations,
   getSingleAppreciation,
+  getAppreciationReviews,
   createAppreciationReview,
   addCommentToAppreciation,
   getAppreciationByCategory,
@@ -28,6 +31,9 @@ const {
 const { isAuthenticatedUser, authorizeRoles } = require("../middlewares/auth");
 
 router.route("/review").patch(isAuthenticatedUser, createAppreciationReview);
+router.route("/review").get(isAuthenticatedUser, getAppreciationReviews);
+router.route("/review").delete(isAuthenticatedUser, deleteReview);
+router.route("/review/:id").delete(isAuthenticatedUser, deleteMyReview);
 
 router.route("/appreciations").get(getAppreciations);
 router.route("/filterappreciations").get(getAppreciationsByFilters);

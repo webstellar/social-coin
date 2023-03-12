@@ -6,6 +6,7 @@ const initialState = {
   loading: true,
   error: null,
   success: false,
+  reviews: [],
 };
 
 export const getGratitude = createAsyncThunk(
@@ -34,6 +35,47 @@ export const reviewGratitude = createAsyncThunk(
       return data;
     } catch (error) {
       return error.response.data.message;
+    }
+  }
+);
+
+export const getReviews = createAsyncThunk(
+  "gratitude/getReview",
+  async (id) => {
+    try {
+      const { data } = await axios.get(`/api/v1/review?id=${id}`);
+      return data.reviews;
+    } catch (error) {
+      return error.data.message;
+    }
+  }
+);
+
+//id here = review._id
+export const deleteReview = createAsyncThunk(
+  "gratitude/deleteReview",
+  async ({ id, appreciationid }) => {
+    try {
+      const { data } = await axios.delete(
+        `/api/v1/review?id=${id}&appreciationid=${appreciationid}`
+      );
+
+      return data;
+    } catch (error) {
+      return error.data.message;
+    }
+  }
+);
+
+export const deleteMyReview = createAsyncThunk(
+  "gratitude/deleteMyReview",
+  async (id) => {
+    try {
+      const { data } = await axios.delete(`/api/v1/review/${id}`);
+
+      return data;
+    } catch (error) {
+      return error.data.message;
     }
   }
 );
@@ -95,9 +137,46 @@ export const gratitudeSlice = createSlice({
     });
     builder.addCase(reviewGratitude.fulfilled, (state, action) => {
       state.loading = false;
-      state.success = action.payload;
+      state.success = action.payload.success;
+      state.appreciation = action.payload.appreciation;
     });
     builder.addCase(reviewGratitude.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error;
+    });
+    builder.addCase(getReviews.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getReviews.fulfilled, (state, action) => {
+      state.loading = false;
+      state.reviews = action.payload;
+      state.success = true;
+    });
+    builder.addCase(getReviews.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error;
+    });
+    builder.addCase(deleteReview.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(deleteReview.fulfilled, (state, action) => {
+      state.loading = false;
+      state.appreciation = action.payload.appreciation;
+      state.success = true;
+    });
+    builder.addCase(deleteReview.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error;
+    });
+    builder.addCase(deleteMyReview.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(deleteMyReview.fulfilled, (state, action) => {
+      state.loading = false;
+      state.appreciation = action.payload.appreciation;
+      state.success = true;
+    });
+    builder.addCase(deleteMyReview.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error;
     });

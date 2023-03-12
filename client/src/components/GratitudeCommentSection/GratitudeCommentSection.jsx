@@ -15,6 +15,7 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import MailIcon from "@mui/icons-material/Mail";
 import SendIcon from "@mui/icons-material/Send";
+import DeleteIcon from "@mui/icons-material/Delete";
 import {
   shareOnFacebook,
   shareOnLinkedIn,
@@ -29,9 +30,11 @@ const GratitudeCommentSection = ({
   comment,
   setComment,
   onSubmit,
+  reviews,
+  deleteComment,
 }) => {
-  const reviews = gratitude?.reviews;
-  const commentLength = reviews?.length;
+  const gratitudeReviews = gratitude?.reviews;
+  const commentLength = gratitudeReviews?.length;
 
   return (
     <section>
@@ -138,7 +141,7 @@ const GratitudeCommentSection = ({
                     maxRows={4}
                     fullWidth
                     color="secondary"
-                    onClick={(e) => {
+                    onChange={(e) => {
                       setComment(e.target.value);
                     }}
                     sx={{
@@ -158,15 +161,14 @@ const GratitudeCommentSection = ({
                 </Grid>
               </Grid>
               {/*
-
-<Grid item xs={12} md={12}>
+              <Grid item xs={12} md={12}>
                 <DisqusThread
                   id={id}
                   title={gratitude?.summary}
                   path={`/appreciation/${id}`}
                 />
               </Grid>
-*/}
+              */}
             </Grid>
           </form>
 
@@ -189,7 +191,7 @@ const GratitudeCommentSection = ({
               rowSpacing={0}
               spacing={0}
             >
-              {gratitude.reviews
+              {gratitude?.reviews
                 ? gratitude?.reviews.map((review) => (
                     <>
                       <Grid item sm={1} md={1} xl={1} key={review?._id}>
@@ -225,7 +227,20 @@ const GratitudeCommentSection = ({
                           </Typography>
                         </Grid>
                       </Grid>
-                      <Grid item sm={2} md={2} xl={2}></Grid>
+                      <Grid item sm={2} md={2} xl={2}>
+                        <IconButton
+                          aria-label="send"
+                          color="primary"
+                          size="large"
+                          onClick={
+                            user?.user?.name !== review?.name
+                              ? null
+                              : () => deleteComment(review?._id)
+                          }
+                        >
+                          <DeleteIcon fontSize="inherit" color="secondary" />
+                        </IconButton>
+                      </Grid>
                     </>
                   ))
                 : null}
@@ -243,5 +258,7 @@ GratitudeCommentSection.propTypes = {
   comment: PropTypes.string,
   setComment: PropTypes.any,
   onSubmit: PropTypes.any,
+  reviews: PropTypes.array,
+  deleteComment: PropTypes.func,
 };
 export default GratitudeCommentSection;
