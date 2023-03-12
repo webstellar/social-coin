@@ -8,6 +8,7 @@ import {
   Typography,
   Avatar,
   TextField,
+  Tooltip,
 } from "@mui/material";
 import { GrBox, GrItem, GrTypography } from "./GratitudeCommentSection.styles";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
@@ -132,22 +133,25 @@ const GratitudeCommentSection = ({
                   />
                 </Grid>
                 <Grid item sm={10} md={10} xl={10}>
-                  <TextField
-                    name="comment"
-                    value={comment}
-                    type="text"
-                    label="Comment"
-                    multiline
-                    maxRows={4}
-                    fullWidth
-                    color="secondary"
-                    onChange={(e) => {
-                      setComment(e.target.value);
-                    }}
-                    sx={{
-                      color: "#000",
-                    }}
-                  />
+                  <Tooltip title="You need to be logged in give comment">
+                    <TextField
+                      name="comment"
+                      value={comment}
+                      disabled={user?.user?._id ? false : true}
+                      type="text"
+                      label="Comment"
+                      multiline
+                      maxRows={4}
+                      fullWidth
+                      color="secondary"
+                      onChange={(e) => {
+                        setComment(e.target.value);
+                      }}
+                      sx={{
+                        color: "#000",
+                      }}
+                    />
+                  </Tooltip>
                 </Grid>
                 <Grid item sm={1} md={1} xl={1}>
                   <IconButton
