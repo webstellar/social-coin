@@ -225,18 +225,20 @@ const GratitudeCommentSection = ({
                       </Grid>
                     </Grid>
                     <Grid item sm={1} md={1} xl={1}>
-                      <IconButton
-                        aria-label="send"
-                        color="primary"
-                        size="large"
-                        onClick={
-                          user?.user?.name !== review?.name
-                            ? null
-                            : () => deleteComment(review?._id)
-                        }
-                      >
-                        <DeleteIcon fontSize="inherit" color="secondary" />
-                      </IconButton>
+                      {user?.user?.name === review?.name ? (
+                        <IconButton
+                          aria-label="send"
+                          color="primary"
+                          size="large"
+                          onClick={
+                            user?.user?.name !== review?.name
+                              ? null
+                              : () => deleteComment(review?._id)
+                          }
+                        >
+                          <DeleteIcon fontSize="inherit" color="secondary" />
+                        </IconButton>
+                      ) : null}
                     </Grid>
                   </>
                 ))

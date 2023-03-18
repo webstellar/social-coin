@@ -230,41 +230,44 @@ const GratitudesCard = ({ gratitude }) => {
                   p: 0,
                   mt: 2,
                   mb: 2,
-                  textTransform: "Capitalize",
+                  textTransform: "none",
                 }}
                 onClick={handleCommentClick}
               >
-                View comment
+                View Comment{gratitude?.reviews?.length > 1 ? "s " : " "}
+                {gratitude?.reviews?.length}
               </Button>
 
               <Collapse in={openComment} timeout="auto" unmountOnExit>
                 {gratitude?.reviews?.length > 0 ? (
                   gratitude?.reviews.map((review) => (
                     <>
-                      <Stack
+                      <Grid
+                        container
                         direction="row"
                         justifyContent="flex-start"
-                        alignItems="center"
-                        spacing={1}
+                        alignItems="flex-start"
+                        sx={{ mb: 1 }}
                       >
-                        <GrItem elevation={0}>
+                        <Grid item sm={3} md={3} lg={3}>
                           <Typography
                             variant="body2"
                             gutterBottom
+                            align="left"
                             sx={{
                               fontWeight: "bold",
                               textTransform: "lowercase",
                             }}
                           >
-                            {review.name}
+                            {review.name.substring(0, 15)}..
                           </Typography>
-                        </GrItem>
-                        <GrItem elevation={0}>
-                          <Typography variant="body2" gutterBottom>
+                        </Grid>
+                        <Grid item sm={9} md={9} lg={9}>
+                          <Typography variant="body2" align="left" gutterBottom>
                             {review.comment}
                           </Typography>
-                        </GrItem>
-                      </Stack>
+                        </Grid>
+                      </Grid>
                     </>
                   ))
                 ) : (
