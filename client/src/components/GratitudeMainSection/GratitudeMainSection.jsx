@@ -10,7 +10,7 @@ const GratitudeMainSection = ({ gratitude }) => {
       <GrBox>
         <Container maxWidth="lg">
           <div id="video">
-            <Container maxWidth="md">
+            <Container maxWidth="lg">
               <YoutubeEmbed gratitude={gratitude} />
             </Container>
           </div>

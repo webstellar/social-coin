@@ -63,7 +63,6 @@ const TestimonyFormTags = ({ tags, topTags, setOpenTags, handleTagChange }) => {
         alignItems="center"
       >
         <Autocomplete
-          freeSolo
           multiple
           fullWidth
           limitTags={2}

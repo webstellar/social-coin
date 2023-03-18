@@ -21,7 +21,7 @@ const YoutubeEmbed = ({ gratitude }) => {
   return (
     <GrLink className="video-responsive">
       <GrIframe
-        width="400"
+        width="100%"
         height="250"
         src={`https://www.youtube.com/embed/${youtubeId}` || null}
         frameBorder="0"

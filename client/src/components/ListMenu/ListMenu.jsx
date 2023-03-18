@@ -1,42 +1,37 @@
 import * as React from "react";
+import PropTypes from "prop-types";
 import {
   Box,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
   Typography,
   Chip,
-  Collapse,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemButton,
+  ListItemText,
+  Checkbox,
 } from "@mui/material";
 import {
   getAllTags,
   getAllCategories,
 } from "../../redux/gratitudes/gratitudesSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { NavLink } from "react-router-dom";
-import Checkbox from "@mui/material/Checkbox";
-import ExpandLess from "@mui/icons-material/ExpandLess";
-import ExpandMore from "@mui/icons-material/ExpandMore";
-import TagIcon from "@mui/icons-material/Tag";
 import SearchIcon from "@mui/icons-material/Search";
-
 import { Search, SearchIconWrapper, StyledInputBase } from "./ListMenu.styles";
 
-const ListMenu = () => {
+const ListMenu = ({
+  search,
+  setSearch,
+  category,
+  setCategory,
+  tag,
+  setTag,
+}) => {
   const dispatch = useDispatch();
-  const [checked, setChecked] = React.useState([]);
-  const [open, setOpen] = React.useState(true);
-  const [searchText, setSearchText] = React.useState("");
 
-  const handleClick = () => {
-    setOpen(!open);
-  };
-
-  const handleToggle = (value) => () => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
+  const handleCategoryToggle = (value) => () => {
+    const currentIndex = category.indexOf(value);
+    const newChecked = [...category];
 
     if (currentIndex === -1) {
       newChecked.push(value);
@@ -44,7 +39,20 @@ const ListMenu = () => {
       newChecked.splice(currentIndex, 1);
     }
 
-    setChecked(newChecked);
+    setCategory(newChecked);
+  };
+
+  const handleTagToggle = (val) => () => {
+    const currentI = tag.indexOf(val);
+    const newC = [...tag];
+
+    if (currentI === -1) {
+      newC.push(val);
+    } else {
+      newC.splice(currentI, 1);
+    }
+
+    setTag(newC);
   };
 
   const { totalTags, totalCategories } = useSelector((state) => ({
@@ -82,14 +90,13 @@ const ListMenu = () => {
           <StyledInputBase
             placeholder="Search…"
             inputProps={{ "aria-label": "search" }}
-            value={searchText}
+            value={search}
             onChange={(e) => {
-              setSearchText(e.target.value);
+              setSearch(e.target.value);
             }}
           />
         </Search>
       </form>
-
       <Typography
         variant="h6"
         component="p"
@@ -99,8 +106,102 @@ const ListMenu = () => {
         Tags
       </Typography>
 
-      {totalTags.map((tag, i) => (
-        <Chip key={i} label={tag} sx={{ ml: 1, mt: 1, mb: 2 }} />
+      <List
+        sx={{
+          width: "100%",
+          maxWidth: 360,
+          bgcolor: "background.paper",
+          overflow: "auto",
+          maxHeight: 300,
+          "& ul": { padding: 0 },
+        }}
+      >
+        {totalTags.map((val) => {
+          const labelId = `checkbox-list-label-${val}`;
+
+          return (
+            <ListItem key={val} disablePadding>
+              <ListItemButton
+                role={undefined}
+                onClick={handleTagToggle(val)}
+                dense
+              >
+                <ListItemIcon>
+                  <Checkbox
+                    edge="start"
+                    checked={tag.indexOf(val) !== -1}
+                    tabIndex={-1}
+                    disableRipple
+                    inputProps={{ "aria-labelledby": labelId }}
+                  />
+                </ListItemIcon>
+                <ListItemText id={labelId} primary={val} />
+              </ListItemButton>
+            </ListItem>
+          );
+        })}
+      </List>
+
+      <Typography
+        variant="h6"
+        component="p"
+        sx={{ fontWeight: "Bold", mt: 4 }}
+        gutterBottom
+      >
+        Categories
+      </Typography>
+      <List
+        sx={{
+          width: "100%",
+          maxWidth: 360,
+          bgcolor: "background.paper",
+          overflow: "auto",
+          maxHeight: 300,
+          "& ul": { padding: 0 },
+        }}
+      >
+        {totalCategories.map((value) => {
+          const labelId = `checkbox-list-label-${value}`;
+
+          return (
+            <ListItem key={value} disablePadding>
+              <ListItemButton
+                role={undefined}
+                onClick={handleCategoryToggle(value)}
+                dense
+              >
+                <ListItemIcon>
+                  <Checkbox
+                    edge="start"
+                    checked={category.indexOf(value) !== -1}
+                    tabIndex={-1}
+                    disableRipple
+                    inputProps={{ "aria-labelledby": labelId }}
+                  />
+                </ListItemIcon>
+                <ListItemText id={labelId} primary={value} />
+              </ListItemButton>
+            </ListItem>
+          );
+        })}
+      </List>
+      {/*}
+      <Typography
+        variant="h6"
+        component="p"
+        sx={{ fontWeight: "Bold" }}
+        gutterBottom
+      >
+        Tags
+      </Typography>
+
+      {totalTags.map((item, i) => (
+        <Chip
+          key={i}
+          label={item}
+          sx={{ ml: 1, mt: 1, mb: 2 }}
+          onClick={() => setTags(item)}
+        />
       ))}
       <Typography
         variant="h6"
@@ -111,11 +212,28 @@ const ListMenu = () => {
         Categories
       </Typography>
 
-      {totalCategories.map((category, i) => (
-        <Chip key={i} label={category} sx={{ ml: 1, mt: 1 }} />
+      {totalCategories.map((item, i) => (
+        <Chip
+          key={i}
+          label={item}
+          sx={{ ml: 1, mt: 1 }}
+          onClick={() => setCategories(item)}
+        />
       ))}
+
+
+      */}
     </Box>
   );
+};
+
+ListMenu.propTypes = {
+  categories: PropTypes.any,
+  setCategories: PropTypes.any,
+  keyword: PropTypes.any,
+  setKeyword: PropTypes.any,
+  tags: PropTypes.any,
+  setTags: PropTypes.any,
 };
 
 export default ListMenu;

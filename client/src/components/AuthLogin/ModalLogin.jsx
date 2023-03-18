@@ -230,6 +230,7 @@ const ModalLogin = ({ handleClose }) => {
               </GrTypography>
             </Button>
           </Grid>
+
           <Grid item xs={12} md={12}>
             <Typography variant="p" component="p" size="large" color="grey.900">
               Forgot password? <Link to="/forgot-password">click here.</Link>
@@ -238,6 +239,18 @@ const ModalLogin = ({ handleClose }) => {
 
           <Grid item xs={12} md={12}>
             <div id="signInDiv" />
+          </Grid>
+
+          <Grid item xs={12} md={12} sx={{ mt: 5 }}>
+            <Typography
+              variant="p"
+              component="p"
+              size="large"
+              color="grey.900"
+              align="center"
+            >
+              <Link to="/register"> Sign Up for an account</Link>
+            </Typography>
           </Grid>
 
           {/* <Grid item xs={12} md={12}>

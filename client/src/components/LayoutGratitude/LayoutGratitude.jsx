@@ -1,3 +1,4 @@
+import * as React from "react";
 import PropTypes from "prop-types";
 import { Fragment } from "react";
 import CookieConsent from "react-cookie-consent";
@@ -6,8 +7,12 @@ import { GrParaBox } from "./LayoutGratitude.styles";
 import ListMenu from "../ListMenu/ListMenu";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
+import { FilterContext } from "../../pages/Testimonies";
 
 const LayoutGratitude = ({ children }) => {
+  const { category, setCategory, search, setSearch, tag, setTag } =
+    React.useContext(FilterContext);
+
   return (
     <Fragment>
       <Header />
@@ -22,7 +27,14 @@ const LayoutGratitude = ({ children }) => {
             rowGap={6}
           >
             <Grid item xs={12} sm={4} md={4}>
-              <ListMenu />
+              <ListMenu
+                category={category}
+                setCategory={setCategory}
+                search={search}
+                setSearch={setSearch}
+                tag={tag}
+                setTag={setTag}
+              />
             </Grid>
             <Grid item xs={12} sm={6} md={6}>
               <div>{children}</div>

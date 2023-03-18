@@ -28,6 +28,50 @@ export const getGratitudes = createAsyncThunk(
   }
 );
 
+export const getFilteredGratitudes = createAsyncThunk(
+  "gratitudes/getFilteredGratitudes",
+  async ({ keyword = "", page, tags, categories }) => {
+    try {
+      let link = `/api/v1/appreciations/filter/?keyword=${keyword}&page=${page}`;
+
+      if (tags) {
+        link = `/api/v1/appreciations/filter/?keyword=${keyword}&page=${page}&tags=${tags}`;
+      } else if (categories) {
+        link = `/api/v1/appreciations/filter/?keyword=${keyword}&page=${page}&categories=${categories}`;
+      } else if (categories && tags) {
+        link = `/api/v1/appreciations/filter/?keyword=${keyword}&page=${page}&tags=${tags}&categories=${categories}`;
+      }
+
+      const { data } = await axios.get(link);
+      return data;
+    } catch (error) {
+      return error.response.data.message;
+    }
+  }
+);
+
+export const getGratitudesByFilter = createAsyncThunk(
+  "gratitudes/getGratitudesByFilter",
+  async ({ search = "", page, tag, category }) => {
+    try {
+      let link = `/api/v1/appreciations/filter/?keyword=${search}&page=${page}`;
+
+      if (tag) {
+        link = `/api/v1/appreciations/filter/?keyword=${search}&page=${page}&tags=${tag}`;
+      } else if (category) {
+        link = `/api/v1/appreciations/filter/?keyword=${search}&page=${page}&categories=${category}`;
+      } else if (category && tag) {
+        link = `/api/v1/appreciations/filter/?keyword=${search}&page=${page}&tags=${tag}&categories=${category}`;
+      }
+
+      const { data } = await axios.get(link);
+      return data;
+    } catch (error) {
+      return error.response.data.message;
+    }
+  }
+);
+
 export const getTagGratitude = createAsyncThunk(
   "gratitudes/getTagGratitude",
   async (tag, { rejectWithValue }) => {
@@ -111,6 +155,22 @@ export const gratitudesSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     });
+    builder.addCase(getGratitudesByFilter.pending, (state) => {
+      state.loading = true;
+      state.appreciations = [];
+    });
+    builder.addCase(getGratitudesByFilter.fulfilled, (state, action) => {
+      state.loading = false;
+      state.appreciations = action.payload.appreciations;
+      state.appreciationsCount = action.payload.appreciationsCount;
+      state.currentPage = action.payload.currentPage;
+      state.numberOfPages = action.payload.numberOfPages;
+      state.success = true;
+    });
+    builder.addCase(getGratitudesByFilter.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
     builder.addCase(getTagGratitude.pending, (state) => {
       state.loading = true;
       state.tagAppreciations = [];
@@ -177,6 +237,22 @@ export const gratitudesSlice = createSlice({
       state.success = true;
     });
     builder.addCase(getAllCategories.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+    builder.addCase(getFilteredGratitudes.pending, (state) => {
+      state.loading = true;
+      state.totalCategories = [];
+    });
+    builder.addCase(getFilteredGratitudes.fulfilled, (state, action) => {
+      state.loading = false;
+      state.appreciations = action.payload.appreciations;
+      state.appreciationsCount = action.payload.appreciationsCount;
+      state.currentPage = action.payload.currentPage;
+      state.numberOfPages = action.payload.numberOfPages;
+      state.success = true;
+    });
+    builder.addCase(getFilteredGratitudes.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
     });

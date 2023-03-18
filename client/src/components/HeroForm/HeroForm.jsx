@@ -14,21 +14,27 @@ import {
   CircularProgress,
   Divider,
   Typography,
+  IconButton,
 } from "@mui/material/";
 import { GrTypography, GrBox } from "./HeroForm.styles";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import ClearIcon from "@mui/icons-material/Clear";
 import { Link } from "react-router-dom";
-import FileBase from "react-file-base64";
+//import FileBase from "react-file-base64";
 
 import HeroAutocompleteForm from "../HeroAutocompleteForm/HeroAutocompleteForm";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { createHero } from "../../redux/heroes/createHeroSlice";
+import HeroImage from "../../images/Hero-Image.png";
 
 import data from "../../data/countries.json";
 import { getHeroes } from "../../redux/heroes/heroesSlice";
+
+import { useDropzone } from "react-dropzone";
 
 const genders = ["Male", "Female", "Others"];
 const countries = data;
@@ -74,20 +80,49 @@ const HeroForm = () => {
   const onSubmit = (e) => {
     e.preventDefault();
     setOpen(!open);
-    if (name && description && profilePicture < 1e6) {
+    if (name && description && profilePicture.length < 1e6) {
       dispatch(createHero({ formData, navigate, toast, hero }));
       dispatch(getHeroes());
       setTimeout(() => {
         setOpen(open);
-      }, 5000);
+      }, 1000);
     } else {
       toast.error("image size is larger than 1mb");
+      setOpen(open);
     }
   };
 
   React.useEffect(() => {
     error && toast.error(error);
   }, [error]);
+
+  const onDrop = React.useCallback(
+    (acceptedFiles) => {
+      const reader = new FileReader();
+      const file = acceptedFiles[0];
+      if (file > 8e6) {
+        alert("Max Limit is: 8mb");
+        return;
+      }
+      reader.onload = () => {
+        setFormData({ ...formData, profilePicture: reader.result });
+      };
+
+      reader.readAsDataURL(file);
+    },
+    [formData]
+  );
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    maxFiles: 1,
+    multiple: false,
+    accept: "image/*",
+  });
+
+  const handleImageClear = () => {
+    setFormData({ ...formData, profilePicture: null });
+  };
 
   return (
     <Container maxWidth="xl">
@@ -198,7 +233,7 @@ const HeroForm = () => {
                           type="text"
                           required
                           multiline
-                          rows={4}
+                          rows={7}
                           fullWidth
                           label="Describe your hero"
                           onChange={onChange}
@@ -208,7 +243,7 @@ const HeroForm = () => {
                           variant="p"
                           sx={{
                             mt: 1,
-                            color: description.length > 1500 ? "red" : "#000",
+                            color: description.length > 2000 ? "red" : "#000",
                           }}
                         >
                           {description?.length} characters
@@ -371,21 +406,92 @@ const HeroForm = () => {
                         <InputLabel sx={{ mb: 2 }}>
                           Upload a picture of your hero (optional)
                         </InputLabel>
+                      </Grid>
 
-                        <Box>
-                          <img
-                            src={formData.profilePicture}
-                            alt=""
+                      {formData.profilePicture ? (
+                        <Grid
+                          item
+                          xs={12}
+                          md={12}
+                          container
+                          direction="column"
+                          justifyContent="center"
+                          alignItems="center"
+                        >
+                          <Box sx={{ position: "relative" }}>
+                            <img
+                              src={formData.profilePicture || HeroImage}
+                              alt=""
+                              style={{
+                                width: 250,
+                                height: 250,
+                                objectFit: "cover",
+                                borderRadius: "0.5rem",
+                              }}
+                            />
+
+                            <IconButton
+                              onClick={() => handleImageClear()}
+                              color="secondary"
+                              sx={{
+                                position: "absolute",
+                                top: "2%",
+                                right: "2%",
+                                backgroundColor: "#fff",
+                                p: 0.5,
+                              }}
+                            >
+                              <ClearIcon color="inherit" />
+                            </IconButton>
+                          </Box>
+                        </Grid>
+                      ) : (
+                        <Grid
+                          item
+                          xs={12}
+                          md={12}
+                          container
+                          direction="column"
+                          justifyContent="center"
+                          alignItems="center"
+                        >
+                          <div
+                            {...getRootProps()}
                             style={{
                               width: 250,
                               height: 250,
-                              objectFit: "cover",
-                              borderRadius: "0.5rem",
+                              border: "5px dotted black",
+                              padding: "60px 60px 60px 60px",
+                              backgroundColor: "#dcdcdc",
+                              color: "#000",
+                              marginBottom: "4rem",
                             }}
-                          />
-                        </Box>
-                      </Grid>
-                      <Grid
+                          >
+                            <input {...getInputProps()} />
+                            {isDragActive ? (
+                              <p>Drop the image here ...</p>
+                            ) : (
+                              <>
+                                <p style={{ textAlign: "center" }}>
+                                  Drag 'n' drop an image here, or click to
+                                  select files
+                                </p>
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    cursor: "pointer",
+                                  }}
+                                >
+                                  <CloudUploadIcon sx={{ fontSize: "2rem" }} />
+                                </div>
+                              </>
+                            )}
+                          </div>
+                        </Grid>
+                      )}
+                      {/*<Grid
                         item
                         xs={12}
                         md={12}
@@ -401,8 +507,7 @@ const HeroForm = () => {
                             setFormData({ ...formData, profilePicture: base64 })
                           }
                         />
-                      </Grid>
-
+                        </Grid>*/}
                       <Grid item xs={12} md={12}>
                         <ButtonGroup
                           variant="text"

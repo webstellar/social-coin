@@ -97,7 +97,8 @@ exports.getAppreciationsByFilters = catchAsyncErrors(async (req, res) => {
 
   const limitValue = req.query.limit ? Number(req.query.limit) : 12;
   const startIndex = (Number(page) - 1) * limitValue;
-  const appreciationsCount = await Appreciation.countDocuments();
+  let appreciationsCount = await Appreciation.countDocuments();
+  let totalFilteredCount = await Appreciation.countDocuments({});
 
   let appreciations = await Appreciation.find()
     .populate("hero")
@@ -106,7 +107,7 @@ exports.getAppreciationsByFilters = catchAsyncErrors(async (req, res) => {
     .skip(startIndex)
     .sort({ $natural: -1 });
 
-  if (search || tag || category) {
+  if (tag && category) {
     appreciations = await Appreciation.find({
       tags: { $in: tag },
       categories: { $in: category },
@@ -116,13 +117,51 @@ exports.getAppreciationsByFilters = catchAsyncErrors(async (req, res) => {
       .limit(limitValue)
       .skip(startIndex)
       .sort({ $natural: -1 });
-  }
 
-  const totalFilteredCount = await Appreciation.countDocuments({
-    tags: { $in: tag },
-    categories: { $in: category },
-    summary: { $regex: search, $options: "i" },
-  });
+    totalFilteredCount = await Appreciation.countDocuments({
+      tags: { $in: tag },
+      categories: { $in: category },
+    });
+  } else if (tag) {
+    appreciations = await Appreciation.find({
+      tags: { $in: tag },
+    })
+      .populate("hero")
+      .populate("user")
+      .limit(limitValue)
+      .skip(startIndex)
+      .sort({ $natural: -1 });
+
+    totalFilteredCount = await Appreciation.countDocuments({
+      tags: { $in: tag },
+    });
+  } else if (category) {
+    appreciations = await Appreciation.find({
+      categories: { $in: category },
+    })
+      .populate("hero")
+      .populate("user")
+      .limit(limitValue)
+      .skip(startIndex)
+      .sort({ $natural: -1 });
+
+    totalFilteredCount = await Appreciation.countDocuments({
+      categories: { $in: category },
+    });
+  } else if (search) {
+    appreciations = await Appreciation.find({
+      summary: { $regex: search, $options: "i" },
+    })
+      .populate("hero")
+      .populate("user")
+      .limit(limitValue)
+      .skip(startIndex)
+      .sort({ $natural: -1 });
+
+    totalFilteredCount = await Appreciation.countDocuments({
+      summary: { $regex: search, $options: "i" },
+    });
+  }
 
   res.status(200).json({
     success: true,
@@ -134,6 +173,35 @@ exports.getAppreciationsByFilters = catchAsyncErrors(async (req, res) => {
     appreciations,
     currentPage: Number(page),
     numberOfPages: Math.ceil(appreciationsCount / limitValue),
+  });
+});
+
+exports.getFilteredAppreciations = catchAsyncErrors(async (req, res) => {
+  const { page, tags, categories } = req.query;
+  const limitValue = 12;
+  //const startIndex = (Number(page) - 1) * limitValue;
+  const appreciationsCount = await Appreciation.countDocuments();
+
+  const apiFeatures = new APIFeatures(
+    Appreciation.find()
+      .populate("hero")
+      .populate("user")
+      .sort({ $natural: -1 }),
+    req.query
+  ).filter();
+
+  let appreciations = await apiFeatures.query;
+  let filteredAppreciationCount = appreciations.length;
+
+  res.status(200).json({
+    success: true,
+    appreciationsCount,
+    appreciations,
+    tags: tags,
+    categories: categories,
+    currentPage: Number(page),
+    numberOfPages: Math.ceil(filteredAppreciationCount / limitValue),
+    filteredAppreciationCount,
   });
 });
 
@@ -463,15 +531,19 @@ exports.createAppreciationReview = catchAsyncErrors(async (req, res, next) => {
     comment,
   };
 
+  console.log(review.user);
+
   const appreciation = await Appreciation.findById(id);
 
+  console.log(appreciation);
+
   const isReviewed = appreciation.reviews.find(
-    (r) => r.user.id.toString() === req.user.id.toString()
+    (r) => r?.id.toString() === req.user.id.toString()
   );
 
   if (isReviewed) {
     appreciation.reviews.forEach((review) => {
-      if (review.user.id.toString() === req.user.id.toString()) {
+      if (review?.id.toString() === req.user.id.toString()) {
         review.comment = comment;
       }
     });

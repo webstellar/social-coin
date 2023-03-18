@@ -33,11 +33,11 @@ class APIFeatures {
     return this;
   }
 
-  pagination(resPerPage) {
-    const currentPage = Number(this.queryStr.page) || 1;
-    const skip = resPerPage * (currentPage - 1);
+  pagination(limitValue) {
+    const page = Number(this.queryStr.page) || 1;
+    const skip = (Number(page) - 1) * limitValue;
 
-    this.query = this.query.limit(resPerPage).skip(skip);
+    this.query = this.query.limit(limitValue).skip(skip);
     return this;
   }
 }

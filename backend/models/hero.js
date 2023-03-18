@@ -7,7 +7,7 @@ const heroSchema = new mongoose.Schema(
       type: String,
       required: [true, "Please provide your hero's name"],
       trim: true,
-      maxLength: [200, "Please your hero's name cannot exceed 100 characters"],
+      maxLength: [200, "Please your hero's name cannot exceed 200 characters"],
     },
     description: {
       type: String,
@@ -26,7 +26,7 @@ const heroSchema = new mongoose.Schema(
       type: String,
       required: [true, "Please select a gender type for your Hero"],
       enum: {
-        values: ["Male", "Female", "Non-Binary", "Others"],
+        values: ["Male", "Female", "Others"],
         message: "Please select a gender",
       },
     },
@@ -38,6 +38,9 @@ const heroSchema = new mongoose.Schema(
       type: String,
       trim: true,
       lowercase: true,
+      sparse: true,
+      unique: false,
+      required: [false, "This is optional"],
       match: [
         /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
         "Please fill a valid email address",

@@ -17,9 +17,7 @@ import { useParams, Link } from "react-router-dom";
 import {
   getGratitude,
   reviewGratitude,
-  getReviews,
   deleteReview,
-  deleteMyReview,
 } from "../redux/gratitudes/gratitudeSlice";
 import { likeGratitude } from "../redux/gratitudes/gratitudesSlice";
 import { toast } from "react-toastify";
@@ -32,7 +30,7 @@ const Gratitude = () => {
   const [open, setOpen] = useState(false);
   const [appreciationid, setAppreciationid] = useState("");
 
-  const { error, appreciation, reviews } = useSelector((state) => ({
+  const { error, appreciation } = useSelector((state) => ({
     ...state.gratitude,
   }));
 
@@ -73,7 +71,6 @@ const Gratitude = () => {
   useEffect(() => {
     if (id) {
       dispatch(getGratitude(id));
-      dispatch(getReviews(id));
       setAppreciationid(id);
     }
 
@@ -139,7 +136,6 @@ const Gratitude = () => {
           comment={comment}
           setComment={setComment}
           onSubmit={onSubmit}
-          reviews={reviews}
           deleteComment={deleteComment}
         />
         <Tooltip title="Like this testimony">

@@ -203,6 +203,18 @@ const Login = () => {
               <div id="signInDiv" />
             </Grid>
 
+            <Grid item xs={12} md={12} sx={{ mt: 5 }}>
+              <Typography
+                variant="p"
+                component="p"
+                size="large"
+                color="grey.900"
+                align="center"
+              >
+                <Link to="/register"> Sign Up for an account</Link>
+              </Typography>
+            </Grid>
+
             {/* <Grid item xs={12} md={12}>
               <Button
                 variant="contained"

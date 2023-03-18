@@ -7,7 +7,7 @@ export const Search = styled("div")(({ theme }) => ({
   borderRadius: theme.shape.borderRadius,
   backgroundColor: alpha(theme.palette.common.black, 0.05),
   "&:hover": {
-    backgroundColor: alpha(theme.palette.common.black, 0.10),
+    backgroundColor: alpha(theme.palette.common.black, 0.1),
   },
   marginLeft: 0,
   width: "100%",
@@ -21,10 +21,10 @@ export const SearchIconWrapper = styled("div")(({ theme }) => ({
   padding: theme.spacing(0, 2),
   height: "100%",
   position: "absolute",
-  pointerEvents: "none",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
+  cursor: "pointer",
 }));
 
 export const StyledInputBase = styled(InputBase)(({ theme }) => ({

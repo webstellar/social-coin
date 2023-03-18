@@ -20,6 +20,7 @@ const {
   getAdminAppreciations,
   getSingleAppreciation,
   getAppreciationReviews,
+  getFilteredAppreciations,
   createAppreciationReview,
   addCommentToAppreciation,
   getAppreciationByCategory,
@@ -36,6 +37,7 @@ router.route("/review").delete(isAuthenticatedUser, deleteReview);
 router.route("/review/:id").delete(isAuthenticatedUser, deleteMyReview);
 
 router.route("/appreciations").get(getAppreciations);
+router.route("/appreciations/filter").get(getFilteredAppreciations);
 router.route("/filterappreciations").get(getAppreciationsByFilters);
 router.route("/appreciation/:id").get(getSingleAppreciation);
 router.route("/appreciation/tag/:tag").get(getAppreciationByTag);

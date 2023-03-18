@@ -13,9 +13,7 @@ import {
   Avatar,
   IconButton,
   Tooltip,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
+  Collapse,
 } from "@mui/material";
 import {
   GrGiverTypography,
@@ -30,7 +28,6 @@ import { likeGratitude } from "../../redux/gratitudes/gratitudesSlice";
 
 import ThumbUpAltOutlinedIcon from "@mui/icons-material/ThumbUpAltOutlined";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import CloseIcon from "@mui/icons-material/Close";
 
 const GratitudesCard = ({ gratitude }) => {
@@ -40,9 +37,14 @@ const GratitudesCard = ({ gratitude }) => {
   const { user } = useSelector((state) => state.auth);
 
   const [open, setOpen] = React.useState(false);
+  const [openComment, setOpenComment] = React.useState(false);
 
   const handleClick = () => {
     setOpen(true);
+  };
+
+  const handleCommentClick = () => {
+    setOpenComment(!openComment);
   };
 
   const handleClose = (e, reason) => {
@@ -222,50 +224,56 @@ const GratitudesCard = ({ gratitude }) => {
                 </GrItem>
               </Stack>
 
-              <Accordion
-                TransitionProps={{ unmountOnExit: true }}
-                elevation={0}
-                sx={{ border: 0, mt: 2 }}
-                disableGutters={true}
-                disabled={gratitude?.reviews?.length > 0 ? false : true}
+              <Button
+                color="secondary"
+                sx={{
+                  p: 0,
+                  mt: 2,
+                  mb: 2,
+                  textTransform: "Capitalize",
+                }}
+                onClick={handleCommentClick}
               >
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  aria-controls="panel1a-content"
-                  id="panel1a-header"
-                >
-                  {gratitude?.reviews?.length > 0 ? (
-                    <Typography>
-                      View all {gratitude?.reviews?.length} Comment
-                      {gratitude?.reviews?.length > 1 ? "s" : ""}
-                    </Typography>
-                  ) : (
-                    <Typography>No Comments</Typography>
-                  )}
-                </AccordionSummary>
-                <AccordionDetails>
-                  {gratitude?.reviews?.length > 0 ? (
-                    gratitude?.reviews.map((review) => (
-                      <>
-                        <Typography variant="body2" gutterBottom>
-                          {review.comment}
-                        </Typography>
-                        <Typography
-                          variant="caption"
-                          display="block"
-                          gutterBottom
-                        >
-                          {review.name}
-                        </Typography>
-                      </>
-                    ))
-                  ) : (
-                    <Typography variant="body2" gutterBottom color="inherit">
-                      no comment yet, be the first
-                    </Typography>
-                  )}
-                </AccordionDetails>
-              </Accordion>
+                View comment
+              </Button>
+
+              <Collapse in={openComment} timeout="auto" unmountOnExit>
+                {gratitude?.reviews?.length > 0 ? (
+                  gratitude?.reviews.map((review) => (
+                    <>
+                      <Stack
+                        direction="row"
+                        justifyContent="flex-start"
+                        alignItems="center"
+                        spacing={1}
+                      >
+                        <GrItem elevation={0}>
+                          <Typography
+                            variant="body2"
+                            gutterBottom
+                            sx={{
+                              fontWeight: "bold",
+                              textTransform: "lowercase",
+                            }}
+                          >
+                            {review.name}
+                          </Typography>
+                        </GrItem>
+                        <GrItem elevation={0}>
+                          <Typography variant="body2" gutterBottom>
+                            {review.comment}
+                          </Typography>
+                        </GrItem>
+                      </Stack>
+                    </>
+                  ))
+                ) : (
+                  <Typography variant="body2" gutterBottom color="inherit">
+                    no comment yet, be the first
+                  </Typography>
+                )}
+              </Collapse>
+
               <Snackbar
                 open={open}
                 autoHideDuration={6000}
