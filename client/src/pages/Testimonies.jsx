@@ -4,6 +4,7 @@ import GeneralPagination from "../components/GeneralPagination/GeneralPagination
 import { getFilteredGratitudes } from "../redux/gratitudes/gratitudesSlice";
 
 import GratitudesCard from "../components/GratitudeCardBig/GratitudesCard";
+import TestimonySorting from "../components/TestimonySorting/TestimonySorting";
 import { useDispatch, useSelector } from "react-redux";
 
 export const FilterContext = React.createContext();
@@ -15,6 +16,11 @@ const Testimonies = () => {
   const [category, setCategory] = React.useState("");
   const [search, setSearch] = React.useState("");
   const [tag, setTag] = React.useState("");
+  const [sort, setSort] = React.useState("");
+
+  const handleSort = (e) => {
+    setSort(e.target.value);
+  };
 
   const { appreciations, numberOfPages } = useSelector((state) => ({
     ...state.gratitudes,
@@ -30,9 +36,22 @@ const Testimonies = () => {
 
   return (
     <FilterContext.Provider
-      value={{ category, setCategory, search, setSearch, tag, setTag }}
+      value={{
+        category,
+        setCategory,
+        search,
+        setSearch,
+        tag,
+        setTag,
+        sort,
+        setSort,
+        handleSort,
+      }}
     >
       <LayoutGratitude>
+        <div>
+          <TestimonySorting />
+        </div>
         <div>
           {appreciations &&
             appreciations.map((appreciation) => (
