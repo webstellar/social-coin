@@ -18,9 +18,13 @@ import {
 } from "@mui/material";
 import defaultImage from "../../images/testimonybanner.png";
 
+import dayjs from "dayjs";
+
 const GratitudeHero = ({ gratitude }) => {
   const likes = gratitude?.likes;
   const LikesCount = likes?.length;
+
+  const testimonyDate = dayjs(gratitude?.createdAt).format("MMM D, YYYY");
 
   return (
     <>
@@ -86,6 +90,14 @@ const GratitudeHero = ({ gratitude }) => {
                     <strong>{gratitude.user && gratitude?.user?.name}</strong>
                   </Typography>
                 </Link>
+
+                <Typography
+                  component="p"
+                  align="center"
+                  sx={{ color: "#c1c1c1", mt: 1 }}
+                >
+                  {testimonyDate}
+                </Typography>
 
                 {LikesCount > 0 ? (
                   <Typography
