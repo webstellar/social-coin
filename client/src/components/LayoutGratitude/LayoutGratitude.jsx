@@ -10,8 +10,15 @@ import Footer from "../Footer/Footer";
 import { FilterContext } from "../../pages/Testimonies";
 
 const LayoutGratitude = ({ children }) => {
-  const { category, setCategory, search, setSearch, tag, setTag } =
-    React.useContext(FilterContext);
+  const {
+    category,
+    setCategory,
+    keyword,
+    setKeyword,
+    tag,
+    setTag,
+    searchHandler,
+  } = React.useContext(FilterContext);
 
   return (
     <Fragment>
@@ -30,10 +37,11 @@ const LayoutGratitude = ({ children }) => {
               <ListMenu
                 category={category}
                 setCategory={setCategory}
-                search={search}
-                setSearch={setSearch}
+                keyword={keyword}
+                setKeyword={setKeyword}
                 tag={tag}
                 setTag={setTag}
+                searchHandler={searchHandler}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={6}>

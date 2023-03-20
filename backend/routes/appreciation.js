@@ -14,13 +14,14 @@ const {
   updateAppreciation,
   likeMyAppreciation,
   deleteAppreciation,
+  pushCategoryAndTags,
+  updateAllLikeCounts,
   updateMyAppreciation,
   deleteMyAppreciation,
   getAppreciationByTag,
   getAdminAppreciations,
   getSingleAppreciation,
   getAppreciationReviews,
-  getFilteredAppreciations,
   createAppreciationReview,
   addCommentToAppreciation,
   getAppreciationByCategory,
@@ -28,6 +29,7 @@ const {
   getAppreciationByRelatedTag,
   addMyReactionToAppreciation,
   getAppreciationByRelatedCategory,
+  getAppreciationBySortingByFilters,
 } = require("../controllers/appreciationControllers");
 const { isAuthenticatedUser, authorizeRoles } = require("../middlewares/auth");
 
@@ -37,8 +39,8 @@ router.route("/review").delete(isAuthenticatedUser, deleteReview);
 router.route("/review/:id").delete(isAuthenticatedUser, deleteMyReview);
 
 router.route("/appreciations").get(getAppreciations);
-router.route("/appreciations/filter").get(getFilteredAppreciations);
 router.route("/filterappreciations").get(getAppreciationsByFilters);
+router.route("/filter").get(getAppreciationBySortingByFilters);
 router.route("/appreciation/:id").get(getSingleAppreciation);
 router.route("/appreciation/tag/:tag").get(getAppreciationByTag);
 router.route("/appreciation/relatedtag").get(getAppreciationByRelatedTag);
@@ -79,5 +81,13 @@ router
 router
   .route("/appreciation/likes/:id/")
   .patch(isAuthenticatedUser, likeMyAppreciation);
+
+router
+  .route("/appreciation/updateTagsAndCategories")
+  .patch(isAuthenticatedUser, pushCategoryAndTags);
+
+router
+  .route("/appreciation/updateTagsAndCategories")
+  .get(isAuthenticatedUser, updateAllLikeCounts);
 
 module.exports = router;

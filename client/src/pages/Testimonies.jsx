@@ -1,7 +1,7 @@
 import * as React from "react";
 import LayoutGratitude from "../components/LayoutGratitude/LayoutGratitude";
 import GeneralPagination from "../components/GeneralPagination/GeneralPagination";
-import { getFilteredGratitudes } from "../redux/gratitudes/gratitudesSlice";
+import { getFilters } from "../redux/gratitudes/gratitudesSlice";
 
 import GratitudesCard from "../components/GratitudeCardBig/GratitudesCard";
 import TestimonySorting from "../components/TestimonySorting/TestimonySorting";
@@ -12,11 +12,11 @@ export const FilterContext = React.createContext();
 const Testimonies = () => {
   const dispatch = useDispatch();
 
-  const [currentPage, setCurrentPage] = React.useState(1);
-  const [category, setCategory] = React.useState("");
-  const [search, setSearch] = React.useState("");
-  const [tag, setTag] = React.useState("");
-  const [sort, setSort] = React.useState("");
+  const [page, setPage] = React.useState(1);
+  const [category, setCategory] = React.useState([]);
+  const [keyword, setKeyword] = React.useState("");
+  const [tag, setTag] = React.useState([]);
+  const [sort, setSort] = React.useState([]);
 
   const handleSort = (e) => {
     setSort(e.target.value);
@@ -26,26 +26,33 @@ const Testimonies = () => {
     ...state.gratitudes,
   }));
 
-  console.log("category", category);
-  console.log("tag", tag);
-  console.log("keyword", search);
-
   React.useEffect(() => {
-    dispatch(getFilteredGratitudes({ search, currentPage, tag, category }));
-  }, [dispatch, currentPage, search, tag, category]);
+    dispatch(getFilters({ page, tag, category }));
+  }, [dispatch, page, tag, category]);
+
+  const searchHandler = (e) => {
+    e.preventDefault();
+
+    if (keyword.trim()) {
+      dispatch(getFilters({ keyword, page, tag, category }));
+    }
+  };
+
+  console.log(keyword);
 
   return (
     <FilterContext.Provider
       value={{
         category,
         setCategory,
-        search,
-        setSearch,
+        keyword,
+        setKeyword,
         tag,
         setTag,
         sort,
         setSort,
         handleSort,
+        searchHandler,
       }}
     >
       <LayoutGratitude>
@@ -60,8 +67,8 @@ const Testimonies = () => {
         </div>
         <div>
           <GeneralPagination
-            setCurrentPage={setCurrentPage}
-            currentPage={currentPage}
+            setCurrentPage={setPage}
+            currentPage={page}
             numberOfPages={numberOfPages}
           />
         </div>

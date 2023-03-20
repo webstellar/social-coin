@@ -50,6 +50,21 @@ export const getFilteredGratitudes = createAsyncThunk(
   }
 );
 
+export const getFilters = createAsyncThunk(
+  "gratitude/filters",
+  async ({ keyword, page, tag, category }) => {
+    try {
+      const { data } = await axios.get(
+        `/api/v1/filter/?${keyword}&page=${page}&tag=${tag}&category=${category}`
+      );
+
+      return data;
+    } catch (error) {
+      return error.response.data.message;
+    }
+  }
+);
+
 export const getGratitudesByFilter = createAsyncThunk(
   "gratitudes/getGratitudesByFilter",
   async ({ search = "", page, tag, category }) => {
@@ -215,7 +230,6 @@ export const gratitudesSlice = createSlice({
     });
     builder.addCase(getAllTags.pending, (state) => {
       state.loading = true;
-      state.totalTags = [];
     });
     builder.addCase(getAllTags.fulfilled, (state, action) => {
       state.loading = false;
@@ -229,7 +243,6 @@ export const gratitudesSlice = createSlice({
 
     builder.addCase(getAllCategories.pending, (state) => {
       state.loading = true;
-      state.totalCategories = [];
     });
     builder.addCase(getAllCategories.fulfilled, (state, action) => {
       state.loading = false;
@@ -242,7 +255,6 @@ export const gratitudesSlice = createSlice({
     });
     builder.addCase(getFilteredGratitudes.pending, (state) => {
       state.loading = true;
-      state.totalCategories = [];
     });
     builder.addCase(getFilteredGratitudes.fulfilled, (state, action) => {
       state.loading = false;
@@ -253,6 +265,22 @@ export const gratitudesSlice = createSlice({
       state.success = true;
     });
     builder.addCase(getFilteredGratitudes.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+    builder.addCase(getFilters.pending, (state) => {
+      state.loading = true;
+      state.appreciations = [];
+    });
+    builder.addCase(getFilters.fulfilled, (state, action) => {
+      state.loading = false;
+      state.appreciations = action.payload.appreciations;
+      state.appreciationsCount = action.payload.totalFilteredCount;
+      state.currentPage = action.payload.currentPage;
+      state.numberOfPages = action.payload.numberOfPages;
+      state.success = true;
+    });
+    builder.addCase(getFilters.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
     });

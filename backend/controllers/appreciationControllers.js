@@ -88,12 +88,34 @@ exports.getAppreciations = catchAsyncErrors(async (req, res) => {
   });
 });
 
-//Get all appreciations => /api/v1/appreciations
+//Get all appreciations => /api/v1/filterappreciations
 exports.getAppreciationsByFilters = catchAsyncErrors(async (req, res) => {
+  let testimonies = await Appreciation.find();
+  const totalTags = [...new Set(testimonies.flatMap(({ tags }) => tags))];
+  const totalCategories = [
+    ...new Set(testimonies.flatMap(({ categories }) => categories)),
+  ];
+
   const page = req.query.page;
   const search = req.query.search || "";
-  const tag = req.query.tag || "";
-  const category = req.query.category || "";
+  let tag = req.query.tag || "All";
+  let category = req.query.category || "All";
+
+  tag === "All" ? (tag = totalTags) : (tag = req.query.tag.split(","));
+  category === "All"
+    ? (category = totalCategories)
+    : (category = req.query.category.split(","));
+
+  /* let sort = req.query.sort || "Most Recent";
+
+  req.query.sort ? (sort = req.query.sort.split(",")) : (sort = [sort]);
+
+  let sortBy = {};
+  if (sort[1]) {
+    sortBy[sort[0]] = sort[1];
+  } else {
+    sortBy[sort[0]] = "asc";
+  } */
 
   const limitValue = req.query.limit ? Number(req.query.limit) : 12;
   const startIndex = (Number(page) - 1) * limitValue;
@@ -176,6 +198,73 @@ exports.getAppreciationsByFilters = catchAsyncErrors(async (req, res) => {
   });
 });
 
+// delivers only 2 data, despite chnage in values
+// api/v1/filters
+exports.getAppreciationBySortingByFilters = catchAsyncErrors(
+  async (req, res) => {
+    const page = req.query.page;
+    const keyword = req.query.keyword || "";
+    let tags = req.query.tag || "All";
+    let categories = req.query.category || "All";
+    const limitValue = req.query.limit ? Number(req.query.limit) : 12;
+    const startIndex = (Number(page) - 1) * limitValue;
+    const appreciationsCount = await Appreciation.countDocuments();
+
+    const sortQuery = req.query.sort;
+
+    let sortObject = {};
+    if (req.query.sortField == "likes") {
+      sortObject["likes"] = sortQuery;
+    } else if (req.query.sortField == "createdAt") {
+      sortObject["createdAt"] = sortQuery;
+    }
+
+    let testimonies = await Appreciation.find();
+    const totalTags = [...new Set(testimonies.flatMap(({ tags }) => tags))];
+    const totalCategories = [
+      ...new Set(testimonies.flatMap(({ categories }) => categories)),
+    ];
+
+    tags === "All" ? (tags = totalTags) : (tags = req.query.tag.split(","));
+    categories === "All"
+      ? (categories = totalCategories)
+      : (categories = req.query.category.split(","));
+
+    const appreciations = await Appreciation.find({
+      summary: { $regex: keyword, $options: "i" },
+    })
+      .populate("hero")
+      .populate("user")
+      .where("tags")
+      .in([...tags])
+      .where("categories")
+      .in([...categories])
+      .limit(limitValue)
+      .skip(startIndex)
+      .sort({ $natural: -1 });
+
+    const total = appreciations.length;
+    const totalFilteredCount = await Appreciation.countDocuments({
+      summary: { $regex: keyword, $options: "i" },
+    })
+      .where("tags")
+      .in([...tags])
+      .where("categories")
+      .in([...categories]);
+
+    res.status(200).json({
+      success: true,
+      appreciationsCount,
+      totalFilteredCount,
+      total,
+      currentPage: Number(page),
+      numberOfPages: Math.ceil(totalFilteredCount / limitValue),
+      appreciations,
+    });
+  }
+);
+
+//doesn't works
 exports.getFilteredAppreciations = catchAsyncErrors(async (req, res) => {
   const { page, tags, categories } = req.query;
   const limitValue = 12;
@@ -501,13 +590,13 @@ exports.likeMyAppreciation = catchAsyncErrors(async (req, res) => {
 
   if (index === -1) {
     appreciation.likes.push(req.user.id);
+    appreciation.likeCount = appreciation.likes.length;
   } else {
     appreciation.likes = appreciation.likes.filter(
       (id) => id !== String(req.user.id)
     );
+    appreciation.likeCount = appreciation.likes.length;
   }
-
-  const likeCount = appreciation.likes.length;
 
   const updatedAppreciation = await Appreciation.findByIdAndUpdate(
     id,
@@ -518,6 +607,35 @@ exports.likeMyAppreciation = catchAsyncErrors(async (req, res) => {
   res.status(200).json({
     success: true,
     updatedAppreciation,
+  });
+});
+
+exports.pushCategoryAndTags = catchAsyncErrors(async (req, res, next) => {
+  const { tag, category } = req.body;
+  const appreciations = await Appreciation.updateMany(
+    {},
+    {
+      $push: { categories: category, tags: tag },
+    }
+  );
+
+  res.status(200).json({
+    tag,
+    category,
+    success: true,
+    appreciations,
+  });
+});
+
+exports.updateAllLikeCounts = catchAsyncErrors(async (req, res) => {
+  const appreciations = await Appreciation.find();
+
+  const likes = appreciations.likes.length;
+  console.log(likes);
+
+  res.status(200).json({
+    success: true,
+    appreciations,
   });
 });
 

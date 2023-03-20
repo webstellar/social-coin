@@ -39,19 +39,33 @@ const TestimonySorting = () => {
                   labelId="demo-select-small"
                   id="demo-select-small"
                   value={sort}
-                  label="Age"
+                  label="Sort"
                   onChange={handleSort}
                   sx={{
+                    p: 0,
                     borderColor: "#000",
                     color: "#000",
+                    fontSize: "0.8rem",
                   }}
                 >
-                  <MenuItem value="">
-                    <em>None</em>
+                  <MenuItem value={10} sx={{ fontSize: "0.8rem" }}>
+                    Most Recent
                   </MenuItem>
-                  <MenuItem value={10}>Most Liked</MenuItem>
-                  <MenuItem value={20}>Most Recent</MenuItem>
-                  <MenuItem value={30}>Most Oldest</MenuItem>
+                  <MenuItem value={20} sx={{ fontSize: "0.8rem" }}>
+                    Most Oldest
+                  </MenuItem>
+                  <MenuItem value={30} sx={{ fontSize: "0.8rem" }}>
+                    Highest Likes
+                  </MenuItem>
+                  <MenuItem value={40} sx={{ fontSize: "0.8rem" }}>
+                    Lowest Likes
+                  </MenuItem>
+                  <MenuItem value={50} sx={{ fontSize: "0.8rem" }}>
+                    Highest Comments
+                  </MenuItem>
+                  <MenuItem value={60} sx={{ fontSize: "0.8rem" }}>
+                    Lowest Comments
+                  </MenuItem>
                 </Select>
               </FormControl>
             </GrItem>

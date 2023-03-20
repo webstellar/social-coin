@@ -15,9 +15,9 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams, Link } from "react-router-dom";
 import {
+  deleteReview,
   getGratitude,
   reviewGratitude,
-  deleteReview,
 } from "../redux/gratitudes/gratitudeSlice";
 import { likeGratitude } from "../redux/gratitudes/gratitudesSlice";
 import { toast } from "react-toastify";

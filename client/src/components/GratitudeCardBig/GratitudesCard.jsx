@@ -30,6 +30,8 @@ import ThumbUpAltOutlinedIcon from "@mui/icons-material/ThumbUpAltOutlined";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 import CloseIcon from "@mui/icons-material/Close";
 
+import dayjs from "dayjs";
+
 const GratitudesCard = ({ gratitude }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -131,6 +133,8 @@ const GratitudesCard = ({ gratitude }) => {
     dispatch(likeGratitude({ id }));
   };
 
+  const testimonyDate = dayjs(gratitude?.createdAt).format("MMM D, YYYY");
+
   return (
     <>
       <Grid item xs={12} md={12} sx={{ mb: 5 }}>
@@ -196,6 +200,8 @@ const GratitudesCard = ({ gratitude }) => {
                   <IconButton onClick={!userId ? handleClick : handleLike}>
                     <Likes />
                   </IconButton>
+
+                  <LikesCount />
                 </GrItem>
               </Stack>
               <GrStoriesTypography
@@ -205,7 +211,7 @@ const GratitudesCard = ({ gratitude }) => {
                   navigate(`/appreciation/${gratitude._id}`);
                 }}
               >
-                {gratitude.summary.substring(0, 50)}...
+                {gratitude.summary}
               </GrStoriesTypography>
 
               <Stack
@@ -216,21 +222,23 @@ const GratitudesCard = ({ gratitude }) => {
               >
                 <GrItem elevation={0}>
                   <GrGiverTypography variant="caption" color="grey.500">
-                    by {gratitude?.user ? gratitude?.user?.name : "unknown"}
+                    by {gratitude?.user ? gratitude?.user?.name : "user"}
                   </GrGiverTypography>
                 </GrItem>
                 <GrItem elevation={0}>
-                  <LikesCount />
+                  <GrGiverTypography variant="caption" color="grey.500">
+                    {testimonyDate}
+                  </GrGiverTypography>
                 </GrItem>
               </Stack>
 
               <Button
-                color="secondary"
                 sx={{
                   p: 0,
                   mt: 2,
                   mb: 2,
                   textTransform: "none",
+                  color: "#c1c1c1",
                 }}
                 onClick={handleCommentClick}
               >

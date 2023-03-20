@@ -2,15 +2,12 @@ import PropTypes from "prop-types";
 import {
   Grid,
   Card,
-  Stack,
   CardActionArea,
   CardContent,
   CardMedia,
   Typography,
-  Badge,
   Tooltip,
 } from "@mui/material";
-import { GrItem } from "./HeroCard.styles";
 import TryOutlinedIcon from "@mui/icons-material/TryOutlined";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -45,36 +42,42 @@ const HeroCard = ({ hero }) => {
               />
             </Link>
             <CardContent sx={{ flex: 1, paddingLeft: 4, paddingRight: 4 }}>
-              <Stack
+              <Grid
+                container
                 direction="row"
                 justifyContent="space-between"
-                alignItems="space-between"
-                spacing={0}
+                alignItems="center"
               >
-                <GrItem
-                  elevation={0}
-                  onClick={() => {
-                    navigate(`/hero/${hero?._id}`);
-                  }}
-                  sx={{
-                    textDecoration: "none",
-                  }}
-                >
+                <Grid item sm={4} md={4} lg={4}>
                   <Typography
                     variant="subtitle1"
                     component="p"
                     sx={{
-                      color: "#000",
+                      color: "#F6430A",
                       textDecoration: "none",
                       "&:hover": {
-                        color: "#F6430A",
+                        color: "#000",
                       },
+                    }}
+                    onClick={() => {
+                      navigate(`/hero/${hero?._id}`);
                     }}
                   >
                     {hero?.name}
                   </Typography>
-                </GrItem>
-                <GrItem elevation={0}>
+                </Grid>
+
+                <Grid
+                  container
+                  direction="row"
+                  justifyContent="flex-end"
+                  alignItems="center"
+                  columnGap={1}
+                  item
+                  sm={8}
+                  md={8}
+                  lg={8}
+                >
                   {heroAppreciationCount > 0 ? (
                     <>
                       <Typography variant="subtitle1" component="p">
@@ -85,8 +88,9 @@ const HeroCard = ({ hero }) => {
                       </Tooltip>
                     </>
                   ) : null}
-                </GrItem>
-              </Stack>
+                </Grid>
+              </Grid>
+
               <Typography sx={{ mt: 3 }}>{hero?.description}</Typography>
             </CardContent>
           </Card>

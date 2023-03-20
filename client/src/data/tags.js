@@ -1,4 +1,5 @@
 export const topTags = [
+  "General",
   "inspirational",
   "caring",
   "ironheart",

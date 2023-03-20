@@ -32,10 +32,18 @@ import decode from "jwt-decode";
 const navItems = [
   {
     id: 1,
-    name: "Explore",
+    name: "Testimonies",
     link: "/testimonies",
     type: "text",
-    variant: "h6",
+    variant: "h5",
+    weight: "regular",
+  },
+  {
+    id: 1,
+    name: "Heroes",
+    link: "/heroes",
+    type: "text",
+    variant: "h5",
     weight: "regular",
   },
 ];
@@ -158,7 +166,7 @@ const Header = () => {
                     color="inherit"
                     onClick={user ? handleLoggedUser : handleSecondOpen}
                   >
-                    <Typography variant="h6" sx={{ fontWeight: "regular" }}>
+                    <Typography variant="h5" sx={{ fontWeight: "regular" }}>
                       Write A Testimony
                     </Typography>
                   </IconButton>

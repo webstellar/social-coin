@@ -3,7 +3,6 @@ import { Fragment } from "react";
 import CookieConsent from "react-cookie-consent";
 import { Grid, Container } from "@mui/material";
 import { GrParaBox } from "./LayoutHero.styles";
-import ListMenu from "../ListMenu/ListMenu";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 
@@ -20,9 +19,7 @@ const LayoutHero = ({ children }) => {
             alignItems="flex-start"
             columnGap={2}
           >
-            <Grid item xs={12} sm={4} md={4}>
-              <ListMenu />
-            </Grid>
+            <Grid item xs={12} sm={4} md={4}></Grid>
             <Grid item xs={12} sm={6} md={6}>
               <div>{children}</div>
             </Grid>
