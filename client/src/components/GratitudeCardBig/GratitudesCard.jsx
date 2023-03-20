@@ -30,7 +30,7 @@ import ThumbUpAltOutlinedIcon from "@mui/icons-material/ThumbUpAltOutlined";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 import CloseIcon from "@mui/icons-material/Close";
 
-import dayjs from "dayjs";
+import { getDate } from "../../utils/dateConvertor";
 
 const GratitudesCard = ({ gratitude }) => {
   const navigate = useNavigate();
@@ -133,8 +133,6 @@ const GratitudesCard = ({ gratitude }) => {
     dispatch(likeGratitude({ id }));
   };
 
-  const testimonyDate = dayjs(gratitude?.createdAt).format("MMM D, YYYY");
-
   return (
     <>
       <Grid item xs={12} md={12} sx={{ mb: 5 }}>
@@ -227,7 +225,7 @@ const GratitudesCard = ({ gratitude }) => {
                 </GrItem>
                 <GrItem elevation={0}>
                   <GrGiverTypography variant="caption" color="grey.500">
-                    {testimonyDate}
+                    {getDate(gratitude?.createdAt)}
                   </GrGiverTypography>
                 </GrItem>
               </Stack>
