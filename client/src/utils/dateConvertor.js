@@ -12,7 +12,7 @@ export function getDate(releaseDate){
         return `${diffMonth} mo${diffMonth<=1 ? '':'s'} ago`;
     
     if(diffDay!==0)
-        return `${diffDay} day${diffDay<=1 ? '':'s'} ago`;
+        return `${diffDay} d${diffDay<=1 ? '':'s'} ago`;
     if(diffMin!==0)
         return `${Math.max(0,diffMin)} min${diffMin<=1 ? '':'s'} ago`;
     
