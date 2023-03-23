@@ -87,7 +87,6 @@ const UserProfile = () => {
       name: name,
     };
 
-    console.log(formData);
     dispatch(updateProfile({ formData, toast, navigate }));
   };
 
@@ -167,21 +166,33 @@ const UserProfile = () => {
             <Grid item xs={12} md={12}>
               <Stack
                 direction="row"
-                justifyContent="flex-end"
+                justifyContent="flex-start"
                 alignItems="center"
                 divider={<Divider orientation="vertical" flexItem />}
                 spacing={2}
               >
                 <GrItem elevation={0}>
                   <GrLink to="/create-hero">
-                    <Typography variant="h6" color="grey.500">
+                    <Typography
+                      variant={isMobile ? "caption" : "h6"}
+                      color="grey.500"
+                      sx={{ fontSize: "1rem" }}
+                      align="left"
+                    >
                       Create Hero
                     </Typography>
                   </GrLink>
                 </GrItem>
                 <GrItem elevation={0}>
                   <GrLink to="/create-testimony">
-                    <Typography variant="h6">Create Testimony</Typography>
+                    <Typography
+                      variant={isMobile ? "caption" : "h6"}
+                      color="grey.500"
+                      sx={{ fontSize: "1rem" }}
+                      align="left"
+                    >
+                      Create Testimony
+                    </Typography>
                   </GrLink>
                 </GrItem>
               </Stack>

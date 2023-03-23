@@ -20,26 +20,30 @@ import {
   StyledInputBase,
 } from "./MobileMenu.styles";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getHeroes } from "../../redux/heroes/heroesSlice";
 import { setLogout } from "../../redux/auth/authSlice";
+import ModalLogin from "../AuthLogin/ModalLogin";
+import Modal from "react-modal";
 
+const customStyles = {
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    overflow: "unset",
+    transform: "translate(-50%, -50%)",
+  },
+};
+
+Modal.setAppElement("#root");
 const drawerWidth = 240;
 const navItems = [
   {
     id: 1,
-    name: "Write a Testimony",
-    link: "/create-testimony",
-  },
-  {
-    id: 2,
     name: "Testimonies",
     link: "/testimonies",
-  },
-  {
-    id: 3,
-    name: "Profile",
-    link: "/my-profile",
   },
 ];
 
@@ -49,6 +53,9 @@ const MobileMenu = (props) => {
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchText, setSearchText] = useState("");
+  const [open, setOpen] = useState(false);
+
+  const { user } = useSelector((state) => state.auth);
 
   const handleLogout = () => {
     dispatch(setLogout());
@@ -69,12 +76,39 @@ const MobileMenu = (props) => {
     }
   };
 
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleLoggedUser = () => navigate("/create-hero");
+
   const drawer = (
     <Box sx={{ textAlign: "center" }}>
       <Typography variant="h6" sx={{ my: 2 }}>
         Testimony
       </Typography>
       <Divider />
+
+      <Modal
+        id="login"
+        isOpen={open}
+        onRequestClose={handleClose}
+        aria={{
+          labelledby: "login",
+          describedby: "full_description",
+        }}
+        ariaHideApp={false}
+        style={customStyles}
+        contentLabel="Login"
+        shouldCloseOnOverlayClick={true}
+        shouldCloseOnEsc={true}
+      >
+        <ModalLogin handleClose={handleClose} />
+      </Modal>
       <List>
         <ListItem>
           <form onSubmit={searchHandler}>
@@ -94,6 +128,16 @@ const MobileMenu = (props) => {
           </form>
         </ListItem>
 
+        <ListItem disablePadding>
+          <ListItemButton
+            sx={{ textAlign: "left", textTransform: "capitalize" }}
+            component={Button}
+            onClick={user ? handleLoggedUser : handleOpen}
+          >
+            <ListItemText primary="Write A Testimony" />
+          </ListItemButton>
+        </ListItem>
+
         {navItems.map((item) => (
           <ListItem key={item.id} disablePadding>
             <ListItemButton
@@ -105,16 +149,29 @@ const MobileMenu = (props) => {
             </ListItemButton>
           </ListItem>
         ))}
+        {user?.user ? (
+          <>
+            <ListItem disablePadding>
+              <ListItemButton
+                sx={{ textAlign: "left", textTransform: "capitalize" }}
+                component={Button}
+                onClick={() => navigate("/my-profile")}
+              >
+                <ListItemText primary="My account" />
+              </ListItemButton>
+            </ListItem>
 
-        <ListItem disablePadding>
-          <ListItemButton
-            sx={{ textAlign: "left", textTransform: "capitalize" }}
-            component={Button}
-            onClick={handleLogout}
-          >
-            <ListItemText primary="Logout" />
-          </ListItemButton>
-        </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton
+                sx={{ textAlign: "left", textTransform: "capitalize" }}
+                component={Button}
+                onClick={handleLogout}
+              >
+                <ListItemText primary="Logout" />
+              </ListItemButton>
+            </ListItem>
+          </>
+        ) : null}
       </List>
     </Box>
   );

@@ -9,21 +9,24 @@ import {
   Avatar,
   TextField,
   Tooltip,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
-import { GrBox, GrItem, GrTypography } from "./GratitudeCommentSection.styles";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { GrBox } from "./GratitudeCommentSection.styles";
+import SendIcon from "@mui/icons-material/Send";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { Link } from "react-router-dom";
+/* import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import FacebookIcon from "@mui/icons-material/Facebook";
-import MailIcon from "@mui/icons-material/Mail";
-import SendIcon from "@mui/icons-material/Send";
-import DeleteIcon from "@mui/icons-material/Delete";
-import {
+import MailIcon from "@mui/icons-material/Mail"; */
+/* import {
   shareOnFacebook,
   shareOnLinkedIn,
   shareOnTwitter,
   shareOnEmail,
-} from "../../utils/SocialShare";
+} from "../../utils/SocialShare"; */
 //import DisqusThread from "../Disqus/DisqusThread";
 
 const GratitudeCommentSection = ({
@@ -36,6 +39,13 @@ const GratitudeCommentSection = ({
 }) => {
   const gratitudeReviews = gratitude?.reviews;
   const commentLength = gratitudeReviews?.length;
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
+  const Login = () => {
+    return <Link to="/login">Login to comment</Link>;
+  };
 
   return (
     <section>
@@ -100,7 +110,7 @@ const GratitudeCommentSection = ({
             </Grid>
             <Grid item xs={6} md={6}>
               <Typography color="inherit" align="right" sx={{ mt: 9 }}>
-                {user?.user?._id ? user?.user?.name : "Login to comment"}
+                {user?.user?._id ? user?.user?.name : <Login />}
               </Typography>
             </Grid>
           </Grid>
@@ -112,7 +122,7 @@ const GratitudeCommentSection = ({
               direction="row"
               justifyContent="space-between"
               alignItems="flex-start"
-              columnSpacing={6}
+              columnSpacing={isMobile ? 2 : 6}
             >
               <Grid item sm={1} md={1} xl={1}>
                 <Avatar
@@ -122,49 +132,51 @@ const GratitudeCommentSection = ({
                 />
               </Grid>
               <Grid item sm={10} md={10} xl={10}>
+                <TextField
+                  error={user?.user?._id ? false : true}
+                  helperText="You need to be logged in to give comment"
+                  name="comment"
+                  value={comment}
+                  type="text"
+                  label="Comment"
+                  multiline
+                  maxRows={4}
+                  fullWidth
+                  color="secondary"
+                  onChange={(e) => {
+                    setComment(e.target.value);
+                  }}
+                  sx={{
+                    color: "#000",
+                  }}
+                />
+              </Grid>
+              <Grid item sm={1} md={1} xl={1}>
                 <Tooltip
                   title={
                     user?.user?._id
                       ? ""
-                      : "You need to be logged in give comment"
+                      : "You need to be logged in to give comment"
                   }
                 >
-                  <TextField
-                    name="comment"
-                    value={comment}
+                  <IconButton
+                    aria-label="send"
+                    color="primary"
+                    size="large"
+                    type="submit"
                     disabled={user?.user?._id ? false : true}
-                    type="text"
-                    label="Comment"
-                    multiline
-                    maxRows={4}
                     fullWidth
-                    color="secondary"
-                    onChange={(e) => {
-                      setComment(e.target.value);
-                    }}
                     sx={{
-                      color: "#000",
+                      p: 0,
                     }}
-                  />
+                  >
+                    <SendIcon
+                      fontSize="inherit"
+                      color="secondary"
+                      sx={{ fontSize: "2.2rem" }}
+                    />
+                  </IconButton>
                 </Tooltip>
-              </Grid>
-              <Grid item sm={1} md={1} xl={1}>
-                <IconButton
-                  aria-label="send"
-                  color="primary"
-                  size="large"
-                  type="submit"
-                  fullWidth
-                  sx={{
-                    p: 0,
-                  }}
-                >
-                  <SendIcon
-                    fontSize="inherit"
-                    color="secondary"
-                    sx={{ fontSize: "2.2rem" }}
-                  />
-                </IconButton>
               </Grid>
             </Grid>
             {/*
@@ -184,17 +196,17 @@ const GratitudeCommentSection = ({
             justifyContent="space-between"
             alignItems="flex-start"
             sx={{ mt: 1 }}
-            columnSpacing={6}
-            rowSpacing={6}
+            columnSpacing={isMobile ? 3 : 6}
+            rowSpacing={isMobile ? 2 : 6}
           >
             {gratitude?.reviews
               ? gratitude?.reviews.map((review) => (
                   <>
-                    <Grid item sm={1} md={1} xl={1} key={review?._id}>
+                    <Grid item xs={1} sm={1} md={1} xl={1} key={review?._id}>
                       <Avatar
                         alt={review?.name}
                         src={review?.profilePicture?.url}
-                        sx={{ width: 50, height: 50 }}
+                        sx={{ width: 50, height: 50 , mr:2}}
                       />
                     </Grid>
                     <Grid
@@ -203,28 +215,29 @@ const GratitudeCommentSection = ({
                       justifyContent="flex-start"
                       alignItems="flex-start"
                       item
+                      xs={10}
                       sm={10}
                       md={10}
                       xl={10}
                       rowSpacing={1}
                     >
-                      <Grid item sm={12} md={12}>
+                      <Grid item xs={12} sm={12} md={12}>
                         <Typography color="inherit" sx={{ fontWeight: "bold" }}>
                           {review?.name}
                         </Typography>
                       </Grid>
-                      <Grid item sm={12} md={12}>
+                      <Grid item xs={12} sm={12} md={12}>
                         <Typography color="inherit">
                           {review?.createdAt}
                         </Typography>
                       </Grid>
-                      <Grid item sm={12} md={12}>
+                      <Grid item xs={12} sm={12} md={12}>
                         <Typography color="inherit">
                           {review?.comment}
                         </Typography>
                       </Grid>
                     </Grid>
-                    <Grid item sm={1} md={1} xl={1}>
+                    <Grid item xs={1} sm={1} md={1} xl={1}>
                       {user?.user?.name === review?.name ? (
                         <IconButton
                           aria-label="send"

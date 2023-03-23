@@ -3,14 +3,16 @@ import PropTypes from "prop-types";
 import {
   Grid,
   Card,
-  CardActionArea,
-  CardContent,
+  Stack,
+  Button,
+  Avatar,
+  Tooltip,
+  Snackbar,
   CardMedia,
   Typography,
-  Stack,
-  Avatar,
   IconButton,
-  Tooltip,
+  CardContent,
+  CardActionArea,
 } from "@mui/material";
 import {
   GrStoriesTypography,
@@ -25,10 +27,12 @@ import { likeGratitude } from "../../redux/gratitudes/gratitudesSlice";
 
 import ThumbUpAltOutlinedIcon from "@mui/icons-material/ThumbUpAltOutlined";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
+import CloseIcon from "@mui/icons-material/Close";
 
 const GratitudeCardBig = ({ gratitude }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [open, setOpen] = React.useState(false);
 
   const { user } = useSelector((state) => state.auth);
 
@@ -89,6 +93,40 @@ const GratitudeCardBig = ({ gratitude }) => {
   const handleLike = () => {
     dispatch(likeGratitude({ id }));
   };
+
+  const handleClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (e, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+  const action = (
+    <React.Fragment>
+      <Button
+        color="secondary"
+        size="small"
+        onClick={() => {
+          navigate("/login");
+        }}
+      >
+        LOGIN
+      </Button>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleClose}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </React.Fragment>
+  );
 
   return (
     <>
@@ -152,7 +190,7 @@ const GratitudeCardBig = ({ gratitude }) => {
                 </GrItem>
 
                 <GrItem elevation={0}>
-                  <IconButton onClick={!userId ? null : handleLike}>
+                  <IconButton onClick={!userId ? handleClick : handleLike}>
                     <Likes />
                   </IconButton>
                 </GrItem>
@@ -182,6 +220,14 @@ const GratitudeCardBig = ({ gratitude }) => {
                   <LikesCount />
                 </GrItem>
               </Stack>
+
+              <Snackbar
+                open={open}
+                autoHideDuration={6000}
+                onClose={handleClose}
+                message="Please login to like this testimony"
+                action={action}
+              />
             </CardContent>
           </Card>
         </CardActionArea>

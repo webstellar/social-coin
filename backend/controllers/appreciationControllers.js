@@ -210,7 +210,7 @@ exports.getAppreciationBySortingByFilters = catchAsyncErrors(
     const startIndex = (Number(page) - 1) * limitValue;
     const appreciationsCount = await Appreciation.countDocuments();
 
-    const sortQuery = req.query.sort;
+    let sort = req.query.sort || "summary";
 
     let sortObject = {};
     if (req.query.sortField == "likes") {
@@ -230,19 +230,30 @@ exports.getAppreciationBySortingByFilters = catchAsyncErrors(
       ? (categories = totalCategories)
       : (categories = req.query.category.split(","));
 
-    const appreciations = await Appreciation.find({
-      summary: { $regex: keyword, $options: "i" },
-    })
-      .populate("hero")
-      .populate("user")
-      .where("tags")
-      .in([...tags])
-      .where("categories")
-      .in([...categories])
-      .limit(limitValue)
-      .skip(startIndex)
-      .sort({ $natural: -1 });
+    req.query.sort ? (sort = req.query.sort.split(",")) : (sort = [sort]);
 
+    let sortBy = {};
+    if (sort[1]) {
+      sortBy[sort[0]] = sort[1];
+    } else {
+      sortBy[sort[0]] = "asc";
+    }
+
+    const apiFeatures = new APIFeatures(
+      Appreciation.find()
+        .populate("hero")
+        .populate("user")
+        .where("tags")
+        .in([...tags])
+        .where("categories")
+        .in([...categories])
+        .limit(limitValue)
+        .skip(startIndex)
+        .sort(sortBy),
+      req.query
+    ).search();
+
+    const appreciations = await apiFeatures.query;
     const total = appreciations.length;
     const totalFilteredCount = await Appreciation.countDocuments({
       summary: { $regex: keyword, $options: "i" },
@@ -253,6 +264,8 @@ exports.getAppreciationBySortingByFilters = catchAsyncErrors(
       .in([...categories]);
 
     res.status(200).json({
+      sort,
+      keyword,
       success: true,
       appreciationsCount,
       totalFilteredCount,
@@ -612,6 +625,19 @@ exports.likeMyAppreciation = catchAsyncErrors(async (req, res) => {
 
 exports.pushCategoryAndTags = catchAsyncErrors(async (req, res, next) => {
   const { tag, category } = req.body;
+
+  const allAppreciations = await Appreciation.find({});
+
+  var tagToDelete = "general";
+  var categoryToDelete = "General";
+
+  var tagPosition = allAppreciations?.tags?.indexOf(tagToDelete);
+  var categoryPosition =
+    allAppreciations?.categories?.indexOf(categoryToDelete);
+
+  if (~tagPosition) Appreciation?.tags?.splice(position, 1);
+  if (~categoryPosition) Appreciation?.tags?.splice(position, 1);
+
   const appreciations = await Appreciation.updateMany(
     {},
     {

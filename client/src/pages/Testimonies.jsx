@@ -16,29 +16,35 @@ const Testimonies = () => {
   const [category, setCategory] = React.useState([]);
   const [keyword, setKeyword] = React.useState("");
   const [tag, setTag] = React.useState([]);
-  const [sort, setSort] = React.useState([]);
-
-  const handleSort = (e) => {
-    setSort(e.target.value);
-  };
+  const [sort, setSort] = React.useState({ sort: "createdAt", order: "desc" });
 
   const { appreciations, numberOfPages } = useSelector((state) => ({
     ...state.gratitudes,
   }));
 
   React.useEffect(() => {
-    dispatch(getFilters({ page, tag, category }));
-  }, [dispatch, page, tag, category]);
+    dispatch(getFilters({ page, tag, category, sort }));
+  }, [dispatch, page, tag, category, sort]);
+
+  const handleSort = (e) => {
+    setSort({ sort: e.target.value, order: sort.order });
+  };
+
+  const onArrowChange = () => {
+    if (sort.order === "asc") {
+      setSort({ sort: sort.sort, order: "desc" });
+    } else {
+      setSort({ sort: sort.sort, order: "asc" });
+    }
+  };
 
   const searchHandler = (e) => {
     e.preventDefault();
 
     if (keyword.trim()) {
-      dispatch(getFilters({ keyword, page, tag, category }));
+      dispatch(getFilters({ keyword, page, tag, category, sort }));
     }
   };
-
-  console.log(keyword);
 
   return (
     <FilterContext.Provider
@@ -53,6 +59,7 @@ const Testimonies = () => {
         setSort,
         handleSort,
         searchHandler,
+        onArrowChange,
       }}
     >
       <LayoutGratitude>

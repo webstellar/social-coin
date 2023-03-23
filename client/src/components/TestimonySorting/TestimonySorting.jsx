@@ -6,12 +6,14 @@ import {
   FormControl,
   InputLabel,
   MenuItem,
+  IconButton,
 } from "@mui/material";
 import { GrItem } from "./TestimonySorting.styles";
 import { FilterContext } from "../../pages/Testimonies";
+import SwapVertSharpIcon from "@mui/icons-material/SwapVertSharp";
 
 const TestimonySorting = () => {
-  const { sort, handleSort } = React.useContext(FilterContext);
+  const { sort, handleSort, onArrowChange } = React.useContext(FilterContext);
 
   return (
     <>
@@ -36,9 +38,9 @@ const TestimonySorting = () => {
               >
                 <InputLabel id="demo-select-small">Sort </InputLabel>
                 <Select
-                  labelId="demo-select-small"
-                  id="demo-select-small"
-                  value={sort}
+                  labelId="sort-select-small"
+                  id="sort-select-small"
+                  value={sort.sort}
                   label="Sort"
                   onChange={handleSort}
                   sx={{
@@ -48,26 +50,25 @@ const TestimonySorting = () => {
                     fontSize: "0.8rem",
                   }}
                 >
-                  <MenuItem value={10} sx={{ fontSize: "0.8rem" }}>
-                    Most Recent
+                  <MenuItem value="createdAt" sx={{ fontSize: "0.8rem" }}>
+                    Newest
                   </MenuItem>
-                  <MenuItem value={20} sx={{ fontSize: "0.8rem" }}>
-                    Most Oldest
+                  <MenuItem value="likeCount" sx={{ fontSize: "0.8rem" }}>
+                    Most Likes
                   </MenuItem>
-                  <MenuItem value={30} sx={{ fontSize: "0.8rem" }}>
-                    Highest Likes
+                  <MenuItem value="numOfReviews" sx={{ fontSize: "0.8rem" }}>
+                    Most Comments
                   </MenuItem>
-                  <MenuItem value={40} sx={{ fontSize: "0.8rem" }}>
-                    Lowest Likes
-                  </MenuItem>
-                  <MenuItem value={50} sx={{ fontSize: "0.8rem" }}>
-                    Highest Comments
-                  </MenuItem>
-                  <MenuItem value={60} sx={{ fontSize: "0.8rem" }}>
-                    Lowest Comments
+                  <MenuItem value="summary" sx={{ fontSize: "0.8rem" }}>
+                    Alphabetically
                   </MenuItem>
                 </Select>
               </FormControl>
+            </GrItem>
+            <GrItem elevation={0}>
+              <IconButton sx={{ p: 0 }} onClick={onArrowChange}>
+                <SwapVertSharpIcon />
+              </IconButton>
             </GrItem>
           </Stack>
         </Grid>

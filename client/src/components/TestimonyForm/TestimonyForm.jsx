@@ -242,8 +242,8 @@ const TestimonyForm = () => {
             >
               <Grid
                 item
-                xs={10}
-                sm={10}
+                xs={12}
+                sm={12}
                 md={10}
                 lg={10}
                 sx={{
@@ -260,8 +260,8 @@ const TestimonyForm = () => {
               <Grid item xs={2} sm={2} md={2} lg={2}></Grid>
               <Grid
                 item
-                xs={10}
-                sm={10}
+                xs={12}
+                sm={12}
                 md={10}
                 lg={10}
                 sx={{
@@ -741,26 +741,31 @@ const TestimonyForm = () => {
         </GrBox>
       </section>
 
-      <Fab
-        component={Button}
-        variant="extended"
-        color="secondary"
-        type="submit"
-        sx={{ position: "absolute", bottom: 16, right: 32 }}
-      >
-        <SendIcon sx={{ mr: 1 }} />
-        Publish
-      </Fab>
-      <Backdrop
-        sx={{
-          color: "#fff",
-          zIndex: (theme) => theme.zIndex.drawer + 1,
-        }}
-        open={open}
-        onClick={handleClose}
-      >
-        <CircularProgress color="inherit" />
-      </Backdrop>
+      <Container maxWidth="lg">
+        <Fab
+          component={Button}
+          variant="extended"
+          color="secondary"
+          type="submit"
+          align="center"
+          sx={{
+            align: "center",
+          }}
+        >
+          <SendIcon sx={{ mr: 1 }} />
+          Publish
+        </Fab>
+        <Backdrop
+          sx={{
+            color: "#fff",
+            zIndex: (theme) => theme.zIndex.drawer + 1,
+          }}
+          open={open}
+          onClick={handleClose}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      </Container>
     </form>
   );
 };

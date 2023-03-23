@@ -10,10 +10,11 @@ import {
   Menu,
   MenuItem,
   Avatar,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 
 import AddCommentIcon from "@mui/icons-material/AddComment";
-
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
 import GroupsIcon from "@mui/icons-material/Groups";
@@ -31,6 +32,8 @@ import { useNavigate, Link } from "react-router-dom";
 
 const DashboardLayout = ({ children }) => {
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const dispatch = useDispatch();
@@ -87,9 +90,12 @@ const DashboardLayout = ({ children }) => {
                   alignItems="center"
                   spacing={2}
                 >
-                  <GrItem elevation={0}>
-                    {user ? `Hello, ${firstname}` : "John Doe"}
-                  </GrItem>
+                  {!isMobile ? (
+                    <GrItem elevation={0}>
+                      {user ? `Hello, ${firstname}` : "John Doe"}
+                    </GrItem>
+                  ) : null}
+
                   <GrItem elevation={0}>
                     <IconButton
                       size="large"

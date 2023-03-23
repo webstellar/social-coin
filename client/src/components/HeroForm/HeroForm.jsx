@@ -21,7 +21,6 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import ClearIcon from "@mui/icons-material/Clear";
-import { Link } from "react-router-dom";
 //import FileBase from "react-file-base64";
 
 import HeroAutocompleteForm from "../HeroAutocompleteForm/HeroAutocompleteForm";
@@ -100,8 +99,8 @@ const HeroForm = () => {
     (acceptedFiles) => {
       const reader = new FileReader();
       const file = acceptedFiles[0];
-      if (file > 8e6) {
-        alert("Max Limit is: 8mb");
+      if (file > 1e6) {
+        alert("Max Limit is: 1mb");
         return;
       }
       reader.onload = () => {
@@ -191,21 +190,12 @@ const HeroForm = () => {
                           aria-label="text button group"
                           fullWidth
                         >
-                          <Button component={Link} to="/express-gratitude">
-                            <GrTypography
-                              variant="p"
-                              component="p"
-                              color="grey.900"
-                            >
-                              Skip to Create Testimony
-                            </GrTypography>
-                          </Button>
+                          <Button disabled></Button>
                           <Button
                             variant="contained"
                             color="secondary"
                             type="button"
                             onClick={handleNext}
-                            onKeyPress={(e) => e.key === 13 && handleNext()}
                             fullWidth
                             endIcon={
                               <ArrowForwardIosIcon sx={{ fontSize: 10 }} />
@@ -294,7 +284,7 @@ const HeroForm = () => {
 
                   {currentStep === 3 && (
                     <>
-                      <Grid item xs={12} md={12}>
+                      <Grid item xs={10} sm={10} md={12}>
                         <FormControl fullWidth>
                           <InputLabel>
                             Select your hero&apos;s gender
@@ -338,17 +328,16 @@ const HeroForm = () => {
                       </Grid>
 
                       <Grid item xs={12} md={12}>
-                        <InputLabel>
-                          Do you want to inform your hero of your testimony?
-                        </InputLabel>
-                        <TextField
-                          name="email"
-                          value={email || ""}
-                          type="email"
-                          fullWidth
-                          label="Add your hero’s email address"
-                          onChange={onChange}
-                        />
+                        <FormControl fullWidth>
+                          <TextField
+                            name="email"
+                            value={email || ""}
+                            type="email"
+                            fullWidth
+                            label="Add your hero’s email address"
+                            onChange={onChange}
+                          />
+                        </FormControl>
                       </Grid>
                       <Grid item xs={12} md={12}>
                         <ButtonGroup
@@ -508,6 +497,12 @@ const HeroForm = () => {
                           }
                         />
                         </Grid>*/}
+
+                      {formData.profilePicture?.length > 1e6 ? (
+                        <Typography align="center" color="error">
+                          The image is larger than 1mb
+                        </Typography>
+                      ) : null}
                       <Grid item xs={12} md={12}>
                         <ButtonGroup
                           variant="text"
@@ -591,3 +586,5 @@ const HeroForm = () => {
 };
 
 export default HeroForm;
+
+// onKeyPress={(e) => e.key === 13 && handleNext()}

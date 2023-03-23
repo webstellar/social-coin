@@ -6,7 +6,6 @@ import {
   Input,
   InputLabel,
   FormControl,
-  FormControlLabel,
   InputAdornment,
   IconButton,
   List,
@@ -69,137 +68,136 @@ const ListMenu = ({
   };
 
   return (
-    <>
-      <Box
+    <Box
+      sx={{
+        width: "100%",
+        maxWidth: "100%",
+        bgcolor: "background.paper",
+      }}
+    >
+      <Typography
+        variant="h6"
+        component="p"
+        sx={{ fontWeight: "Bold" }}
+        gutterBottom
+      >
+        Search
+      </Typography>
+      <form onSubmit={searchHandler}>
+        <FormControl fullWidth sx={{ m: 1 }} variant="standard">
+          <InputLabel htmlFor="standard-adornment-seach">SEARCH</InputLabel>
+          <Input
+            type="text"
+            id="search_field"
+            value={keyword}
+            onChange={(e) => {
+              setKeyword(e.target.value);
+            }}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton aria-label="search" type="submit">
+                  <SearchIcon color="secondary" sx={{ fontSize: "2rem" }} />
+                </IconButton>
+              </InputAdornment>
+            }
+            sx={{
+              fontSize: "1rem",
+              fontWeight: "Bold",
+              textTransform: "uppercase",
+            }}
+          />
+        </FormControl>
+      </form>
+
+      <Typography
+        variant="h6"
+        component="p"
+        sx={{ fontWeight: "Bold", mt: 4 }}
+        gutterBottom
+      >
+        Tags
+      </Typography>
+
+      <List
         sx={{
           width: "100%",
-          maxWidth: 360,
+          maxWidth: "100%",
           bgcolor: "background.paper",
+          overflow: "auto",
+          maxHeight: 300,
+          "& ul": { padding: 0 },
         }}
       >
-        <Typography
-          variant="h6"
-          component="p"
-          sx={{ fontWeight: "Bold" }}
-          gutterBottom
-        >
-          Search
-        </Typography>
-        <form onSubmit={searchHandler}>
-          <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-            <InputLabel htmlFor="standard-adornment-seach">SEARCH</InputLabel>
-            <Input
-              type="text"
-              id="search_field"
-              value={keyword}
-              onChange={(e) => {
-                setKeyword(e.target.value);
-              }}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton aria-label="search" type="submit">
-                    <SearchIcon color="secondary" sx={{ fontSize: "2rem" }} />
-                  </IconButton>
-                </InputAdornment>
-              }
-              sx={{
-                fontSize: "1rem",
-                fontWeight: "Bold",
-                textTransform: "uppercase",
-              }}
-            />
-          </FormControl>
-        </form>
+        {totalTags.map((val) => {
+          const labelId = `checkbox-list-label-${val}`;
 
-        <Typography
-          variant="h6"
-          component="p"
-          sx={{ fontWeight: "Bold", mt: 4 }}
-          gutterBottom
-        >
-          Tags
-        </Typography>
+          return (
+            <ListItem key={val} disablePadding>
+              <ListItemButton
+                role={undefined}
+                onClick={handleTagToggle(val)}
+                dense
+              >
+                <ListItemIcon>
+                  <Checkbox
+                    edge="start"
+                    checked={tag.indexOf(val) !== -1}
+                    tabIndex={-1}
+                    disableRipple
+                    inputProps={{ "aria-labelledby": labelId }}
+                  />
+                </ListItemIcon>
+                <ListItemText id={labelId} primary={val} />
+              </ListItemButton>
+            </ListItem>
+          );
+        })}
+      </List>
 
-        <List
-          sx={{
-            width: "100%",
-            maxWidth: 360,
-            bgcolor: "background.paper",
-            overflow: "auto",
-            maxHeight: 300,
-            "& ul": { padding: 0 },
-          }}
-        >
-          {totalTags.map((val) => {
-            const labelId = `checkbox-list-label-${val}`;
+      <Typography
+        variant="h6"
+        component="p"
+        sx={{ fontWeight: "Bold", mt: 4 }}
+        gutterBottom
+      >
+        Categories
+      </Typography>
+      <List
+        sx={{
+          width: "100%",
+          maxWidth: "100%",
+          bgcolor: "background.paper",
+          overflow: "auto",
+          maxHeight: 300,
+          "& ul": { padding: 0 },
+        }}
+      >
+        {totalCategories.map((value) => {
+          const id = `checkbox-list-label-${value}`;
 
-            return (
-              <ListItem key={val} disablePadding>
-                <ListItemButton
-                  role={undefined}
-                  onClick={handleTagToggle(val)}
-                  dense
-                >
-                  <ListItemIcon>
-                    <Checkbox
-                      edge="start"
-                      checked={tag.indexOf(val) !== -1}
-                      tabIndex={-1}
-                      disableRipple
-                      inputProps={{ "aria-labelledby": labelId }}
-                    />
-                  </ListItemIcon>
-                  <ListItemText id={labelId} primary={val} />
-                </ListItemButton>
-              </ListItem>
-            );
-          })}
-        </List>
+          return (
+            <ListItem key={value} disablePadding>
+              <ListItemButton
+                role={undefined}
+                onClick={handleCategoryToggle(value)}
+                dense
+              >
+                <ListItemIcon>
+                  <Checkbox
+                    edge="start"
+                    tabIndex={-1}
+                    disableRipple
+                    inputProps={{ "aria-labelledby": id }}
+                  />
+                </ListItemIcon>
+                <ListItemText id={id} primary={value} />
+              </ListItemButton>
+            </ListItem>
+          );
+        })}
+      </List>
 
-        <Typography
-          variant="h6"
-          component="p"
-          sx={{ fontWeight: "Bold", mt: 4 }}
-          gutterBottom
-        >
-          Categories
-        </Typography>
-        <List
-          sx={{
-            width: "100%",
-            maxWidth: 360,
-            bgcolor: "background.paper",
-            overflow: "auto",
-            maxHeight: 300,
-            "& ul": { padding: 0 },
-          }}
-        >
-          {totalCategories.map((value) => {
-            const id = `checkbox-list-label-${value}`;
-
-            return (
-              <ListItem key={value} disablePadding>
-                <ListItemButton
-                  role={undefined}
-                  onClick={handleCategoryToggle(value)}
-                  dense
-                >
-                  <ListItemIcon>
-                    <Checkbox
-                      edge="start"
-                      tabIndex={-1}
-                      disableRipple
-                      inputProps={{ "aria-labelledby": id }}
-                    />
-                  </ListItemIcon>
-                  <ListItemText id={id} primary={value} />
-                </ListItemButton>
-              </ListItem>
-            );
-          })}
-        </List>
-
-        {/*}
+      {/*}
       <Typography
         variant="h6"
         component="p"
@@ -237,8 +235,7 @@ const ListMenu = ({
 
 
       */}
-      </Box>
-    </>
+    </Box>
   );
 };
 

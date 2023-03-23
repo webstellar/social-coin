@@ -52,10 +52,10 @@ export const getFilteredGratitudes = createAsyncThunk(
 
 export const getFilters = createAsyncThunk(
   "gratitude/filters",
-  async ({ keyword, page, tag, category }) => {
+  async ({ keyword, page, tag, category, sort }) => {
     try {
       const { data } = await axios.get(
-        `/api/v1/filter/?${keyword}&page=${page}&tag=${tag}&category=${category}`
+        `/api/v1/filter/?${keyword}&page=${page}&tag=${tag}&category=${category}&sort=${sort.sort},${sort.order}`
       );
 
       return data;
@@ -156,7 +156,6 @@ export const gratitudesSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getGratitudes.pending, (state) => {
       state.loading = true;
-      state.appreciations = [];
     });
     builder.addCase(getGratitudes.fulfilled, (state, action) => {
       state.loading = false;
@@ -172,7 +171,6 @@ export const gratitudesSlice = createSlice({
     });
     builder.addCase(getGratitudesByFilter.pending, (state) => {
       state.loading = true;
-      state.appreciations = [];
     });
     builder.addCase(getGratitudesByFilter.fulfilled, (state, action) => {
       state.loading = false;
@@ -188,7 +186,6 @@ export const gratitudesSlice = createSlice({
     });
     builder.addCase(getTagGratitude.pending, (state) => {
       state.loading = true;
-      state.tagAppreciations = [];
     });
     builder.addCase(getTagGratitude.fulfilled, (state, action) => {
       state.loading = false;
@@ -201,7 +198,6 @@ export const gratitudesSlice = createSlice({
     });
     builder.addCase(getCategoryGratitude.pending, (state) => {
       state.loading = true;
-      state.categoryAppreciations = [];
     });
     builder.addCase(getCategoryGratitude.fulfilled, (state, action) => {
       state.loading = false;

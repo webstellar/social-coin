@@ -19,8 +19,6 @@ const YoutubeEmbedForm = ({ video, summary }) => {
     }
   }, [video]);
 
-  console.log(youtubeId);
-
   return (
     <GrLink className="video-responsive">
       <GrIframe

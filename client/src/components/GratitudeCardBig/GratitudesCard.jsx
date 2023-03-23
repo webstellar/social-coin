@@ -246,7 +246,7 @@ const GratitudesCard = ({ gratitude }) => {
 
               <Collapse in={openComment} timeout="auto" unmountOnExit>
                 {gratitude?.reviews?.length > 0 ? (
-                  gratitude?.reviews.map((review) => (
+                  gratitude?.reviews.map((review, i) => (
                     <>
                       <Grid
                         container
@@ -254,6 +254,7 @@ const GratitudesCard = ({ gratitude }) => {
                         justifyContent="flex-start"
                         alignItems="flex-start"
                         sx={{ mb: 1 }}
+                        key={i}
                       >
                         <Grid item sm={3} md={3} lg={3}>
                           <Typography

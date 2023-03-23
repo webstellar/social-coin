@@ -33,7 +33,7 @@ const LayoutGratitude = ({ children }) => {
             columnGap={2}
             rowGap={6}
           >
-            <Grid item xs={12} sm={4} md={4}>
+            <Grid item xs={12} sm={12} md={5}>
               <ListMenu
                 category={category}
                 setCategory={setCategory}
@@ -44,7 +44,7 @@ const LayoutGratitude = ({ children }) => {
                 searchHandler={searchHandler}
               />
             </Grid>
-            <Grid item xs={12} sm={6} md={6}>
+            <Grid item xs={12} sm={12} md={6}>
               <div>{children}</div>
             </Grid>
           </Grid>

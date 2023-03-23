@@ -30,24 +30,22 @@ const GratitudeCard = ({ gratitude }) => {
             />
             <Box sx={{ display: "flex", flexDirection: "column" }}>
               <CardContent sx={{ flex: 1 }}>
-                {gratitude.tags
-                  .map((tag) => (
-                    <Typography variant="subtitle1">{tag},</Typography>
-                  ))
-                  .slice(1, 3)}
-
                 <GrStoriesTypography variant="h6" component="h6" gutterBottom>
-                  {gratitude.summary.substring(0, 30)}...
+                  {gratitude.summary.substring(0, 40)}...
                 </GrStoriesTypography>
+
+                <Typography variant="subtitle1" sx={{ mb: 2 }}>
+                  {gratitude?.hero?.name}
+                </Typography>
 
                 <Stack
                   direction="row"
                   justifyContent="flex-start"
                   alignItems="center"
-                  spacing={0}
+                  columnGap={0.5}
                 >
                   <GrItem elevation={0}>
-                    <MenuIcon sx={{ color: "#000", fontSize: "1.5rem" }} />
+                    <MenuIcon sx={{ color: "#000", fontSize: "1.2rem" }} />
                   </GrItem>
                   <GrItem elevation={0}>
                     <Typography
@@ -56,7 +54,7 @@ const GratitudeCard = ({ gratitude }) => {
                       sx={{
                         color: "#000",
                         textDecoration: "none",
-                        fontSize: "1.2rem",
+                        fontSize: "1rem",
                       }}
                       gutterBottom={0}
                     >

@@ -26,7 +26,7 @@ const Register = () => {
   });
 
   const { name, email, password, confirmPassword } = formData;
-  const { user, error } = useSelector((state) => state.auth);
+  const { error } = useSelector((state) => state.auth);
   const { gError } = useSelector((state) => state.authGoogle);
   const { lError } = useSelector((state) => state.authLinkedin);
 

@@ -40,8 +40,9 @@ const UserProfileTestimony = () => {
               direction="row"
               justifyContent="space-between"
               alignItems="center"
+              spacing={2}
             >
-              <Grid item md={8}>
+              <Grid item md={6}>
                 <GrTypography
                   component="p"
                   variant="h2"
@@ -51,7 +52,7 @@ const UserProfileTestimony = () => {
                   My Testimony collection
                 </GrTypography>
               </Grid>
-              <Grid item md={4}>
+              <Grid item md={6}>
                 <GrLink to="/create-testimony">
                   <GrCTypography
                     component="p"

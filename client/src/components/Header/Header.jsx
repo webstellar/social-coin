@@ -39,7 +39,7 @@ const navItems = [
     weight: "regular",
   },
   {
-    id: 1,
+    id: 2,
     name: "Heroes",
     link: "/heroes",
     type: "text",
@@ -263,7 +263,7 @@ const Header = () => {
                       </MenuItem>
                       <MenuItem onClick={() => navigate("/my-profile")}>
                         <AccountCircleIcon color="secondary" sx={{ mr: 1 }} />
-                        My account
+                        My Account
                       </MenuItem>
                       <MenuItem onClick={handleLogout}>
                         <LogoutIcon color="secondary" sx={{ mr: 1 }} />
